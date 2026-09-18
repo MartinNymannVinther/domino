@@ -89,11 +89,12 @@ conforms to a JSON Schema the producing brick declares.
 **`input`** — where a run's input enters. No input ports.
 
 ```json
-{ "kind": "text" | "file" | "list", "label": "Ansøgninger", "hint": "Upload alle PDF'er" }
+{ "kind": "text" | "file" | "list", "itemKind": "file" | "text", "label": "Ansøgninger", "hint": "Upload alle PDF'er" }
 ```
 
 Output port `value`, of kind `text`, `file` or `list` (of `file` or
-`text`, by what was given). The run's input is keyed by the node id.
+`text`, by `itemKind`; files by default). The run's input is keyed by
+the node id.
 
 **`llm`** — a language model writes from a prompt.
 
@@ -124,7 +125,9 @@ reference to a port that is not connected. Output port `text`.
 can express and the model can reliably fill: objects, strings, numbers,
 booleans, enums, arrays of those, one level of nesting. Output port
 `json`, whose declared schema is exactly `schema`; downstream bricks may
-reference its fields as `{{n3.json.name}}`.
+reference its fields as `{{n3.json.name}}`. At run time the answer is
+checked against the schema; one that does not fit is sent back once
+with the problems named, and a second miss fails the step.
 
 **`document`** — the text out of a file.
 
@@ -139,12 +142,19 @@ re-parse two hundred files.
 **`branch`** — if/else.
 
 ```json
-{ "condition": { "port": "value", "op": "contains" | "equals" | "notEmpty" | "gt" | "lt", "value": "…" } }
+{ "condition": { "op": "contains" | "equals" | "notEmpty" | "gt" | "lt", "value": "…", "field": "haster" } }
 ```
 
 One input port `value`; two output ports `yes` and `no`, each of the
-input's kind. Exactly one of them fires per run; what hangs off the
-other is skipped and its steps are written as `skipped`.
+input's kind. `field` names a property to look at when the input is
+`json` (empty means the whole value); `equals` and `contains` compare
+as text, case-insensitively; `gt` and `lt` read numbers, Danish
+decimals included. Exactly one of the two ports fires per run; what
+hangs off the other is skipped and its steps are written as `skipped`.
+Skipping travels: a brick whose required input was skipped is skipped
+too, a `combine` simply leaves the skipped input out (so two branches
+can meet again in one), and a `loop_end` leaves a skipped item out of
+its list.
 
 **`loop_start`** / **`loop_end`** — once per item.
 
@@ -165,7 +175,9 @@ it, does not validate. Loops do not nest in version 1.
 ```
 
 Input ports `a`, `b`, `c` … as connected (2–8); output `text` for
-`concat`, `json` for `merge`, `list` for `list`.
+`concat` (the inputs as text, joined by `separator`), `json` for `merge`
+(objects merged, anything else kept under the letter of its port),
+`list` for `list` (lists flattened one level, so two piles become one).
 
 **`template`** — text put together.
 
@@ -199,8 +211,13 @@ output is keyed by the node id.
 | `from` | object | A node and one of its output ports.              |
 | `to`   | object | A node and one of its input ports.               |
 
-An input port takes at most one edge. The graph must be acyclic apart
-from what a loop pair encloses. Every node other than an `input` must
+An input port takes at most one edge. An edge into a reference port
+(`n2.text`) must come from the node and port the reference names. The
+graph must be acyclic; a loop is expressed by its pair, not by an edge
+back. The edges a prompt implies are derived from its text: when a
+prompt gains or loses a `{{…}}`, the patch that changes it carries the
+matching `addEdge` or `removeEdge`, and an imported file that has
+prompts but no edges for them is given the edges on the way in. Every node other than an `input` must
 have every declared input port connected, or the document does not
 validate — a brick with an unconnected input is a run that would fail,
 and the canvas says so before anybody runs it.
