@@ -39,8 +39,10 @@ export function LoginForm({ signupOpen }: { signupOpen: boolean }) {
     });
     setPending(false);
     if (apiError) {
-      // Deliberately generic: never reveal whether the account exists.
-      setError(t("error"));
+      // Deliberately generic: never reveal whether the account exists. The
+      // one exception says nothing about accounts: the app was opened on
+      // an address it is not set up for, and no password will ever work.
+      setError(apiError.code === "INVALID_ORIGIN" ? t("errorOrigin") : t("error"));
       return;
     }
     if (data && "twoFactorRedirect" in data && data.twoFactorRedirect) {

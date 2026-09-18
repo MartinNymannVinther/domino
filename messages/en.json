@@ -72,7 +72,8 @@
       "noAccount": "Don't have an account?",
       "registerLink": "Create account",
       "error": "Wrong email or password.",
-      "passkeyError": "Passkey sign-in failed. Please try again."
+      "passkeyError": "Passkey sign-in failed. Please try again.",
+      "errorOrigin": "The app is not set up for this address. Open it on the address in BETTER_AUTH_URL, or add this one to AUTH_TRUSTED_ORIGINS."
     },
     "register": {
       "title": "Create account",

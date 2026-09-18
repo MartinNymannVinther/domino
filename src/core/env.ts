@@ -27,6 +27,21 @@ export const EnvSchema = z
     AUTH_DATABASE_URL: z.url({ error: DB_URL_HINT }),
     BETTER_AUTH_SECRET: z.string().min(16),
     BETTER_AUTH_URL: z.url().default("http://localhost:3000"),
+    // Other origins the browser may sign in from, comma-separated: a
+    // machine's network name while developing, a second hostname in
+    // front of one installation. Better Auth refuses every origin it
+    // was not told about, which is right, and which is why this exists
+    // rather than a wildcard. Passkeys stay bound to BETTER_AUTH_URL.
+    AUTH_TRUSTED_ORIGINS: z
+      .string()
+      .default("")
+      .transform((value) =>
+        value
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+      )
+      .pipe(z.array(z.url()).max(20)),
     // LLM adapter (CLAUDE.md: EU-hosted or local models behind an
     // adapter): "mistral" (EU-hosted API), "ollama" (local or
     // self-hosted, Ollama-compatible) or "none" to disable AI features.

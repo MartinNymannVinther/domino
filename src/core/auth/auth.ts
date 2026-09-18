@@ -34,6 +34,7 @@ async function getDefaultOrganizationId(userId: string): Promise<string | null> 
 export const auth = betterAuth({
   appName: "Domino",
   baseURL: env.BETTER_AUTH_URL,
+  trustedOrigins: env.AUTH_TRUSTED_ORIGINS,
   secret: env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(authDb, {
     provider: "pg",
