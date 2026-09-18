@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { ArrowLeftIcon, DownloadIcon, Undo2Icon } from "lucide-react";
+import { ArrowLeftIcon, DownloadIcon, MessageSquareIcon, Undo2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ConfirmButton } from "@/components/ui/confirm-button";
@@ -26,6 +26,8 @@ export function FlowHeader({
   problems,
   selectedId,
   pending,
+  chatOpen,
+  onToggleChat,
   onCommit,
   onUndo,
   onRevert,
@@ -37,6 +39,8 @@ export function FlowHeader({
   problems: Problem[];
   selectedId: string | null;
   pending: boolean;
+  chatOpen: boolean;
+  onToggleChat: () => void;
   onCommit: (ops: PatchOp[], message: string) => Promise<boolean>;
   onUndo: () => void;
   onRevert: (versionId: string, number: number) => Promise<boolean>;
@@ -79,6 +83,16 @@ export function FlowHeader({
         </span>
       )}
       <div className="ml-auto flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant={chatOpen ? "secondary" : "outline"}
+          size="sm"
+          aria-pressed={chatOpen}
+          onClick={onToggleChat}
+        >
+          <MessageSquareIcon data-icon="inline-start" />
+          {t("chat")}
+        </Button>
         <AddBrickMenu
           doc={document}
           selectedId={selectedId}

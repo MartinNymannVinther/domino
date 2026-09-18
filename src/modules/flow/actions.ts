@@ -32,7 +32,13 @@ const FlowId = z.string().min(1).max(64);
 const NewFlowInput = z.discriminatedUnion("from", [
   z.object({ from: z.literal("example"), key: z.string().min(1).max(40) }),
   z.object({ from: z.literal("blank") }),
-  z.object({ from: z.literal("document"), document: z.unknown() }),
+  z.object({
+    from: z.literal("document"),
+    document: z.unknown(),
+    /** A document the model proposed and the person accepted on the start screen. */
+    proposedByAi: z.boolean().default(false),
+    note: z.string().max(200).default(""),
+  }),
 ]);
 
 const BLANK: FlowDocument = {
@@ -66,7 +72,8 @@ export async function createFlowAction(raw: unknown): Promise<Result<{ flowId: s
         : input.document;
   if (!document) return fail("notFound");
   const created = await createFlow(ctx, document, {
-    message: input.from === "example" ? "eksempel" : "",
+    actorKind: input.from === "document" && input.proposedByAi ? "ai" : "user",
+    message: input.from === "example" ? "eksempel" : input.from === "document" ? input.note : "",
   });
   if (!created.ok) return fail("invalid", created.problems[0]);
   revalidatePath("/flows");

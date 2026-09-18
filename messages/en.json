@@ -561,6 +561,35 @@
         "unknownVersion": "The file's format version cannot be read.",
         "invalid": "The flow in the file does not hold together."
       }
+    },
+    "describe": "Describe a flow",
+    "start": {
+      "title": "New flow",
+      "subtitle": "Say what you want done and the model lines up the bricks. Or start from an example.",
+      "describe": "What should the flow do?",
+      "placeholder": "E.g.: I have 200 applications as PDFs. For each I want name, education, experience, motivation and an assessment, collected in one table.",
+      "noModel": "No language model is set up. An owner can choose one under Settings → AI; until then you can start from an example.",
+      "propose": "Propose a flow",
+      "asking": "The model is thinking…",
+      "hint": "You can change everything afterwards, on the canvas and in the conversation.",
+      "examples": "Or start from an example",
+      "useExample": "Use this example",
+      "blank": "Start from a blank flow",
+      "warnings": "{count, plural, one {The proposal has # loose end, which you can fix on the canvas.} other {The proposal has # loose ends, which you can fix on the canvas.}}",
+      "use": "Use this flow",
+      "back": "Change the description",
+      "proposedMessage": "proposed by the model from a description",
+      "createFailed": "The flow could not be created.",
+      "failed": {
+        "noModel": "No language model is set up for the workspace.",
+        "rateLimited": "The ceiling on AI calls is reached. Try again in a while.",
+        "unreachable": "The model does not answer.",
+        "badAnswer": "The model did not answer with anything usable.",
+        "generic": "Something went wrong.",
+        "invalid": "The message could not be sent.",
+        "notFound": "The flow was not found.",
+        "unauthorized": "You are not signed in."
+      }
     }
   },
   "flow": {
@@ -578,7 +607,8 @@
       "deleteFailed": "The flow could not be deleted.",
       "messages": {
         "renamed": "renamed"
-      }
+      },
+      "chat": "Conversation"
     },
     "editor": {
       "refused": "The change was refused.",
@@ -648,6 +678,35 @@
         "fieldOnText": "{port} is text and has no fields.",
         "unknownField": "The field does not exist in {port}.",
         "loopOpen": "The loop's start does not reach its end yet."
+      }
+    },
+    "chat": {
+      "label": "Conversation about the flow",
+      "empty": "Ask for a change in ordinary words: “add a check for whether the applicant is eligible”, “make the summary shorter”. The proposal is shown on the canvas, and you say yes or no.",
+      "placeholder": "What should change?",
+      "noModel": "No language model is set up for the workspace.",
+      "inputLabel": "Your message",
+      "hint": "Cmd/Ctrl + Enter sends.",
+      "decideFirst": "Decide on the proposal on the canvas first.",
+      "send": "Send",
+      "thinking": "The model is thinking…",
+      "noReply": "(no reply)",
+      "couldNot": "I could not make a change that holds together. Try describing it another way.",
+      "proposed": "Proposal",
+      "showing": "shown on the canvas",
+      "accept": "Accept",
+      "reject": "Undo",
+      "accepted": "Accepted",
+      "rejected": "Declined",
+      "failed": {
+        "noModel": "No language model is set up for the workspace.",
+        "rateLimited": "The ceiling on AI calls is reached. Try again in a while.",
+        "unreachable": "The model does not answer.",
+        "badAnswer": "The model did not answer with anything usable.",
+        "generic": "Something went wrong.",
+        "invalid": "The message could not be sent.",
+        "notFound": "The flow was not found.",
+        "unauthorized": "You are not signed in."
       }
     }
   },

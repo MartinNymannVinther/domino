@@ -41,7 +41,7 @@ export function NewFlowMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button type="button" size="sm" disabled={pending}>
+          <Button type="button" size="sm" variant="outline" disabled={pending}>
             <PlusIcon data-icon="inline-start" />
             {t("button")}
           </Button>

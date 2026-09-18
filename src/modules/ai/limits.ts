@@ -33,7 +33,10 @@ export type AiKind =
   | "goal"
   | "close"
   | "review"
-  | "test";
+  | "test"
+  | "flow"
+  | "change"
+  | "brick";
 
 export class RateLimited extends Error {
   constructor() {

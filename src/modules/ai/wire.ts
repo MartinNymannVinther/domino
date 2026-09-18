@@ -24,3 +24,7 @@ export type ProposalResult<T> =
  * refuses more (docs/adr/0037).
  */
 export const MAX_INSTRUCTION_CHARS = 1000;
+
+/** A description of a flow, and a line in the conversation about one: room for a paragraph, not a document. */
+export const MAX_DESCRIPTION_CHARS = 2000;
+export const MAX_MESSAGE_CHARS = 2000;

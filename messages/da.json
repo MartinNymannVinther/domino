@@ -561,6 +561,35 @@
         "unknownVersion": "Filens formatversion kan ikke læses.",
         "invalid": "Flowet i filen hænger ikke sammen."
       }
+    },
+    "describe": "Beskriv et flow",
+    "start": {
+      "title": "Nyt flow",
+      "subtitle": "Fortæl hvad du vil have gjort, så stiller modellen klodserne op. Eller start fra et eksempel.",
+      "describe": "Hvad skal flowet gøre?",
+      "placeholder": "Fx: Jeg har 200 ansøgninger som PDF. For hver vil jeg have navn, uddannelse, erfaring, motivation og en vurdering, samlet i én tabel.",
+      "noModel": "Der er ingen sprogmodel sat op. En ejer kan vælge en under Indstillinger → AI; indtil da kan du starte fra et eksempel.",
+      "propose": "Foreslå et flow",
+      "asking": "Modellen tænker…",
+      "hint": "Du kan rette alt bagefter, på lærredet og i samtalen.",
+      "examples": "Eller start fra et eksempel",
+      "useExample": "Brug dette eksempel",
+      "blank": "Start fra et tomt flow",
+      "warnings": "{count, plural, one {Forslaget har # løs ende, som du kan ordne på lærredet.} other {Forslaget har # løse ender, som du kan ordne på lærredet.}}",
+      "use": "Brug dette flow",
+      "back": "Ret beskrivelsen",
+      "proposedMessage": "foreslået af modellen fra en beskrivelse",
+      "createFailed": "Flowet kunne ikke oprettes.",
+      "failed": {
+        "noModel": "Der er ingen sprogmodel sat op for arbejdsrummet.",
+        "rateLimited": "Loftet for AI-kald er nået. Prøv igen om lidt.",
+        "unreachable": "Modellen svarer ikke.",
+        "badAnswer": "Modellen svarede ikke med noget der kunne bruges.",
+        "generic": "Noget gik galt.",
+        "invalid": "Beskeden kunne ikke sendes.",
+        "notFound": "Flowet blev ikke fundet.",
+        "unauthorized": "Du er ikke logget ind."
+      }
     }
   },
   "flow": {
@@ -578,7 +607,8 @@
       "deleteFailed": "Flowet kunne ikke slettes.",
       "messages": {
         "renamed": "omdøbt"
-      }
+      },
+      "chat": "Samtale"
     },
     "editor": {
       "refused": "Ændringen blev afvist.",
@@ -648,6 +678,35 @@
         "fieldOnText": "{port} er tekst og har ingen felter.",
         "unknownField": "Feltet findes ikke i {port}.",
         "loopOpen": "Løkkens start når ikke sin slutning endnu."
+      }
+    },
+    "chat": {
+      "label": "Samtale om flowet",
+      "empty": "Bed om en ændring i almindelige ord: “tilføj et tjek af om ansøgeren er berettiget”, “gør sammenfatningen kortere”. Forslaget vises på lærredet, og du siger ja eller nej.",
+      "placeholder": "Hvad skal ændres?",
+      "noModel": "Der er ingen sprogmodel sat op for arbejdsrummet.",
+      "inputLabel": "Din besked",
+      "hint": "Cmd/Ctrl + Enter sender.",
+      "decideFirst": "Tag stilling til forslaget på lærredet først.",
+      "send": "Send",
+      "thinking": "Modellen tænker…",
+      "noReply": "(intet svar)",
+      "couldNot": "Jeg kunne ikke lave en ændring der hænger sammen. Prøv at beskrive det på en anden måde.",
+      "proposed": "Forslag",
+      "showing": "vises på lærredet",
+      "accept": "Accepter",
+      "reject": "Fortryd",
+      "accepted": "Accepteret",
+      "rejected": "Afvist",
+      "failed": {
+        "noModel": "Der er ingen sprogmodel sat op for arbejdsrummet.",
+        "rateLimited": "Loftet for AI-kald er nået. Prøv igen om lidt.",
+        "unreachable": "Modellen svarer ikke.",
+        "badAnswer": "Modellen svarede ikke med noget der kunne bruges.",
+        "generic": "Noget gik galt.",
+        "invalid": "Beskeden kunne ikke sendes.",
+        "notFound": "Flowet blev ikke fundet.",
+        "unauthorized": "Du er ikke logget ind."
       }
     }
   },

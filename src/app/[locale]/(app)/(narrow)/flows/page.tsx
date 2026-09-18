@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatStamp } from "@/core/dates";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { listFlows } from "@/modules/flow/service";
 import { ImportFlowButton } from "./import-flow-button";
@@ -38,6 +39,9 @@ export default async function FlowsPage() {
     <>
       <ImportFlowButton />
       <NewFlowMenu />
+      <Button size="sm" nativeButton={false} render={<Link href="/flows/new" />}>
+        {t("describe")}
+      </Button>
     </>
   );
 
@@ -45,7 +49,15 @@ export default async function FlowsPage() {
     <div className="flex flex-col gap-6">
       <PageHeader title={t("title")} subtitle={t("subtitle")} actions={actions} />
       {flows.length === 0 ? (
-        <EmptyState title={t("empty.title")} hint={t("empty.hint")} action={<NewFlowMenu />} />
+        <EmptyState
+          title={t("empty.title")}
+          hint={t("empty.hint")}
+          action={
+            <Button size="sm" nativeButton={false} render={<Link href="/flows/new" />}>
+              {t("describe")}
+            </Button>
+          }
+        />
       ) : (
         <Table>
           <TableHeader>
