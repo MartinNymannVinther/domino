@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { SendHorizontalIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Markdown } from "@/components/ui/markdown";
 import { Textarea } from "@/components/ui/textarea";
 import { askAi } from "@/modules/ai/read-client";
 import type { ChangeProposal } from "@/modules/ai/propose-change";
@@ -127,7 +128,11 @@ export function ChatPanel({
               m.role === "user" ? "bg-secondary self-end" : "bg-background border-border border",
             )}
           >
-            <p className="whitespace-pre-wrap">{m.content}</p>
+            {m.role === "assistant" ? (
+              <Markdown source={m.content} className="gap-2 text-2sm" />
+            ) : (
+              <p className="whitespace-pre-wrap">{m.content}</p>
+            )}
             {m.proposal ? (
               <ProposalActions
                 status={m.proposalStatus}

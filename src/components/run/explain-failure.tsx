@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { SparklesIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Markdown } from "@/components/ui/markdown";
 import type { Explanation } from "@/modules/ai/brick-assist";
 import { askAi } from "@/modules/ai/read-client";
 import { acceptFixAction } from "@/modules/flow/actions-chat";
@@ -85,7 +86,7 @@ export function ExplainFailure({ runId, flowId }: { runId: string; flowId: strin
           <p className="text-label text-[11px] font-medium tracking-[0.04em] uppercase">
             {t("title")}
           </p>
-          <p className="text-reading leading-relaxed whitespace-pre-wrap">{explanation}</p>
+          <Markdown source={explanation} />
           {fix ? (
             <div className="flex flex-wrap items-center gap-2">
               <Button type="button" size="sm" onClick={apply}>

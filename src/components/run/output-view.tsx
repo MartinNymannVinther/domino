@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { DownloadIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Markdown } from "@/components/ui/markdown";
 import {
   Table,
   TableBody,
@@ -54,7 +55,7 @@ export function OutputView({ run }: { run: RunJson }) {
             ) : node.config.kind === "table" ? (
               <OutputTable value={value} columns={index.tableColumns(node.id)} />
             ) : node.config.kind === "text" ? (
-              <p className="text-reading whitespace-pre-wrap">{toText(value as never)}</p>
+              <Markdown source={toText(value as never)} />
             ) : (
               <pre className="bg-background max-h-96 overflow-auto rounded-md px-3 py-2 text-xs leading-relaxed">
                 {JSON.stringify(value, null, 2)}
