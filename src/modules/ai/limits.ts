@@ -36,7 +36,8 @@ export type AiKind =
   | "test"
   | "flow"
   | "change"
-  | "brick";
+  | "brick"
+  | "run";
 
 export class RateLimited extends Error {
   constructor() {
@@ -95,6 +96,32 @@ export async function reserveAiCall(
       throw new RateLimited();
   }
   await tx.insert(aiCalls).values({ orgId: ctx.orgId, userId: ctx.userId, kind, engine });
+}
+
+/**
+ * A run's model calls (docs/adr/0013): counted against the workspace's
+ * day and the installation's roof, never against the person's hour. The
+ * hourly ceiling is sized for a person typing; a pile of two hundred
+ * documents is a pile, chosen once, and the run's own ceilings bound it.
+ */
+export async function reserveRunCall(
+  tx: AppTransaction,
+  ctx: OrgContext,
+  engine: string,
+): Promise<void> {
+  const [perOrg] = await tx
+    .select({ n: count() })
+    .from(aiCalls)
+    .where(and(eq(aiCalls.orgId, ctx.orgId), gt(aiCalls.createdAt, sql`now() - interval '1 day'`)));
+  if (Number(perOrg?.n ?? 0) >= MAX_CALLS_PER_WORKSPACE_PER_DAY) throw new RateLimited();
+  if (MAX_CALLS_PER_INSTALLATION_PER_DAY > 0) {
+    const result = await tx.execute(sql`select ai_calls_last_day() as n`);
+    const [row] = result.rows as Array<{ n?: string | number | null }>;
+    const total = Number(row?.n);
+    if (!Number.isFinite(total) || total >= MAX_CALLS_PER_INSTALLATION_PER_DAY)
+      throw new RateLimited();
+  }
+  await tx.insert(aiCalls).values({ orgId: ctx.orgId, userId: ctx.userId, kind: "run", engine });
 }
 
 /** Trims and caps user text before it goes anywhere near a prompt. */

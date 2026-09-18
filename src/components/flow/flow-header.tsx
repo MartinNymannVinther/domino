@@ -12,6 +12,7 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { AddBrickMenu } from "./add-brick-menu";
 import { useDraft } from "./field-helpers";
 import { HistorySheet } from "./history-sheet";
+import { RunSheet } from "@/components/run/run-sheet";
 
 /**
  * The bar over the canvas: the way back, the flow's name (typed into,
@@ -112,6 +113,15 @@ export function FlowHeader({
           {t("undo")}
         </Button>
         <HistorySheet flowId={flowId} currentNumber={versionNumber} onRevert={onRevert} />
+        <Button
+          variant="outline"
+          size="sm"
+          nativeButton={false}
+          render={<Link href={`/flows/${flowId}/runs`} />}
+        >
+          {t("runs")}
+        </Button>
+        <RunSheet flowId={flowId} document={document} ready={warnings === 0 && !pending} />
         <Button
           variant="outline"
           size="sm"

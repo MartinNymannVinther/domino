@@ -41,6 +41,9 @@ export default defineConfig({
       // default is "off" is proven in tests/core/env.
       DEMO: "on",
       LLM_PROVIDER: "none",
+      // The runner is driven by hand in tests/runs; a polling loop in a
+      // test process would race it.
+      RUNNER: "off",
       // Mail is kept in memory: the suite proves what would be sent, and
       // never sends it.
       MAIL_TRANSPORT: "memory",

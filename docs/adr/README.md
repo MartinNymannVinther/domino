@@ -25,7 +25,8 @@ session reads, and **TECH-DEBT.md** is what we know is not right yet.
 | [0006](0006-workspace-chosen-models.md)     | A workspace can choose its own model                                     |           |
 | [0007](0007-design-scale-and-tokens.md)     | A named small-text scale, and the last hard-coded values become tokens   |           |
 | [0008](0008-ai-reads-on-their-own-route.md) | An AI read is a route, not an action                                     |           |
-| [0009](0009-ai-installation-roof.md)        | The installation's own roof over the AI                                  |           |
+| [0009](0009-ai-installation-roof.md)        | The installation's own roof over the AI                                  | ← 0013    |
 | [0010](0010-the-landing-mark.md)            | The landing mark — motion answers a move, not a gesture                  |           |
 | [0011](0011-one-document-one-patch.md)      | One document, one patch — the flow format and everything that changes it | ← 0012    |
 | [0012](0012-unfinished-is-not-broken.md)    | Unfinished is not broken — two grades of validation                      | → 0011    |
+| [0013](0013-the-runs-own-ceilings.md)       | The run's own ceilings, and how a run gets its model calls               | → 0009    |

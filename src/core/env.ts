@@ -60,6 +60,10 @@ export const EnvSchema = z
     // whose model runs on their own machine and costs nothing per call;
     // the per-user and per-workspace ceilings stand either way.
     AI_DAILY_CALL_CAP: z.coerce.number().int().min(0).max(1_000_000).default(2000),
+    // Whether this process runs queued flows. "on" (the default) is the
+    // one-server installation; "off" is for a deployment that runs a
+    // second process for the runner and keeps the web one answering.
+    RUNNER: z.enum(["on", "off"]).default("on"),
     // How many proxies in front of Domino append to X-Forwarded-For. The
     // rightmost entries are the ones your own infrastructure wrote and are
     // therefore the only ones worth trusting; everything to the left of

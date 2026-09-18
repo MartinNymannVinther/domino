@@ -12,12 +12,28 @@
  * container shows as restarting rather than up, and the message is the
  * last thing in the log.
  */
-export async function validateEnvironmentOrExit(): Promise<void> {
+export async function validateEnvironmentOrExit(): Promise<boolean> {
   try {
     await import("@/core/env");
+    return true;
   } catch (error) {
     console.error("domino: refusing to start, the environment is not valid.");
     console.error(error instanceof Error ? error.message : String(error));
     process.exit(1);
+    return false;
   }
+}
+
+/**
+ * The runner lives in the web process (CLAUDE.md, architecture: no job
+ * queue dependency). Started after the environment is known to be
+ * valid, never during a build, and only when RUNNER is not "off" — the
+ * switch for an installation that runs a second process for it.
+ */
+export async function startRunnerIfEnabled(): Promise<void> {
+  if (process.env.NEXT_PHASE === "phase-production-build") return;
+  const { env } = await import("@/core/env");
+  if (env.RUNNER === "off") return;
+  const { startRunner } = await import("@/modules/runs/runner");
+  startRunner();
 }

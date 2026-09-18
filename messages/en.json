@@ -542,7 +542,8 @@
       "name": "Name",
       "description": "Description",
       "version": "Version",
-      "updated": "Changed"
+      "updated": "Changed",
+      "lastRun": "Last run"
     },
     "new": {
       "button": "New flow",
@@ -608,7 +609,8 @@
       "messages": {
         "renamed": "renamed"
       },
-      "chat": "Conversation"
+      "chat": "Conversation",
+      "runs": "Runs"
     },
     "editor": {
       "refused": "The change was refused.",
@@ -850,5 +852,98 @@
   },
   "canvas": {
     "label": "Canvas with the flow's bricks and connections"
+  },
+  "run": {
+    "status": {
+      "queued": "Queued",
+      "running": "Running",
+      "done": "Done",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "skipped": "Skipped"
+    },
+    "mode": {
+      "test": "Test on one example",
+      "full": "The whole pile"
+    },
+    "start": {
+      "button": "Run",
+      "notReady": "The flow has loose ends and cannot run yet.",
+      "title": "Run the flow",
+      "subtitle": "Give the flow what its input bricks ask for.",
+      "noInputs": "The flow has no input bricks; it runs with what it has.",
+      "linesPlaceholder": "One item per paragraph – separate with a blank line.",
+      "linesHelp": "Every paragraph becomes one item in the pile.",
+      "test": "Test on one example",
+      "full": "Run the whole pile",
+      "run": "Run",
+      "hint": "The run is shown step by step, and you can cancel on the way.",
+      "failed": {
+        "generic": "The run could not be started.",
+        "notFound": "The flow was not found.",
+        "unfinished": "The flow has loose ends. Fix them on the canvas first.",
+        "invalidInput": "Something is missing in what you gave the flow.",
+        "tooManyItems": "The pile is too big for one run. Split it.",
+        "unknownFile": "One of the files no longer exists."
+      }
+    },
+    "files": {
+      "pickOne": "Choose file",
+      "pickMany": "Choose files",
+      "uploading": "Uploading…",
+      "accepted": "PDF, Word, text, Markdown, CSV or JSON. At most 20 MB per file.",
+      "noText": "no text could be read",
+      "remove": "Remove",
+      "failed": "The files could not be uploaded.",
+      "count": "{count, plural, one {# file} other {# files}}",
+      "reasons": {
+        "tooBig": "too big",
+        "unsupported": "the type is not supported",
+        "empty": "empty",
+        "generic": "could not be stored"
+      }
+    },
+    "view": {
+      "metaTitle": "Run",
+      "title": "{mode, select, test {Test run} other {Run}}",
+      "duration": "{seconds, plural, one {# second} other {# seconds}}",
+      "tokens": "{in} tokens in · {out} out",
+      "history": "All runs",
+      "cancel": "Cancel",
+      "cancelFailed": "The run could not be cancelled.",
+      "failedTitle": "The run failed"
+    },
+    "steps": {
+      "title": "{count, plural, one {# step} other {# steps}}",
+      "none": "No steps yet.",
+      "iteration": "round {n}",
+      "ms": "{ms} ms",
+      "tokens": "{in}/{out} tokens",
+      "input": "In",
+      "output": "Out",
+      "error": "Error",
+      "empty": "(empty)"
+    },
+    "output": {
+      "spreadsheet": "Download as spreadsheet",
+      "nothing": "Nothing reached this output."
+    },
+    "list": {
+      "title": "Runs",
+      "subtitle": "What happened, every time the flow ran.",
+      "toCanvas": "To the canvas",
+      "empty": {
+        "title": "No runs yet",
+        "hint": "Press Run on the canvas to try the flow on one example."
+      },
+      "columns": {
+        "status": "Status",
+        "mode": "Scope",
+        "started": "Started",
+        "steps": "Steps",
+        "tokens": "Tokens",
+        "engine": "Model"
+      }
+    }
   }
 }

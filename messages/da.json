@@ -542,7 +542,8 @@
       "name": "Navn",
       "description": "Beskrivelse",
       "version": "Version",
-      "updated": "Ændret"
+      "updated": "Ændret",
+      "lastRun": "Sidste kørsel"
     },
     "new": {
       "button": "Nyt flow",
@@ -608,7 +609,8 @@
       "messages": {
         "renamed": "omdøbt"
       },
-      "chat": "Samtale"
+      "chat": "Samtale",
+      "runs": "Kørsler"
     },
     "editor": {
       "refused": "Ændringen blev afvist.",
@@ -850,5 +852,98 @@
   },
   "canvas": {
     "label": "Lærred med flowets klodser og forbindelser"
+  },
+  "run": {
+    "status": {
+      "queued": "I kø",
+      "running": "Kører",
+      "done": "Færdig",
+      "failed": "Fejlet",
+      "cancelled": "Afbrudt",
+      "skipped": "Sprunget over"
+    },
+    "mode": {
+      "test": "Test på ét eksempel",
+      "full": "Hele bunken"
+    },
+    "start": {
+      "button": "Kør",
+      "notReady": "Flowet har løse ender og kan ikke køre endnu.",
+      "title": "Kør flowet",
+      "subtitle": "Giv flowet det, dets input-klodser beder om.",
+      "noInputs": "Flowet har ingen input-klodser; det kører med det, det har.",
+      "linesPlaceholder": "Ét element pr. afsnit – adskil med en tom linje.",
+      "linesHelp": "Hvert afsnit bliver ét element i bunken.",
+      "test": "Test på ét eksempel",
+      "full": "Kør hele bunken",
+      "run": "Kør",
+      "hint": "Kørslen vises trin for trin, og du kan afbryde undervejs.",
+      "failed": {
+        "generic": "Kørslen kunne ikke startes.",
+        "notFound": "Flowet blev ikke fundet.",
+        "unfinished": "Flowet har løse ender. Ordn dem på lærredet først.",
+        "invalidInput": "Der mangler noget i det, du gav flowet.",
+        "tooManyItems": "Bunken er for stor til én kørsel. Del den op.",
+        "unknownFile": "En af filerne findes ikke længere."
+      }
+    },
+    "files": {
+      "pickOne": "Vælg fil",
+      "pickMany": "Vælg filer",
+      "uploading": "Uploader…",
+      "accepted": "PDF, Word, tekst, Markdown, CSV eller JSON. Højst 20 MB pr. fil.",
+      "noText": "ingen tekst kunne læses ud",
+      "remove": "Fjern",
+      "failed": "Filerne kunne ikke uploades.",
+      "count": "{count, plural, one {# fil} other {# filer}}",
+      "reasons": {
+        "tooBig": "for stor",
+        "unsupported": "typen understøttes ikke",
+        "empty": "tom",
+        "generic": "kunne ikke gemmes"
+      }
+    },
+    "view": {
+      "metaTitle": "Kørsel",
+      "title": "{mode, select, test {Testkørsel} other {Kørsel}}",
+      "duration": "{seconds, plural, one {# sekund} other {# sekunder}}",
+      "tokens": "{in} tokens ind · {out} ud",
+      "history": "Alle kørsler",
+      "cancel": "Afbryd",
+      "cancelFailed": "Kørslen kunne ikke afbrydes.",
+      "failedTitle": "Kørslen fejlede"
+    },
+    "steps": {
+      "title": "{count, plural, one {# trin} other {# trin}}",
+      "none": "Ingen trin endnu.",
+      "iteration": "omgang {n}",
+      "ms": "{ms} ms",
+      "tokens": "{in}/{out} tokens",
+      "input": "Ind",
+      "output": "Ud",
+      "error": "Fejl",
+      "empty": "(tomt)"
+    },
+    "output": {
+      "spreadsheet": "Hent som regneark",
+      "nothing": "Intet nåede frem til dette output."
+    },
+    "list": {
+      "title": "Kørsler",
+      "subtitle": "Hvad der skete, hver gang flowet kørte.",
+      "toCanvas": "Til lærredet",
+      "empty": {
+        "title": "Ingen kørsler endnu",
+        "hint": "Tryk Kør på lærredet for at prøve flowet på ét eksempel."
+      },
+      "columns": {
+        "status": "Status",
+        "mode": "Omfang",
+        "started": "Startet",
+        "steps": "Trin",
+        "tokens": "Tokens",
+        "engine": "Model"
+      }
+    }
   }
 }

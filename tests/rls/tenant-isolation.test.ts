@@ -340,10 +340,16 @@ describe("rls coverage (guards future tables)", () => {
     // row does, and it takes no arguments, so it can answer one question
     // and only that one.
     "ai_calls_last_day",
+    // The runner's two doors (docs/adr/0013, drizzle/0005): claims the
+    // oldest queued run whoever owns it and hands back three ids, never
+    // a row; and fails the runs a stopped process left running. Both
+    // take no arguments and answer one question each.
+    "claim_next_run",
     // Deletes a workspace the caller owns, audit rows included, which is
     // dogma 3 and which RLS and the append-only guard would otherwise
     // forbid (docs/adr/0003). Checks the caller's role itself.
     "delete_workspace",
+    "fail_interrupted_runs",
   ];
 
   it("only the named definer functions can be called by a runtime role", async () => {

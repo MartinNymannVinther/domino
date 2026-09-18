@@ -16,6 +16,7 @@
  */
 export async function register(): Promise<void> {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
-  const { validateEnvironmentOrExit } = await import("./instrumentation-node");
-  await validateEnvironmentOrExit();
+  const { validateEnvironmentOrExit, startRunnerIfEnabled } =
+    await import("./instrumentation-node");
+  if (await validateEnvironmentOrExit()) await startRunnerIfEnabled();
 }
