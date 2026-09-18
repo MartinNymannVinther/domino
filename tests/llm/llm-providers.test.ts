@@ -167,6 +167,27 @@ describe("OllamaProvider", () => {
     expect(body.format).toBe("json");
   });
 
+  it("turns thinking off for text too, and names an answer the model reasoned away", async () => {
+    const { fetchFn, calls } = fetchReturning({
+      message: { role: "assistant", content: "Hej" },
+      prompt_eval_count: 8,
+      eval_count: 2,
+    });
+    const provider = new OllamaProvider("http://localhost:11434", "gemma4:12b", fetchFn);
+    await provider.complete([{ role: "user", content: "Sig hej" }], { maxTokens: 600 });
+    expect(JSON.parse(String(calls[0]!.init?.body)).think).toBe(false);
+
+    const { fetchFn: silent } = fetchReturning({
+      message: { role: "assistant", content: "" },
+      prompt_eval_count: 2889,
+      eval_count: 600,
+    });
+    const thinker = new OllamaProvider("http://localhost:11434", "gemma4:12b", silent);
+    await expect(thinker.complete([{ role: "user", content: "Sammenfat" }])).rejects.toThrow(
+      /without answering/,
+    );
+  });
+
   it("health check flags a model that is not pulled", async () => {
     const { fetchFn } = fetchReturning({ models: [{ name: "mistral:7b" }] });
     const provider = new OllamaProvider("http://localhost:11434", "llama3.2", fetchFn);

@@ -59,7 +59,14 @@ export function ModelForm({
           id="llm-provider"
           value={choice}
           disabled={!canEdit || pending}
-          onChange={(e) => setChoice(e.target.value as ProviderChoice)}
+          onChange={(e) => {
+            const next = e.target.value as ProviderChoice;
+            // A model name belongs to its provider: "gemma4:12b" means
+            // nothing to Mistral, and the provider's own default is the
+            // right place to start from after a switch.
+            if (next !== choice) setModel("");
+            setChoice(next);
+          }}
           className="border-input bg-card focus-visible:ring-ring h-[2.625rem] rounded-md border px-3 text-sm outline-none focus-visible:ring-2 disabled:opacity-45"
         >
           <option value="inherit">

@@ -39,9 +39,11 @@ export class OllamaProvider implements LlmProvider {
       // read from disk for every request is a model nobody waits for.
       keep_alive: "30m",
       ...(options.responseFormat === "json" ? { format: "json" } : {}),
-      // Thinking models (gemma4 and friends) spend their time on hidden
-      // reasoning before a structured answer; for JSON we turn that off.
-      // A model without the feature rejects the flag, and we retry without.
+      // Thinking models (gemma4 and friends) spend their tokens on hidden
+      // reasoning before they answer, and with a ceiling on tokens they can
+      // spend all of them there and answer nothing. Every call here wants
+      // the answer, so thinking is off; a model without the feature rejects
+      // the flag, and we retry without it.
       ...(think ? {} : { think: false }),
       options: {
         temperature: options.temperature ?? 0.2,
@@ -65,8 +67,8 @@ export class OllamaProvider implements LlmProvider {
       });
     let response: Response;
     try {
-      response = await post(options.responseFormat !== "json");
-      if (response.status === 400 && options.responseFormat === "json") {
+      response = await post(false);
+      if (response.status === 400) {
         const text = await response.text();
         if (/think/i.test(text)) response = await post(true);
         else throw new LlmError("bad_response", "ollama: HTTP 400");
@@ -88,6 +90,14 @@ export class OllamaProvider implements LlmProvider {
     const content = payload.message?.content;
     if (typeof content !== "string") {
       throw new LlmError("bad_response", "ollama: response carried no content");
+    }
+    // Tokens spent, nothing said: the model reasoned its budget away. An
+    // empty answer would be shown as an empty result; this names it.
+    if (content.trim() === "" && (payload.eval_count ?? 0) > 0) {
+      throw new LlmError(
+        "bad_response",
+        "ollama: the model used its tokens without answering; raise the brick's max tokens or choose a model that does not think",
+      );
     }
     return {
       content,
