@@ -42,16 +42,18 @@ export function importDocument(text: string): ImportResult {
 export function importRaw(raw: unknown): ImportResult {
   const migrated = migrateDocument(raw);
   if (!migrated.ok) return { ok: false, reason: migrated.reason, version: migrated.version };
-  const parsed = parseDocument(migrated.document);
   const migratedFrom = migrated.from < FlowDocument.shape.version.value ? migrated.from : null;
-  if (parsed.ok) return { ok: true, document: parsed.document, migratedFrom };
-  // Perhaps only the implied edges are missing: shape it, add them, try once more.
-  const shaped = FlowDocument.safeParse(migrated.document);
+  // A file written by hand, or by a model, may carry prompts without the
+  // edges they imply; those are written in before the whole is judged.
+  let candidate: unknown = migrated.document;
+  const shaped = FlowDocument.safeParse(candidate);
   if (shaped.success && needsReferenceEdges(shaped.data)) {
     const ops = missingReferenceEdgeOps(shaped.data);
     const applied = ops.length ? applyPatch(shaped.data, { ops }) : null;
-    if (applied?.ok) return { ok: true, document: applied.document, migratedFrom };
+    if (applied?.ok) candidate = applied.document;
   }
+  const parsed = parseDocument(candidate);
+  if (parsed.ok) return { ok: true, document: parsed.document, migratedFrom };
   return { ok: false, reason: "invalid", problems: parsed.problems };
 }
 

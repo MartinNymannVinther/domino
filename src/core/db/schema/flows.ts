@@ -3,7 +3,7 @@ import {
   check,
   index,
   integer,
-  jsonb,
+  json,
   pgTable,
   text,
   timestamp,
@@ -69,9 +69,9 @@ export const flowVersions = pgTable(
     /** 1, 2, 3 … per flow; handed out inside the write's transaction. */
     number: integer("number").notNull(),
     /** The whole FlowDocument at this version, validated by the format's schema before it is written. */
-    document: jsonb("document").notNull(),
+    document: json("document").notNull(),
     /** The patch that took the previous version here; null on the first version. */
-    patch: jsonb("patch"),
+    patch: json("patch"),
     actorKind: text("actor_kind").notNull().default("user"),
     /** A short line on what changed, in the actor's words. */
     message: text("message").notNull().default(""),
@@ -106,7 +106,7 @@ export const flowMessages = pgTable(
     /** Which engine answered; empty for a person's line. */
     engine: text("engine").notNull().default(""),
     /** { baseVersionId, patch } or null. */
-    proposal: jsonb("proposal"),
+    proposal: json("proposal"),
     proposalStatus: text("proposal_status"),
     resultVersionId: text("result_version_id").references(() => flowVersions.id, {
       onDelete: "set null",

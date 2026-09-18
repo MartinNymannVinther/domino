@@ -75,13 +75,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           organization={organization?.name ?? ""}
           attention={attention}
         />
-        <main
-          id="main"
-          tabIndex={-1}
-          className="@container mx-auto w-full max-w-6xl flex-1 px-5 py-6 sm:px-7 lg:px-8 lg:py-[30px]"
-        >
-          {children}
-        </main>
+        {children}
       </SidebarShell>
     </div>
   );

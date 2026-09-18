@@ -27,4 +27,5 @@ session reads, and **TECH-DEBT.md** is what we know is not right yet.
 | [0008](0008-ai-reads-on-their-own-route.md) | An AI read is a route, not an action                                     |           |
 | [0009](0009-ai-installation-roof.md)        | The installation's own roof over the AI                                  |           |
 | [0010](0010-the-landing-mark.md)            | The landing mark — motion answers a move, not a gesture                  |           |
-| [0011](0011-one-document-one-patch.md)      | One document, one patch — the flow format and everything that changes it |           |
+| [0011](0011-one-document-one-patch.md)      | One document, one patch — the flow format and everything that changes it | ← 0012    |
+| [0012](0012-unfinished-is-not-broken.md)    | Unfinished is not broken — two grades of validation                      | → 0011    |

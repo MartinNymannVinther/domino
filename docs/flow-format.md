@@ -211,7 +211,8 @@ output is keyed by the node id.
 | `from` | object | A node and one of its output ports.              |
 | `to`   | object | A node and one of its input ports.               |
 
-An input port takes at most one edge. An edge into a reference port
+An input port takes at most one edge; a required input with no edge is
+a warning, not an error. An edge into a reference port
 (`n2.text`) must come from the node and port the reference names. The
 graph must be acyclic; a loop is expressed by its pair, not by an edge
 back. The edges a prompt implies are derived from its text: when a
@@ -253,8 +254,12 @@ canvas can draw it as a diff without computing one.
 
 Applying a patch is a pure function: `apply(document, patch) → document`
 or a refusal naming the op that failed. The result is validated whole
-before it is stored, so a patch that is well-formed but leaves a brick
-unconnected is refused as a patch, not stored as a broken version.
+before it is stored. Validation has two grades (ADR 0012): an _error_ —
+an id used twice, a port that does not exist, kinds that do not fit, a
+circle, a loop without its pair — refuses the patch; a _warning_ — an
+input with nothing connected, a combine with fewer than two inputs, no
+output brick — is stored with the version, drawn on the brick, and
+refuses only a run.
 
 A patch is stored with the version it produced, so the history can say
 what changed without diffing two documents. The diff the canvas draws

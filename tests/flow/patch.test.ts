@@ -102,11 +102,30 @@ describe("applyPatch", () => {
     expect(result.document.edges.map((e) => e.id)).toEqual(["e1", "e9"]);
   });
 
-  it("refuses a patch that leaves a brick unconnected, as a patch", () => {
+  it("keeps a patch that leaves a brick unconnected, with the warning beside it", () => {
     const result = applyPatch(summary, { ops: [{ op: "removeEdge", id: "e2" }] });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.warnings[0]).toMatchObject({ code: "unconnected", nodeId: "n3" });
+  });
+
+  it("refuses a patch that leaves a document that is not a flow", () => {
+    const result = applyPatch(summary, {
+      ops: [
+        { op: "removeEdge", id: "e3" },
+        {
+          op: "addEdge",
+          edge: {
+            id: "e9",
+            from: { node: "n1", port: "value" },
+            to: { node: "n4", port: "value" },
+          },
+        },
+      ],
+    });
     expect(result).toMatchObject({ ok: false, at: -1 });
     if (result.ok) return;
-    expect(result.problems[0]).toMatchObject({ code: "unconnected", nodeId: "n3" });
+    expect(result.problems.map((p) => p.code)).toContain("kindMismatch");
   });
 
   it("refuses a second edge into a port", () => {

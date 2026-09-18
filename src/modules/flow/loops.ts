@@ -1,4 +1,4 @@
-import type { Problem } from "./problems";
+import { severityOf, type Problem } from "./problems";
 import type { FlowDocument, FlowNode } from "./schema";
 
 /**
@@ -76,6 +76,7 @@ export function checkLoops(doc: FlowDocument, problems: Problem[]) {
     if (start.length !== 1 || end.length !== 1) {
       problems.push({
         code: "loopUnpaired",
+        severity: severityOf("loopUnpaired"),
         message: `loop ${loopId} needs exactly one start and one end`,
         nodeId: (start[0] ?? end[0])?.id,
       });
@@ -84,7 +85,8 @@ export function checkLoops(doc: FlowDocument, problems: Problem[]) {
     const reach = reachableFrom(start[0]!.id, next, end[0]!.id);
     if (!reach.has(end[0]!.id)) {
       problems.push({
-        code: "loopUnpaired",
+        code: "loopOpen",
+        severity: severityOf("loopOpen"),
         message: `loop ${loopId} never reaches its end`,
         nodeId: start[0]!.id,
       });
@@ -96,18 +98,21 @@ export function checkLoops(doc: FlowDocument, problems: Problem[]) {
       if (node.type === "loop_start" || node.type === "loop_end")
         problems.push({
           code: "loopNested",
+          severity: severityOf("loopNested"),
           message: `${id} is a loop inside loop ${loopId}; loops do not nest`,
           nodeId: id,
         });
       else if (node.type === "output")
         problems.push({
           code: "loopHoldsEnd",
+          severity: severityOf("loopHoldsEnd"),
           message: `${id} is an output inside loop ${loopId}`,
           nodeId: id,
         });
       else if (!reachableFrom(id, next).has(end[0]!.id))
         problems.push({
           code: "loopEscapes",
+          severity: severityOf("loopEscapes"),
           message: `${id} runs inside loop ${loopId} but never comes back to its end`,
           nodeId: id,
         });

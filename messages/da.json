@@ -533,10 +533,263 @@
   },
   "flows": {
     "title": "Flows",
-    "subtitle": "Arbejdsgange du har stillet op, og hvordan de sidst kørte.",
+    "subtitle": "Arbejdsgange du har stillet op. Åbn et flow for at bygge videre på det.",
     "empty": {
       "title": "Ingen flows endnu",
-      "hint": "Lærredet og samtalen der bygger et flow kommer i næste etape. Indtil da er der intet at vise her."
+      "hint": "Start fra et af eksemplerne, eller fra det mindste flow der kan køre, og byg videre på lærredet."
+    },
+    "columns": {
+      "name": "Navn",
+      "description": "Beskrivelse",
+      "version": "Version",
+      "updated": "Ændret"
+    },
+    "new": {
+      "button": "Nyt flow",
+      "examples": "Start fra et eksempel",
+      "blank": "Tomt flow",
+      "failed": "Flowet kunne ikke oprettes."
+    },
+    "import": {
+      "button": "Importér",
+      "done": "Flowet er importeret.",
+      "tooBig": "Filen er for stor.",
+      "reasons": {
+        "notJson": "Filen er ikke JSON.",
+        "notAFlow": "Filen er ikke et Domino-flow.",
+        "tooNew": "Filen er skrevet i en nyere version af formatet end denne installation kender.",
+        "unknownVersion": "Filens formatversion kan ikke læses.",
+        "invalid": "Flowet i filen hænger ikke sammen."
+      }
     }
+  },
+  "flow": {
+    "header": {
+      "back": "Tilbage til flows",
+      "name": "Flowets navn",
+      "unfinished": "{count, plural, one {# løs ende} other {# løse ender}}",
+      "ready": "Klar",
+      "undo": "Fortryd",
+      "export": "Eksportér",
+      "delete": "Slet flow",
+      "deleteTitle": "Slet {name}?",
+      "deleteBody": "Flowet, alle dets versioner, samtalen om det og dets kørsler slettes for altid. Eksportér det først, hvis du vil beholde en kopi.",
+      "deleteConfirm": "Slet flowet",
+      "deleteFailed": "Flowet kunne ikke slettes.",
+      "messages": {
+        "renamed": "omdøbt"
+      }
+    },
+    "editor": {
+      "refused": "Ændringen blev afvist.",
+      "conflict": "Flowet er ændret et andet sted siden du åbnede det. Siden er hentet igen.",
+      "messages": {
+        "connected": "forbundet",
+        "removed": "fjernet",
+        "undone": "fortrudt",
+        "reverted": "tilbage til version {number}"
+      }
+    },
+    "add": {
+      "button": "Tilføj klods",
+      "after": "Efter “{title}”",
+      "loose": "Løs klods (vælg en klods for at sætte den efter)",
+      "message": "tilføjet {type}"
+    },
+    "panel": {
+      "label": "Indstillinger for den valgte klods",
+      "close": "Luk",
+      "title": "Titel",
+      "remove": "Fjern klods",
+      "removeTitle": "Fjern “{title}”?",
+      "removeBody": "Klodsen og alle dens forbindelser fjernes. Du kan fortryde bagefter.",
+      "removeConfirm": "Fjern",
+      "connections": {
+        "title": "Forbindelser",
+        "none": "Ikke forbundet"
+      },
+      "messages": {
+        "settings": "ændrede {title}",
+        "renamed": "omdøbte til {title}",
+        "connected": "forbandt {title}",
+        "removed": "fjernede {title}"
+      }
+    },
+    "history": {
+      "button": "Version {number}",
+      "title": "Historik",
+      "loading": "Henter…",
+      "version": "Version {number}",
+      "noMessage": "(ingen besked)",
+      "ops": "{count, plural, one {# ændring} other {# ændringer}}",
+      "revert": "Gå tilbage hertil",
+      "actor": {
+        "user": "dig",
+        "ai": "AI"
+      }
+    },
+    "problems": {
+      "codes": {
+        "shape": "Dokumentet har en fejl i formen.",
+        "duplicateId": "Et id er brugt to gange.",
+        "unknownNode": "En forbindelse peger på en klods der ikke findes.",
+        "unknownPort": "En forbindelse peger på en port der ikke findes.",
+        "portTaken": "Porten {port} har to forbindelser.",
+        "referenceMismatch": "Porten {port} skal fødes fra den klods den nævner.",
+        "kindMismatch": "Det der kommer ind på {port} passer ikke til porten.",
+        "unconnected": "Indgangen {port} mangler en forbindelse.",
+        "combineTooFew": "Kombinér skal have mindst to indgange forbundet.",
+        "cycle": "Flowet løber i ring.",
+        "loopUnpaired": "Løkken mangler sin start eller sin slutning.",
+        "loopEscapes": "En klods i løkken fører ud af den uden at nå slutningen.",
+        "loopNested": "Løkker kan ikke ligge inde i løkker.",
+        "loopHoldsEnd": "Et output kan ikke ligge inde i en løkke.",
+        "noOutput": "Flowet har ingen output-klods.",
+        "fieldOnText": "{port} er tekst og har ingen felter.",
+        "unknownField": "Feltet findes ikke i {port}.",
+        "loopOpen": "Løkkens start når ikke sin slutning endnu."
+      }
+    }
+  },
+  "bricks": {
+    "types": {
+      "input": "Input",
+      "llm": "Sprogmodel",
+      "structured": "Struktureret output",
+      "document": "Dokument",
+      "branch": "Hvis/ellers",
+      "loop_start": "Løkke start",
+      "loop_end": "Løkke slut",
+      "combine": "Kombinér",
+      "template": "Skabelon",
+      "output": "Output"
+    },
+    "about": {
+      "input": "Her kommer kørslens input ind: tekst, en fil eller en bunke.",
+      "llm": "En sprogmodel skriver ud fra en prompt.",
+      "structured": "Sprogmodellen svarer i et fast skema.",
+      "document": "Teksten ud af en fil.",
+      "branch": "Sender videre ad den ene eller den anden vej.",
+      "loop_start": "Én gang for hvert element i en liste.",
+      "loop_end": "Samler det der kom ud af løkken.",
+      "combine": "Flere ting til én.",
+      "template": "Tekst sat sammen af felter.",
+      "output": "Det kørslen er til for."
+    },
+    "defaults": {
+      "input": "Input",
+      "llm": "Skriv",
+      "structured": "Træk ud",
+      "document": "Læs dokumentet",
+      "branch": "Hvis",
+      "loop_start": "For hver",
+      "loop_end": "Saml",
+      "combine": "Kombinér",
+      "template": "Skabelon",
+      "output": "Resultat"
+    },
+    "hasProblems": "{count, plural, one {# ting at se på} other {# ting at se på}}",
+    "dropReference": "træk en forbindelse hertil",
+    "input": {
+      "kind": "Type",
+      "kinds": {
+        "text": "Tekst",
+        "file": "Én fil",
+        "list": "En bunke"
+      },
+      "itemKind": "Bunken består af",
+      "itemKinds": {
+        "file": "Filer",
+        "text": "Tekster"
+      },
+      "label": "Feltets navn",
+      "hint": "Hjælpetekst",
+      "hintHelp": "Vises ved feltet, når nogen starter en kørsel."
+    },
+    "prompt": {
+      "prompt": "Prompt",
+      "promptPlaceholder": "Skriv hvad modellen skal gøre, og sæt ind hvad den skal have at arbejde med…",
+      "template": "Skabelon",
+      "templatePlaceholder": "Skriv teksten, og sæt felter ind hvor de skal stå…",
+      "insert": "Sæt ind",
+      "insertPlaceholder": "Vælg noget fra en tidligere klods…",
+      "insertHelp": "Sættes ind ved markøren, fx '{{'n2.text'}}'. Forbindelsen følger med.",
+      "temperature": "Temperatur",
+      "maxTokens": "Højst tokens"
+    },
+    "schema": {
+      "title": "Skema",
+      "help": "De felter modellen skal udfylde. Navne uden mellemrum og æøå.",
+      "name": "Feltnavn",
+      "type": "Type",
+      "types": {
+        "string": "Tekst",
+        "number": "Tal",
+        "integer": "Heltal",
+        "boolean": "Ja/nej",
+        "enum": "Valg",
+        "advanced": "Avanceret"
+      },
+      "options": "Valgmuligheder",
+      "optionsPlaceholder": "stærk, mulig, svag",
+      "description": "Beskrivelse",
+      "descriptionPlaceholder": "Hvad skal stå her, i én sætning",
+      "required": "Skal udfyldes",
+      "add": "Tilføj felt",
+      "remove": "Fjern felt"
+    },
+    "document": {
+      "maxChars": "Højst tegn",
+      "maxCharsHelp": "Længere tekst klippes. 60.000 tegn er omkring 20 sider."
+    },
+    "branch": {
+      "op": "Betingelse",
+      "ops": {
+        "contains": "indeholder",
+        "equals": "er lig med",
+        "notEmpty": "er ikke tom",
+        "gt": "er større end",
+        "lt": "er mindre end"
+      },
+      "value": "Værdi",
+      "field": "Felt",
+      "fieldHelp": "Tomt betyder hele værdien. For struktureret output: feltets navn, fx haster."
+    },
+    "loop": {
+      "startHelp": "Løkke {loopId}: alt mellem start og slut kører én gang for hvert element i listen. Forbind en liste til items, og forbind det der skal samles til slutklodsens item.",
+      "endHelp": "Løkke {loopId}: samler item fra hver omgang til én liste, items."
+    },
+    "combine": {
+      "mode": "Måde",
+      "modes": {
+        "concat": "Sæt tekster sammen",
+        "merge": "Flet felter",
+        "list": "Lav en liste"
+      },
+      "modeHelp": {
+        "concat": "Indgangene som tekst efter hinanden. En gren der ikke blev taget, udelades.",
+        "merge": "Strukturerede svar flettes til ét; andet lægges under portens bogstav.",
+        "list": "Indgangene som én liste; lister slås sammen."
+      },
+      "separator": "Mellem tekster",
+      "separatorHelp": "Skriv \\n for linjeskift."
+    },
+    "output": {
+      "kind": "Vises som",
+      "kinds": {
+        "text": "Tekst",
+        "table": "Tabel",
+        "json": "Struktureret"
+      },
+      "kindHelp": {
+        "text": "Vises som tekst.",
+        "table": "En liste af strukturerede svar som rækker, med felterne som kolonner. Kan hentes som regneark.",
+        "json": "Vises som det er."
+      },
+      "label": "Navn"
+    }
+  },
+  "canvas": {
+    "label": "Lærred med flowets klodser og forbindelser"
   }
 }

@@ -55,8 +55,10 @@ describe("flows", () => {
   });
 
   it("refuse a document that does not hold together", async () => {
-    const result = await createFlow(a, { ...summary, edges: [] });
-    expect(result.ok).toBe(false);
+    const twice = { ...summary, nodes: [...summary.nodes, summary.nodes[0]!] };
+    expect((await createFlow(a, twice)).ok).toBe(false);
+    // Unfinished is not broken: a flow with a loose end is kept (docs/adr/0012).
+    expect((await createFlow(a, { ...summary, edges: [] })).ok).toBe(true);
   });
 
   it("change by patch, one version at a time, and refuse a stale base", async () => {
@@ -84,7 +86,19 @@ describe("flows", () => {
     const broken = await commitPatch(
       a,
       created.flowId,
-      { ops: [{ op: "removeEdge", id: "e2" }] },
+      {
+        ops: [
+          { op: "removeEdge", id: "e3" },
+          {
+            op: "addEdge",
+            edge: {
+              id: "e9",
+              from: { node: "n1", port: "value" },
+              to: { node: "n4", port: "value" },
+            },
+          },
+        ],
+      },
       { actorKind: "user", message: "" },
     );
     expect(broken).toMatchObject({ ok: false, error: "invalid", at: -1 });

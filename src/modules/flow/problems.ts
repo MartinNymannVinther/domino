@@ -6,6 +6,8 @@
  */
 export type Problem = {
   code: ProblemCode;
+  /** An error refuses the document; a warning is stored, shown, and refuses only a run (docs/adr/0012). */
+  severity: "error" | "warning";
   message: string;
   nodeId?: string;
   edgeId?: string;
@@ -24,9 +26,24 @@ export type ProblemCode =
   | "combineTooFew"
   | "cycle"
   | "loopUnpaired"
+  | "loopOpen"
   | "loopEscapes"
   | "loopNested"
   | "loopHoldsEnd"
   | "noOutput"
   | "fieldOnText"
   | "unknownField";
+
+/** The codes that mean "not finished" rather than "not a flow". */
+export const WARNING_CODES: ReadonlySet<ProblemCode> = new Set([
+  "unconnected",
+  "combineTooFew",
+  "noOutput",
+  "loopOpen",
+]);
+
+export const severityOf = (code: ProblemCode): Problem["severity"] =>
+  WARNING_CODES.has(code) ? "warning" : "error";
+
+export const errorsOf = (problems: Problem[]) => problems.filter((p) => p.severity === "error");
+export const warningsOf = (problems: Problem[]) => problems.filter((p) => p.severity === "warning");

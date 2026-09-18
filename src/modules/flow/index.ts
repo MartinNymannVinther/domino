@@ -29,7 +29,7 @@ export { loopBody } from "./loops";
 export { migrateDocument } from "./migrate";
 export { applyPatch, Patch, PatchOp, patchTouches, type ApplyResult } from "./patch";
 export { COMBINE_PORTS, inputPorts, outputPortNames, PortIndex, type Port } from "./ports";
-export type { Problem, ProblemCode } from "./problems";
+export { errorsOf, severityOf, warningsOf, type Problem, type ProblemCode } from "./problems";
 export { freshId, missingReferenceEdgeOps, referenceEdgeOps, referenceSource } from "./references";
 export { FileRef, itemCount, RUN_LIMITS, validateRunInput, type RunInput } from "./run-input";
 export {

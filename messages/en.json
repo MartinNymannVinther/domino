@@ -533,10 +533,263 @@
   },
   "flows": {
     "title": "Flows",
-    "subtitle": "The workflows you have lined up, and how they last ran.",
+    "subtitle": "The workflows you have set up. Open a flow to keep building it.",
     "empty": {
       "title": "No flows yet",
-      "hint": "The canvas and the conversation that builds a flow arrive in the next wave. Until then there is nothing to show here."
+      "hint": "Start from one of the examples, or from the smallest flow that runs, and build on the canvas."
+    },
+    "columns": {
+      "name": "Name",
+      "description": "Description",
+      "version": "Version",
+      "updated": "Changed"
+    },
+    "new": {
+      "button": "New flow",
+      "examples": "Start from an example",
+      "blank": "Blank flow",
+      "failed": "The flow could not be created."
+    },
+    "import": {
+      "button": "Import",
+      "done": "The flow was imported.",
+      "tooBig": "The file is too big.",
+      "reasons": {
+        "notJson": "The file is not JSON.",
+        "notAFlow": "The file is not a Domino flow.",
+        "tooNew": "The file was written in a newer version of the format than this installation knows.",
+        "unknownVersion": "The file's format version cannot be read.",
+        "invalid": "The flow in the file does not hold together."
+      }
     }
+  },
+  "flow": {
+    "header": {
+      "back": "Back to flows",
+      "name": "Flow name",
+      "unfinished": "{count, plural, one {# loose end} other {# loose ends}}",
+      "ready": "Ready",
+      "undo": "Undo",
+      "export": "Export",
+      "delete": "Delete flow",
+      "deleteTitle": "Delete {name}?",
+      "deleteBody": "The flow, every version of it, the conversation about it and its runs are deleted for good. Export it first if you want a copy.",
+      "deleteConfirm": "Delete the flow",
+      "deleteFailed": "The flow could not be deleted.",
+      "messages": {
+        "renamed": "renamed"
+      }
+    },
+    "editor": {
+      "refused": "The change was refused.",
+      "conflict": "The flow was changed somewhere else since you opened it. The page has been reloaded.",
+      "messages": {
+        "connected": "connected",
+        "removed": "removed",
+        "undone": "undone",
+        "reverted": "back to version {number}"
+      }
+    },
+    "add": {
+      "button": "Add brick",
+      "after": "After “{title}”",
+      "loose": "Loose brick (select a brick to add after it)",
+      "message": "added {type}"
+    },
+    "panel": {
+      "label": "Settings for the selected brick",
+      "close": "Close",
+      "title": "Title",
+      "remove": "Remove brick",
+      "removeTitle": "Remove “{title}”?",
+      "removeBody": "The brick and all its connections are removed. You can undo afterwards.",
+      "removeConfirm": "Remove",
+      "connections": {
+        "title": "Connections",
+        "none": "Not connected"
+      },
+      "messages": {
+        "settings": "changed {title}",
+        "renamed": "renamed to {title}",
+        "connected": "connected {title}",
+        "removed": "removed {title}"
+      }
+    },
+    "history": {
+      "button": "Version {number}",
+      "title": "History",
+      "loading": "Loading…",
+      "version": "Version {number}",
+      "noMessage": "(no message)",
+      "ops": "{count, plural, one {# change} other {# changes}}",
+      "revert": "Go back to this",
+      "actor": {
+        "user": "you",
+        "ai": "AI"
+      }
+    },
+    "problems": {
+      "codes": {
+        "shape": "The document has an error in its shape.",
+        "duplicateId": "An id is used twice.",
+        "unknownNode": "A connection points at a brick that does not exist.",
+        "unknownPort": "A connection points at a port that does not exist.",
+        "portTaken": "The port {port} has two connections.",
+        "referenceMismatch": "The port {port} must be fed from the brick it names.",
+        "kindMismatch": "What arrives on {port} does not fit the port.",
+        "unconnected": "The input {port} has no connection.",
+        "combineTooFew": "Combine needs at least two inputs connected.",
+        "cycle": "The flow runs in a circle.",
+        "loopUnpaired": "The loop is missing its start or its end.",
+        "loopEscapes": "A brick inside the loop leads out of it without reaching the end.",
+        "loopNested": "Loops cannot sit inside loops.",
+        "loopHoldsEnd": "An output cannot sit inside a loop.",
+        "noOutput": "The flow has no output brick.",
+        "fieldOnText": "{port} is text and has no fields.",
+        "unknownField": "The field does not exist in {port}.",
+        "loopOpen": "The loop's start does not reach its end yet."
+      }
+    }
+  },
+  "bricks": {
+    "types": {
+      "input": "Input",
+      "llm": "Language model",
+      "structured": "Structured output",
+      "document": "Document",
+      "branch": "If/else",
+      "loop_start": "Loop start",
+      "loop_end": "Loop end",
+      "combine": "Combine",
+      "template": "Template",
+      "output": "Output"
+    },
+    "about": {
+      "input": "Where a run's input comes in: text, a file or a pile.",
+      "llm": "A language model writes from a prompt.",
+      "structured": "The language model answers in a fixed schema.",
+      "document": "The text out of a file.",
+      "branch": "Sends on one way or the other.",
+      "loop_start": "Once for every item in a list.",
+      "loop_end": "Collects what came out of the loop.",
+      "combine": "Several things into one.",
+      "template": "Text put together from fields.",
+      "output": "What the run is for."
+    },
+    "defaults": {
+      "input": "Input",
+      "llm": "Write",
+      "structured": "Extract",
+      "document": "Read the document",
+      "branch": "If",
+      "loop_start": "For each",
+      "loop_end": "Collect",
+      "combine": "Combine",
+      "template": "Template",
+      "output": "Result"
+    },
+    "hasProblems": "{count, plural, one {# thing to look at} other {# things to look at}}",
+    "dropReference": "drop a connection here",
+    "input": {
+      "kind": "Type",
+      "kinds": {
+        "text": "Text",
+        "file": "One file",
+        "list": "A pile"
+      },
+      "itemKind": "The pile holds",
+      "itemKinds": {
+        "file": "Files",
+        "text": "Texts"
+      },
+      "label": "Field name",
+      "hint": "Help text",
+      "hintHelp": "Shown by the field when somebody starts a run."
+    },
+    "prompt": {
+      "prompt": "Prompt",
+      "promptPlaceholder": "Write what the model should do, and insert what it should work with…",
+      "template": "Template",
+      "templatePlaceholder": "Write the text, and insert fields where they go…",
+      "insert": "Insert",
+      "insertPlaceholder": "Pick something from an earlier brick…",
+      "insertHelp": "Inserted at the cursor, e.g. '{{'n2.text'}}'. The connection follows.",
+      "temperature": "Temperature",
+      "maxTokens": "Max tokens"
+    },
+    "schema": {
+      "title": "Schema",
+      "help": "The fields the model must fill in. Names without spaces or special letters.",
+      "name": "Field name",
+      "type": "Type",
+      "types": {
+        "string": "Text",
+        "number": "Number",
+        "integer": "Whole number",
+        "boolean": "Yes/no",
+        "enum": "Choice",
+        "advanced": "Advanced"
+      },
+      "options": "Options",
+      "optionsPlaceholder": "strong, possible, weak",
+      "description": "Description",
+      "descriptionPlaceholder": "What goes here, in one sentence",
+      "required": "Required",
+      "add": "Add field",
+      "remove": "Remove field"
+    },
+    "document": {
+      "maxChars": "Max characters",
+      "maxCharsHelp": "Longer text is cut. 60,000 characters is about 20 pages."
+    },
+    "branch": {
+      "op": "Condition",
+      "ops": {
+        "contains": "contains",
+        "equals": "equals",
+        "notEmpty": "is not empty",
+        "gt": "is greater than",
+        "lt": "is less than"
+      },
+      "value": "Value",
+      "field": "Field",
+      "fieldHelp": "Empty means the whole value. For structured output: the field's name, e.g. urgent."
+    },
+    "loop": {
+      "startHelp": "Loop {loopId}: everything between start and end runs once per item in the list. Connect a list to items, and connect what should be collected to the end brick's item.",
+      "endHelp": "Loop {loopId}: collects item from every round into one list, items."
+    },
+    "combine": {
+      "mode": "Mode",
+      "modes": {
+        "concat": "Join texts",
+        "merge": "Merge fields",
+        "list": "Make a list"
+      },
+      "modeHelp": {
+        "concat": "The inputs as text, one after the other. A branch not taken is left out.",
+        "merge": "Structured answers are merged into one; anything else goes under the port's letter.",
+        "list": "The inputs as one list; lists are joined."
+      },
+      "separator": "Between texts",
+      "separatorHelp": "Write \\n for a line break."
+    },
+    "output": {
+      "kind": "Shown as",
+      "kinds": {
+        "text": "Text",
+        "table": "Table",
+        "json": "Structured"
+      },
+      "kindHelp": {
+        "text": "Shown as text.",
+        "table": "A list of structured answers as rows, with the fields as columns. Downloadable as a spreadsheet.",
+        "json": "Shown as it is."
+      },
+      "label": "Name"
+    }
+  },
+  "canvas": {
+    "label": "Canvas with the flow's bricks and connections"
   }
 }

@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { check, index, integer, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { check, index, integer, json, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { domainId, users } from "./foundation";
 import { flows, flowVersions } from "./flows";
 import { tenant } from "./shared";
@@ -40,9 +40,9 @@ export const runs = pgTable(
     mode: text("mode").notNull().default("full"),
     status: text("status").notNull().default("queued"),
     /** The values given to the input bricks, keyed by node id. */
-    input: jsonb("input").notNull().default({}),
+    input: json("input").notNull().default({}),
     /** What the output bricks produced, keyed by node id; null until the run is done. */
-    output: jsonb("output"),
+    output: json("output"),
     /** Why the run failed, in the engine's words; the AI's explanation is asked for separately. */
     error: text("error"),
     /** Which engine answered the model calls, so the history says whose numbers these are. */
@@ -80,8 +80,8 @@ export const runSteps = pgTable(
     /** Which time round inside a loop; 0 outside one. */
     iteration: integer("iteration").notNull().default(0),
     status: text("status").notNull().default("running"),
-    input: jsonb("input"),
-    output: jsonb("output"),
+    input: json("input"),
+    output: json("output"),
     error: text("error"),
     tokensIn: integer("tokens_in").notNull().default(0),
     tokensOut: integer("tokens_out").notNull().default(0),

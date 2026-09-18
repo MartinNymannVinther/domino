@@ -91,6 +91,22 @@ export async function getVersionDocument(
   });
 }
 
+/** The id of a flow's version by its number, or null. */
+export async function versionIdByNumber(
+  ctx: OrgContext,
+  flowId: string,
+  number: number,
+): Promise<string | null> {
+  return withOrgContext(ctx, async (tx) => {
+    const [row] = await tx
+      .select({ id: flowVersions.id })
+      .from(flowVersions)
+      .where(sql`${flowVersions.flowId} = ${flowId} and ${flowVersions.number} = ${number}`)
+      .limit(1);
+    return row?.id ?? null;
+  });
+}
+
 /**
  * Back to an older version: a new version whose document is the old
  * one's, with the diff from the current as its patch so the history

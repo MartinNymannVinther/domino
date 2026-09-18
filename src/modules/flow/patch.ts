@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Id } from "./kinds";
-import type { Problem } from "./problems";
+import { errorsOf, type Problem } from "./problems";
 import { FlowDocument, FlowEdge, FlowNode, LIMITS } from "./schema";
 import { validateDocument } from "./validate";
 
@@ -38,7 +38,8 @@ export const Patch = z.object({ ops: z.array(PatchOp).min(1).max(200) });
 export type Patch = z.infer<typeof Patch>;
 
 export type ApplyResult =
-  { ok: true; document: FlowDocument } | { ok: false; at: number; problems: Problem[] };
+  | { ok: true; document: FlowDocument; warnings: Problem[] }
+  | { ok: false; at: number; problems: Problem[] };
 
 /**
  * Applies every operation in order, then validates the whole result.
@@ -56,7 +57,7 @@ export function applyPatch(doc: FlowDocument, patch: Patch): ApplyResult {
     const refuse = (message: string, nodeId?: string): ApplyResult => ({
       ok: false,
       at,
-      problems: [{ code: "shape", message, nodeId }],
+      problems: [{ code: "shape", severity: "error", message, nodeId }],
     });
     switch (op.op) {
       case "addNode": {
@@ -116,10 +117,14 @@ export function applyPatch(doc: FlowDocument, patch: Patch): ApplyResult {
     return {
       ok: false,
       at: -1,
-      problems: [{ code: "shape", message: shaped.error.issues[0]?.message ?? "invalid" }],
+      problems: [
+        { code: "shape", severity: "error", message: shaped.error.issues[0]?.message ?? "invalid" },
+      ],
     };
   const problems = validateDocument(shaped.data);
-  return problems.length ? { ok: false, at: -1, problems } : { ok: true, document: shaped.data };
+  return errorsOf(problems).length
+    ? { ok: false, at: -1, problems }
+    : { ok: true, document: shaped.data, warnings: problems };
 }
 
 /** The ids a patch touches, for the canvas to colour: added, changed, removed. */

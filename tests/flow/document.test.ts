@@ -21,9 +21,10 @@ function withEdits(doc: FlowDocument, edit: (d: FlowDocument) => void): FlowDocu
   return copy;
 }
 
+/** Every problem, warnings included: a stored document may still have things to say. */
 const codes = (doc: unknown) => {
   const result = parseDocument(doc);
-  return result.ok ? [] : result.problems.map((p) => p.code);
+  return result.ok ? result.warnings.map((p) => p.code) : result.problems.map((p) => p.code);
 };
 
 describe("the example flows", () => {
@@ -131,19 +132,21 @@ describe("the rules", () => {
     expect(codes(doc)).toContain("kindMismatch");
   });
 
-  it("refuses an unconnected input", () => {
+  it("warns about an unconnected input, but lets the document be kept", () => {
     const doc = withEdits(summary, (d) => {
       d.edges.splice(1, 1);
     });
     expect(codes(doc)).toContain("unconnected");
+    expect(parseDocument(doc).ok).toBe(true);
   });
 
-  it("refuses a flow without an output", () => {
+  it("warns about a flow without an output", () => {
     const doc = withEdits(summary, (d) => {
       d.nodes.pop();
       d.edges.pop();
     });
     expect(codes(doc)).toContain("noOutput");
+    expect(parseDocument(doc).ok).toBe(true);
   });
 
   it("refuses a circle", () => {
