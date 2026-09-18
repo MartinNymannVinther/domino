@@ -3,7 +3,9 @@
 import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { CanvasActionsProvider } from "@/components/canvas/canvas-actions";
 import { FlowCanvas } from "@/components/canvas/flow-canvas";
+import { TestBrickSheet } from "@/components/run/test-brick-sheet";
 import { ChatPanel, type ChatMessage } from "@/components/chat/chat-panel";
 import { validateDocument, type FlowDocument } from "@/modules/flow";
 import { acceptProposalAction, rejectProposalAction } from "@/modules/flow/actions-chat";
@@ -35,6 +37,7 @@ export function FlowEditor({
   const [messages, setMessages] = useState(initial.messages);
   const [chatOpen, setChatOpen] = useState(modelConfigured || initial.messages.length > 0);
   const [deciding, setDeciding] = useState(false);
+  const [testingId, setTestingId] = useState<string | null>(null);
 
   // The newest proposal still waiting, drawn on the canvas as a diff.
   const pending = useMemo(
@@ -151,17 +154,19 @@ export function FlowEditor({
           />
         ) : null}
         <div className="min-h-[40svh] flex-1 lg:min-h-0">
-          <FlowCanvas
-            document={shown}
-            problems={shownProblems}
-            marks={preview?.marks}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-            onConnect={onConnect}
-            onDelete={onDelete}
-            isValidConnection={(c) => !frozen && connectionAllowed(document, c)}
-            readOnly={frozen}
-          />
+          <CanvasActionsProvider value={{ onTest: frozen ? undefined : setTestingId }}>
+            <FlowCanvas
+              document={shown}
+              problems={shownProblems}
+              marks={preview?.marks}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              onConnect={onConnect}
+              onDelete={onDelete}
+              isValidConnection={(c) => !frozen && connectionAllowed(document, c)}
+              readOnly={frozen}
+            />
+          </CanvasActionsProvider>
         </div>
         {selected ? (
           <BrickPanel
@@ -173,10 +178,17 @@ export function FlowEditor({
             withAi={modelConfigured}
             onCommit={(ops, message) => void commit(ops, message)}
             onClose={() => setSelectedId(null)}
+            onTest={frozen ? undefined : () => setTestingId(selected.id)}
             readOnly={frozen}
           />
         ) : null}
       </div>
+      <TestBrickSheet
+        flowId={flowId}
+        document={document}
+        nodeId={testingId}
+        onClose={() => setTestingId(null)}
+      />
     </div>
   );
 }

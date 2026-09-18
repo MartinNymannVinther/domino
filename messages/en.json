@@ -646,7 +646,8 @@
         "renamed": "renamed to {title}",
         "connected": "connected {title}",
         "removed": "removed {title}"
-      }
+      },
+      "test": "Test the brick on its own"
     },
     "history": {
       "button": "Version {number}",
@@ -874,7 +875,8 @@
         "json": "Shown as it is."
       },
       "label": "Name"
-    }
+    },
+    "testBrick": "Test “{title}” on its own"
   },
   "canvas": {
     "label": "Canvas with the flow's bricks and connections"
@@ -991,6 +993,22 @@
         "notFound": "The flow was not found.",
         "unauthorized": "You are not signed in."
       }
+    },
+    "test": {
+      "title": "Test “{title}”",
+      "subtitle": "Give the brick what its inputs would carry and see what it answers. Nothing is stored.",
+      "loading": "Fetching what the last run gave it…",
+      "noInputs": "The brick has no inputs.",
+      "jsonPlaceholder": "JSON, e.g. '{'\"name\": \"…\"'}'",
+      "textPlaceholder": "Paste text…",
+      "run": "Run the brick",
+      "running": "Running…",
+      "took": "{ms} ms",
+      "tokens": "{in} tokens in · {out} out",
+      "nothing": "The brick gave nothing back.",
+      "failedTitle": "The brick failed",
+      "failed": "The brick could not be run.",
+      "ceiling": "The ceiling on AI calls is reached. Try again in a while."
     }
   }
 }

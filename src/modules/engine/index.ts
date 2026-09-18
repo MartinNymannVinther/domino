@@ -4,6 +4,7 @@
  * src/modules/runs gives it a database, a provider and the files.
  */
 export { providerAdapter } from "./adapter";
+export { runBrick, SKIP, type BrickContext, type Outputs } from "./bricks";
 export { runFlow } from "./run";
 export {
   DEFAULT_ENGINE_LIMITS,

@@ -646,7 +646,8 @@
         "renamed": "omdøbte til {title}",
         "connected": "forbandt {title}",
         "removed": "fjernede {title}"
-      }
+      },
+      "test": "Test klodsen for sig"
     },
     "history": {
       "button": "Version {number}",
@@ -874,7 +875,8 @@
         "json": "Vises som det er."
       },
       "label": "Navn"
-    }
+    },
+    "testBrick": "Test “{title}” for sig"
   },
   "canvas": {
     "label": "Lærred med flowets klodser og forbindelser"
@@ -991,6 +993,22 @@
         "notFound": "Flowet blev ikke fundet.",
         "unauthorized": "Du er ikke logget ind."
       }
+    },
+    "test": {
+      "title": "Test “{title}”",
+      "subtitle": "Giv klodsen det, dens indgange ville få, og se hvad den svarer. Intet gemmes.",
+      "loading": "Henter hvad sidste kørsel gav den…",
+      "noInputs": "Klodsen har ingen indgange.",
+      "jsonPlaceholder": "JSON, fx '{'\"navn\": \"…\"'}'",
+      "textPlaceholder": "Indsæt tekst…",
+      "run": "Kør klodsen",
+      "running": "Kører…",
+      "took": "{ms} ms",
+      "tokens": "{in} tokens ind · {out} ud",
+      "nothing": "Klodsen gav intet tilbage.",
+      "failedTitle": "Klodsen fejlede",
+      "failed": "Klodsen kunne ikke køres.",
+      "ceiling": "Loftet for AI-kald er nået. Prøv igen om lidt."
     }
   }
 }

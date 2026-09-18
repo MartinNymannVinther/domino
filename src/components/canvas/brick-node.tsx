@@ -3,8 +3,11 @@
 import { memo } from "react";
 import { useTranslations } from "next-intl";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { PlayIcon } from "lucide-react";
 import { kindLabel } from "@/modules/flow";
+import { testableBrick } from "@/modules/runs/testable";
 import { cn } from "@/lib/utils";
+import { useCanvasActions } from "./canvas-actions";
 import { hasReferenceHandle, REFERENCE_HANDLE, type BrickNode as BrickNodeType } from "./graph";
 
 /**
@@ -25,6 +28,8 @@ function BrickNodeView({ data, selected }: NodeProps<BrickNodeType>) {
   const errors = problems.filter((p) => p.severity === "error");
   const withReference = hasReferenceHandle(brick.type);
   const rows = Math.max(inputs.length + (withReference ? 1 : 0), outputs.length, 1);
+  const { onTest } = useCanvasActions();
+  const testable = Boolean(onTest) && testableBrick(brick.type);
 
   return (
     <div
@@ -45,17 +50,33 @@ function BrickNodeView({ data, selected }: NodeProps<BrickNodeType>) {
           <p className="text-label text-[11px] leading-none font-medium tracking-[0.04em] uppercase">
             {t(`types.${brick.type}`)}
           </p>
-          {warnings.length + errors.length > 0 ? (
-            <span
-              className={cn(
-                "rounded-full px-1.5 text-[10px] leading-4 font-semibold",
-                errors.length ? "bg-destructive text-card" : "bg-warning-tint text-warning",
-              )}
-              aria-label={t("hasProblems", { count: warnings.length + errors.length })}
-            >
-              {warnings.length + errors.length}
-            </span>
-          ) : null}
+          <span className="flex items-center gap-1">
+            {warnings.length + errors.length > 0 ? (
+              <span
+                className={cn(
+                  "rounded-full px-1.5 text-[10px] leading-4 font-semibold",
+                  errors.length ? "bg-destructive text-card" : "bg-warning-tint text-warning",
+                )}
+                aria-label={t("hasProblems", { count: warnings.length + errors.length })}
+              >
+                {warnings.length + errors.length}
+              </span>
+            ) : null}
+            {testable ? (
+              <button
+                type="button"
+                className="nodrag text-primary hover:bg-accent focus-visible:outline-ring -my-1 -mr-1 flex size-6 items-center justify-center rounded-md focus-visible:outline-2"
+                aria-label={t("testBrick", { title: brick.title })}
+                title={t("testBrick", { title: brick.title })}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onTest?.(brick.id);
+                }}
+              >
+                <PlayIcon className="size-3.5" />
+              </button>
+            ) : null}
+          </span>
         </div>
         <p className="truncate px-3 pt-1 leading-snug font-semibold">{brick.title}</p>
       </div>

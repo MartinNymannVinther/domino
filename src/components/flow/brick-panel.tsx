@@ -1,9 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { PlayIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConfirmButton } from "@/components/ui/confirm-button";
 import type { FlowDocument, FlowNode, PatchOp, Problem } from "@/modules/flow";
+import { testableBrick } from "@/modules/runs/testable";
 import { cn } from "@/lib/utils";
 import {
   BranchForm,
@@ -32,6 +34,7 @@ export function BrickPanel({
   withAi,
   onCommit,
   onClose,
+  onTest,
   readOnly,
 }: {
   flowId: string;
@@ -41,6 +44,7 @@ export function BrickPanel({
   withAi: boolean;
   onCommit: (ops: PatchOp[], message: string) => void;
   onClose: () => void;
+  onTest?: () => void;
   readOnly?: boolean;
 }) {
   const t = useTranslations("flow.panel");
@@ -95,6 +99,13 @@ export function BrickPanel({
         <TemplateForm node={node} doc={doc} flowId={flowId} withAi={withAi} onChange={change} />
       ) : null}
       {node.type === "output" ? <OutputForm node={node} onChange={change} /> : null}
+
+      {onTest && testableBrick(node.type) ? (
+        <Button type="button" variant="outline" size="sm" className="w-fit" onClick={onTest}>
+          <PlayIcon data-icon="inline-start" />
+          {t("test")}
+        </Button>
+      ) : null}
 
       <ConnectionsForm
         doc={doc}
