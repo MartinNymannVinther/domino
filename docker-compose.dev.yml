@@ -1,0 +1,37 @@
+# Development infrastructure for Domino.
+# Runs Postgres 16 only; the app runs on the host via `pnpm dev`.
+#
+#   docker compose -f docker-compose.dev.yml up -d --wait
+#   pnpm db:migrate
+#   pnpm dev
+
+services:
+  db:
+    image: postgres:16
+    container_name: domino-dev-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: domino
+      # Runtime role passwords, consumed by docker/postgres-init/01-roles.sh.
+      # Dev-only, and they match the URLs in .env.example. The init script
+      # requires them rather than defaulting to the role name as its own
+      # password; a default that works is how one reaches production.
+      DOMINO_APP_PASSWORD: ${DOMINO_APP_PASSWORD:-domino_app}
+      DOMINO_AUTH_PASSWORD: ${DOMINO_AUTH_PASSWORD:-domino_auth}
+    # Loopback only: this database's password is "postgres" and a laptop
+    # is often on a network somebody else is also on. `pnpm dev` runs on
+    # the host and connects over loopback, so nothing is lost.
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - domino-dev-pgdata:/var/lib/postgresql/data
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d domino"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  domino-dev-pgdata:

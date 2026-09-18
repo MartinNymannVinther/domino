@@ -1,0 +1,126 @@
+/*
+ * Haij design tokens - "2a" (warm paper / moss green), shared across the Haij family.
+ *
+ * The light palette is the design handoff verbatim: hex values are the truth,
+ * oklch are the conversions. Beyond the shadcn set it names three greys the
+ * design leans on (label, meta, hairline) and splits status colors into an ink
+ * and a tint, because 2a states are tinted chips with dark text, never solids.
+ *
+ * The dark palette is derived from 2a, not designed: the same warm hue rotated
+ * to a grey-brown ground with the moss accent lifted for contrast.
+ */
+
+:root {
+  --background: oklch(0.968 0.006 85); /* #f7f5f1 */
+  --foreground: oklch(0.245 0.008 75); /* #24221e */
+  --card: oklch(0.994 0.004 90); /* #fffdfa */
+  --card-foreground: oklch(0.245 0.008 75);
+  --popover: oklch(0.994 0.004 90);
+  --popover-foreground: oklch(0.245 0.008 75);
+  --primary: oklch(0.505 0.055 150); /* #4a6b53 */
+  --primary-foreground: oklch(0.968 0.006 85);
+  --primary-hover: oklch(0.385 0.05 150); /* #31513c */
+  --primary-active: oklch(0.345 0.045 150); /* #2c4a37 */
+  --secondary: oklch(0.953 0.007 85); /* #f2efe9 */
+  --secondary-foreground: oklch(0.375 0.008 80); /* #4a463f */
+  --muted: oklch(0.935 0.008 85); /* #f0ece5 */
+  --muted-foreground: oklch(0.5 0.008 80); /* #6b665d */
+  --accent: oklch(0.925 0.017 150); /* #e4ebe4 */
+  --accent-foreground: oklch(0.385 0.05 150); /* #31513c */
+  --destructive: oklch(0.475 0.075 55); /* #8c5b3e */
+  --success: oklch(0.385 0.05 150); /* ink #31513c */
+  --success-tint: oklch(0.925 0.017 150); /* #e4ebe4 */
+  --warning: oklch(0.475 0.075 55); /* ink #8c5b3e */
+  --warning-tint: oklch(0.938 0.018 55); /* #f6e8e0 */
+  /* The story map's backbone notes: a warm sticky yellow, ink as the page. */
+  --sticky: oklch(0.945 0.075 95); /* #f8eab0 */
+  --sticky-ink: oklch(0.3 0.03 80); /* #3d3625 */
+  /*
+   * Two greys darker than the 2a handoff. At the handoff's values meta
+   * reads 4.13:1 and label 2.83:1 on the card, which fails WCAG AA for
+   * the 11-14px text they are used for; these reach 5.19:1 and 4.60:1 on
+   * the worst surface they land on. The hue and the gap between them are
+   * kept, so the page still reads as 2a.
+   */
+  --label: oklch(0.53 0.008 82); /* #6e6b67 labels, placeholders, column heads */
+  --meta: oklch(0.5 0.008 82); /* #65635e meta text */
+  --hairline: oklch(0.935 0.008 85); /* #f0ece5 table rules, skeletons */
+  --border: oklch(0.918 0.008 85); /* #eae5dc */
+  --input: oklch(0.872 0.009 85); /* #ddd8cf */
+  --ring: oklch(0.505 0.055 150);
+  --chart-1: oklch(0.505 0.055 150); /* #4a6b53 */
+  --chart-2: oklch(0.635 0.04 150); /* #7a9a80 */
+  --chart-3: oklch(0.8 0.012 85); /* #c9c2b6 */
+  --chart-4: oklch(0.655 0.065 60); /* #c08a63 */
+  --chart-5: oklch(0.885 0.01 85); /* #e0dbd1 */
+  --radius: 0.75rem;
+  --surface-shadow: 0 1px 2px oklch(0.245 0.008 75 / 0.04);
+  --dialog-shadow: 0 24px 60px -24px oklch(0.245 0.008 75 / 0.28);
+  /* One dimming for every layer over the page: dialog and sheet alike. */
+  --scrim: oklch(0.245 0.008 75 / 0.32);
+  /* The sticky notes' lift (ADR 0016), in ink that follows the palette. */
+  --note-shadow: 0 1px 2px oklch(0.245 0.008 75 / 0.1), 0 5px 12px -8px oklch(0.245 0.008 75 / 0.3);
+  --note-shadow-hover:
+    0 1px 2px oklch(0.245 0.008 75 / 0.12), 0 8px 18px -8px oklch(0.245 0.008 75 / 0.4);
+  --sidebar: oklch(0.953 0.007 85); /* #f2efe9 */
+  --sidebar-foreground: oklch(0.375 0.008 80);
+  --sidebar-primary: oklch(0.505 0.055 150);
+  --sidebar-primary-foreground: oklch(0.968 0.006 85);
+  --sidebar-accent: oklch(0.925 0.017 150);
+  --sidebar-accent-foreground: oklch(0.385 0.05 150);
+  --sidebar-hover: oklch(0.915 0.008 85); /* #eae6df */
+  --sidebar-border: oklch(0.918 0.008 85);
+  --sidebar-ring: oklch(0.505 0.055 150);
+}
+
+.dark {
+  --background: oklch(0.185 0.006 80);
+  --foreground: oklch(0.94 0.006 85);
+  --card: oklch(0.225 0.006 82);
+  --card-foreground: oklch(0.94 0.006 85);
+  --popover: oklch(0.225 0.006 82);
+  --popover-foreground: oklch(0.94 0.006 85);
+  --primary: oklch(0.66 0.075 150);
+  --primary-foreground: oklch(0.17 0.012 150);
+  --primary-hover: oklch(0.72 0.08 150);
+  --primary-active: oklch(0.76 0.08 150);
+  --secondary: oklch(0.27 0.006 82);
+  --secondary-foreground: oklch(0.9 0.006 85);
+  --muted: oklch(0.265 0.006 82);
+  --muted-foreground: oklch(0.7 0.008 82);
+  --accent: oklch(0.315 0.035 150);
+  --accent-foreground: oklch(0.85 0.06 150);
+  --destructive: oklch(0.7 0.095 55);
+  --success: oklch(0.78 0.085 150);
+  --success-tint: oklch(0.315 0.035 150);
+  --warning: oklch(0.8 0.085 62);
+  --warning-tint: oklch(0.32 0.04 55);
+  --sticky: oklch(0.42 0.06 92);
+  --sticky-ink: oklch(0.95 0.02 90);
+  /* Lifted for the same reason as the light pair; see the note above. */
+  --label: oklch(0.65 0.008 82);
+  --meta: oklch(0.7 0.008 82);
+  --hairline: oklch(1 0 0 / 7%);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.66 0.075 150);
+  --chart-1: oklch(0.66 0.075 150);
+  --chart-2: oklch(0.72 0.05 150);
+  --chart-3: oklch(0.45 0.01 82);
+  --chart-4: oklch(0.7 0.075 60);
+  --chart-5: oklch(0.33 0.008 82);
+  --surface-shadow: 0 1px 2px oklch(0 0 0 / 0.3);
+  --dialog-shadow: 0 24px 60px -24px oklch(0 0 0 / 0.6);
+  --scrim: oklch(0 0 0 / 0.5);
+  --note-shadow: 0 1px 2px oklch(0 0 0 / 0.35), 0 5px 12px -8px oklch(0 0 0 / 0.5);
+  --note-shadow-hover: 0 1px 2px oklch(0 0 0 / 0.4), 0 8px 18px -8px oklch(0 0 0 / 0.6);
+  --sidebar: oklch(0.21 0.006 82);
+  --sidebar-foreground: oklch(0.9 0.006 85);
+  --sidebar-primary: oklch(0.66 0.075 150);
+  --sidebar-primary-foreground: oklch(0.17 0.012 150);
+  --sidebar-accent: oklch(0.315 0.035 150);
+  --sidebar-accent-foreground: oklch(0.85 0.06 150);
+  --sidebar-hover: oklch(0.26 0.006 82);
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: oklch(0.66 0.075 150);
+}

@@ -1,0 +1,25 @@
+# Secrets scanning configuration.
+#
+# Findings that are not secrets are allowlisted here by value, not by commit
+# fingerprint: patches are rebased and cherry-picked, which gives every
+# commit a new hash, and an allowlist keyed on a hash silently stops working
+# the moment history is rewritten. Matching the literal value keeps working
+# and stays narrow.
+#
+# Every entry must be justified in a comment. If you cannot say in one
+# sentence why a value is harmless, it is not harmless: rotate it instead of
+# adding it here.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Values that look like secrets but never were"
+regexTarget = "match"
+regexes = [
+  # A test fixture. This placeholder BETTER_AUTH_SECRET existed only to
+  # satisfy the env schema's 16-character minimum in the signup-gate test,
+  # was never deployed anywhere, and has since been replaced by a
+  # self-describing low-entropy string. It remains in the git history.
+  '''0123456789abcdef0123456789abcdef''',
+]

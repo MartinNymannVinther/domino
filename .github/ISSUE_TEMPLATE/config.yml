@@ -1,0 +1,7 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/MartinNymannVinther/domino/security/policy
+    about: >-
+      Please do not open a public issue. Email security@haij.dk instead;
+      SECURITY.md describes what to expect and how quickly.

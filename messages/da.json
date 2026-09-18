@@ -1,0 +1,542 @@
+{
+  "common": {
+    "cancel": "Annuller",
+    "close": "Luk",
+    "error": "Noget gik galt. Prøv igen.",
+    "hours": "{value} t"
+  },
+  "landing": {
+    "nav": {
+      "login": "Log ind",
+      "register": "Opret konto",
+      "apply": "Ansøg om adgang"
+    },
+    "hero": {
+      "title": "Stil brikkerne op. Skub til den første.",
+      "subtitle": "Domino er en visuel flow-bygger til AI-arbejdsgange, for folk der ikke programmerer. Beskriv hvad du vil have, ret i det modellen foreslår, test på ét eksempel og kør det på hele bunken. Open source, på EU-jord eller din egen server, med en AI der foreslår og aldrig bestemmer.",
+      "ctaPrimary": "Opret konto",
+      "ctaSecondary": "Log ind",
+      "trust": "AGPL-3.0 · Passkeys og totrinslogin · Dine data kan hentes ud med ét klik",
+      "ctaApply": "Ansøg om adgang",
+      "ctaDemo": "Prøv demoen"
+    },
+    "flowsLabel": "Det I får",
+    "values": {
+      "aiTitle": "Snak dig frem til et flow",
+      "aiBody": "Beskriv opgaven, og modellen stiller brikkerne op: input, prompts, skemaer og forbindelser. Bed om ændringer bagefter og se dem som et diff på lærredet, som du godkender eller fortryder. Kør den hos Mistral i EU eller lokalt.",
+      "dataTitle": "Dine data, altid",
+      "dataBody": "Hele arbejdsrummet hentes ud som regneark og JSON med ét klik og kan slettes helt igen. Et flow er én fil du kan eksportere, importere og lægge under versionsstyring.",
+      "securityTitle": "Sikkerhed fra første dag",
+      "securityBody": "Arbejdsrum er adskilt i databasen, ikke kun i koden. Passkeys, totrinslogin og en log der ikke kan redigeres."
+    },
+    "status": "Version {version} · bygget til at blive brugt",
+    "family": {
+      "body": "Domino er ét værktøj i Haij-familien af open source-værktøjer til organisationer der vil eje deres egen teknologi.",
+      "link": "Læs om Haij"
+    },
+    "footer": {
+      "license": "Open source under AGPL-3.0",
+      "language": "English",
+      "terms": "Vilkår og privatliv"
+    },
+    "demo": {
+      "title": "Prøv uden at oprette noget",
+      "body": "Du får dit eget arbejdsrum med eksempelflows klar til at køre. Det slettes efter {hours, plural, one {# time} other {# timer}}. Ingen e-mail, ingen tilmelding.",
+      "privacy": "Skriv ikke rigtige personoplysninger i demoen. Den passerer en database og eventuelt en sprogmodel på vejen.",
+      "cta": "Åbn en demo"
+    },
+    "flows": {
+      "talk": "Beskriv opgaven, få et flow",
+      "bricks": "Ni brikker: input, sprogmodel, skema, dokument, hvis, løkke, kombinér, skabelon, output",
+      "diff": "AI-ændringer som diff, godkend eller fortryd",
+      "test": "Test på ét eksempel før hele bunken",
+      "steps": "Se kørslen brik for brik",
+      "history": "Historik med status, tid og forbrug",
+      "ai": "AI der foreslår, du bestemmer"
+    }
+  },
+  "notFound": {
+    "title": "Siden findes ikke",
+    "body": "Adressen er enten forkert, eller også er siden flyttet.",
+    "cta": "Til forsiden"
+  },
+  "auth": {
+    "login": {
+      "title": "Log ind",
+      "subtitle": "Velkommen tilbage.",
+      "email": "E-mail",
+      "password": "Adgangskode",
+      "submit": "Log ind",
+      "or": "eller",
+      "withPasskey": "Log ind med passkey",
+      "noAccount": "Har du ikke en konto?",
+      "registerLink": "Opret konto",
+      "error": "Forkert e-mail eller adgangskode.",
+      "passkeyError": "Login med passkey mislykkedes. Prøv igen."
+    },
+    "register": {
+      "title": "Opret konto",
+      "subtitle": "Din konto og dit arbejdsrum oprettes samtidig.",
+      "name": "Dit navn",
+      "email": "E-mail",
+      "organizationName": "Arbejdsrummets navn",
+      "organizationHint": "Din virksomhed, forening eller afdeling. Kan ændres senere.",
+      "password": "Adgangskode",
+      "passwordHint": "Mindst 12 tegn.",
+      "submit": "Opret konto",
+      "haveAccount": "Har du allerede en konto?",
+      "loginLink": "Log ind",
+      "errorInvalid": "Tjek felterne og prøv igen.",
+      "errorEmailExists": "Der findes allerede en konto med denne e-mail.",
+      "errorGeneric": "Kontoen kunne ikke oprettes. Prøv igen.",
+      "closedBody": "Denne installation af Domino tager ikke imod nye brugere. Kontakt ejeren hvis du skal have adgang.",
+      "invitedSubtitle": "Du er inviteret. Kontoen oprettes til den e-mail og det arbejdsrum, invitationen gælder for.",
+      "lockedHint": "Fastlagt af invitationen.",
+      "errorInvitationInvalid": "Invitationen er udløbet eller allerede brugt. Bed om et nyt link.",
+      "invitationInvalidTitle": "Linket virker ikke længere",
+      "invitationInvalidBody": "Invitationen er udløbet, brugt eller erstattet af en nyere. Bed den der inviterede dig om et nyt link, eller ansøg om adgang igen.",
+      "applyLink": "Ansøg om adgang"
+    },
+    "twoFactor": {
+      "title": "Totrinsbekræftelse",
+      "subtitle": "Indtast koden fra din authenticator-app.",
+      "submit": "Bekræft",
+      "error": "Forkert kode. Prøv igen."
+    },
+    "onboarding": {
+      "title": "Opret dit arbejdsrum",
+      "subtitle": "Du mangler et arbejdsrum, før du kan komme i gang.",
+      "organizationName": "Arbejdsrummets navn",
+      "submit": "Opret arbejdsrum",
+      "error": "Arbejdsrummet kunne ikke oprettes. Prøv igen."
+    },
+    "apply": {
+      "title": "Ansøg om adgang",
+      "subtitle": "Denne installation af Domino tager imod nye brugere efter en kort ansøgning. Ejeren ser den personligt og svarer per mail.",
+      "name": "Dit navn",
+      "email": "E-mail",
+      "organizationName": "Organisation eller forening",
+      "message": "Hvad skal du bruge Domino til?",
+      "messageHint": "Valgfrit. En linje eller to om teamet gør det nemmere at sige ja.",
+      "submit": "Send ansøgning",
+      "sentTitle": "Tak, ansøgningen er modtaget",
+      "sentBody": "Du hører fra ejeren af denne installation på {email}. Svaret kommer fra et menneske, så regn med en dag eller to.",
+      "errorInvalid": "Tjek felterne og prøv igen.",
+      "errorTooMany": "Der er sendt mange ansøgninger herfra på kort tid. Prøv igen om en time.",
+      "privacy": "Vi gemmer navn, e-mail og organisation for at behandle ansøgningen, og ikke andet. Bliver den afvist, står oplysningerne kun tilbage som en note om afgørelsen.",
+      "haveAccount": "Har du allerede en konto?",
+      "loginLink": "Log ind"
+    }
+  },
+  "app": {
+    "nav": {
+      "flows": "Flows",
+      "help": "Hjælp",
+      "security": "Sikkerhed",
+      "logout": "Log ud",
+      "appearance": "Udseende",
+      "light": "Lys",
+      "dark": "Mørk",
+      "system": "Følg systemet",
+      "language": "Sprog",
+      "danish": "Dansk",
+      "english": "English",
+      "openMenu": "Åbn menu",
+      "menuTitle": "Navigation",
+      "settings": "Indstillinger",
+      "skipToContent": "Spring til indholdet",
+      "hideMenu": "Skjul menuen",
+      "showMenu": "Vis menuen"
+    },
+    "orgSwitcher": {
+      "label": "Arbejdsrum",
+      "create": "Opret arbejdsrum",
+      "createTitle": "Opret nyt arbejdsrum",
+      "name": "Navn",
+      "createSubmit": "Opret",
+      "switched": "Skiftet til {name}",
+      "created": "{name} er oprettet",
+      "error": "Arbejdsrummet kunne ikke oprettes. Prøv igen.",
+      "switch": "Skift arbejdsrum"
+    },
+    "security": {
+      "title": "Sikkerhed",
+      "subtitle": "Passkeys og totrinsbekræftelse for din konto.",
+      "passkeys": {
+        "title": "Passkeys",
+        "description": "Log ind uden adgangskode med Touch ID, Face ID eller en sikkerhedsnøgle.",
+        "empty": "Ingen passkeys endnu.",
+        "nameLabel": "Navn",
+        "namePlaceholder": "F.eks. MacBook",
+        "add": "Tilføj passkey",
+        "remove": "Fjern",
+        "addedAt": "Tilføjet {date}",
+        "addedToast": "Passkey tilføjet",
+        "removedToast": "Passkey fjernet",
+        "error": "Passkey kunne ikke tilføjes. Prøv igen."
+      },
+      "totp": {
+        "title": "Totrinsbekræftelse (TOTP)",
+        "description": "Kræv en kode fra din authenticator-app ved login.",
+        "statusEnabled": "Slået til",
+        "statusDisabled": "Slået fra",
+        "enable": "Slå til",
+        "disable": "Slå fra",
+        "password": "Bekræft med din adgangskode",
+        "scan": "Scan QR-koden med din authenticator-app, og indtast koden nedenfor.",
+        "backupCodes": "Backupkoder",
+        "backupHint": "Gem koderne et sikkert sted. De kan bruges, hvis du mister din telefon.",
+        "verifyLabel": "Kode fra appen",
+        "verify": "Bekræft",
+        "verifyError": "Forkert kode. Prøv igen.",
+        "enabledToast": "Totrinsbekræftelse er slået til",
+        "disabledToast": "Totrinsbekræftelse er slået fra",
+        "error": "Handlingen mislykkedes. Tjek adgangskoden, og prøv igen.",
+        "totpQrAlt": "QR-kode du scanner i din autentificeringsapp for at tilføje Domino"
+      }
+    },
+    "about": {
+      "title": "Om Domino",
+      "subtitle": "Hvilken udgave af Domino der kører her, og om databasen følger med.",
+      "short": "v{release}",
+      "dirtyShort": "ændret",
+      "dirty": "Lokale ændringer",
+      "dirtyHint": "Bygget fra en arbejdsmappe med ændringer der ikke er committet. Commit-nummeret fortæller altså ikke hele sandheden om koden der kører.",
+      "releaseHint": "Versionsnummeret hæves i hånden når et spring er værd at navngive. Commit-nummeret bages ind ved build og peger på præcis den kode der svarer.",
+      "versionLabel": "Version",
+      "commitLabel": "Commit",
+      "builtAtLabel": "Bygget",
+      "environmentLabel": "Miljø",
+      "runtimeLabel": "Runtime",
+      "environments": {
+        "development": "Udvikling",
+        "test": "Test",
+        "production": "Drift"
+      },
+      "schemaTitle": "Databaseskema",
+      "schemaHint": "Antallet af migreringer koden er bygget med, holdt op mod dem databasen har kørt.",
+      "schemaBehind": "Migreringer mangler",
+      "schemaBehindHint": "Databasen har færre migreringer end koden forventer. Kør migreringerne før du bruger systemet videre.",
+      "migrationLabel": "Seneste migrering",
+      "appliedLabel": "Kørt",
+      "appliedValue": "{applied} af {expected}",
+      "appliedAtLabel": "Senest kørt",
+      "unknown": "Ukendt",
+      "license": "Domino er open source under AGPL-3.0 og en del af Haij-familien."
+    },
+    "dataExport": {
+      "title": "Data og eksport",
+      "subtitle": "Tag en komplet kopi af alt hvad dette arbejdsrum indeholder.",
+      "xlsxTitle": "Regneark",
+      "xlsxBody": "Én fil med en fane per type data. Til dig selv, til styregruppen eller til enhver der skal kigge med uden at kende Domino.",
+      "xlsxAction": "Hent regneark",
+      "jsonTitle": "Maskinlæsbar kopi",
+      "jsonBody": "De samme data som JSON, med alle id'er bevaret. Det er den fil der gør, at du kan flytte til noget andet end Domino uden at miste sammenhængen mellem flows, versioner, kørsler og filer.",
+      "jsonAction": "Hent JSON",
+      "sheetsLabel": "Faner i filen:",
+      "membersSheet": "Brugere",
+      "notBackupTitle": "Det her er ikke en backup.",
+      "notBackupBody": "En eksport kan læses, men den kan ikke lægges tilbage, og den er kun så ny som den dag du hentede den. Den dag databasen er væk, er det det natlige krypterede dump der redder dig.",
+      "privacy": "Eksporten indeholder navnene på arbejdsrummets personer og hele dets historik. Adgangskoder, passkeys og nøglen til arbejdsrummets sprogmodel kommer aldrig med. At du henter filen bliver skrevet i revisionssporet."
+    }
+  },
+  "settings": {
+    "title": "Indstillinger",
+    "subtitle": "Din sikkerhed og din installation.",
+    "nav": {
+      "security": "Sikkerhed",
+      "about": "Om",
+      "access": "Adgang",
+      "workspace": "Arbejdsrum",
+      "ai": "AI",
+      "data": "Data"
+    },
+    "access": {
+      "title": "Adgang til installationen",
+      "subtitle": "Hvem der må oprette et arbejdsrum her. Du godkender og sender linket; resten sker af sig selv.",
+      "pendingTitle": "Ansøgninger",
+      "pendingEmpty": "Ingen ventende ansøgninger.",
+      "approve": "Godkend",
+      "decline": "Afvis",
+      "declinedToast": "Ansøgningen er afvist.",
+      "linkTitle": "Link til {email}",
+      "linkBody": "Vises kun nu. Kopiér det og send det selv. Det virker i 7 dage og kun én gang.",
+      "copy": "Kopiér link",
+      "copiedToast": "Linket er kopieret.",
+      "inviteTitle": "Inviter direkte",
+      "inviteBody": "Uden ansøgning først. Samme link, samme regler.",
+      "inviteEmail": "E-mail",
+      "inviteOrganization": "Arbejdsrummets navn",
+      "inviteSubmit": "Opret invitation",
+      "invitationsTitle": "Invitationer",
+      "invitationsEmpty": "Ingen invitationer endnu.",
+      "renew": "Nyt link",
+      "expires": "Udløber {date}",
+      "used": "Brugt {date}",
+      "applied": "Ansøgt {date}",
+      "decidedApproved": "Godkendt {date}",
+      "decidedDeclined": "Afvist {date}",
+      "historyTitle": "Tidligere afgørelser",
+      "stateOpen": "Ubrugt",
+      "stateUsed": "Brugt",
+      "stateExpired": "Udløbet",
+      "stateRevoked": "Erstattet",
+      "errorInvalid": "Tjek e-mail og navnet på arbejdsrummet."
+    },
+    "workspace": {
+      "title": "Arbejdsrum",
+      "subtitle": "Hvem der er med, og vejen ud igen.",
+      "createdOn": "Oprettet {date}",
+      "name": "Navn",
+      "email": "E-mail",
+      "role": "Rolle",
+      "roles": {
+        "owner": "Ejer",
+        "admin": "Administrator",
+        "member": "Medlem"
+      },
+      "delete": {
+        "title": "Slet arbejdsrummet",
+        "body": "Alt i arbejdsrummet forsvinder: flows med alle versioner og samtaler, filer, kørsler og hele revisionssporet om dem. Det kan ikke fortrydes.",
+        "exportFirst": "Hent en eksport først, hvis du vil beholde noget. Den findes under Data.",
+        "typeName": "Skriv {name} for at bekræfte",
+        "action": "Slet arbejdsrummet permanent",
+        "deleting": "Sletter …",
+        "failed": "Arbejdsrummet blev ikke slettet. Prøv igen.",
+        "notOwner": "Kun ejeren af arbejdsrummet kan slette det.",
+        "nameMismatch": "Navnet passer ikke. Skriv arbejdsrummets navn præcis som det står."
+      }
+    },
+    "ai": {
+      "title": "AI",
+      "subtitle": "Hvilken motor der svarer, og hvad den må.",
+      "providerTitle": "Sprogmodel",
+      "providerHint": "Installationen sætter en model i miljøet, og hvert arbejdsrum kan vælge sin egen i stedet.",
+      "provider": "Udbyder",
+      "model": {
+        "title": "Din egen sprogmodel",
+        "subtitle": "Arbejdsrummet kan køre på en anden model end den installationen har sat op. Vælger du ingenting, arver du installationens.",
+        "current": "Model",
+        "source": "Valgt af",
+        "fromInstallation": "Installationen",
+        "fromWorkspace": "Dette arbejdsrum",
+        "keySource": "Nøgle",
+        "keyFromWorkspace": "Arbejdsrummets egen",
+        "keyFromInstallation": "Installationens",
+        "keyMissing": "Mangler",
+        "providerLabel": "Udbyder",
+        "provider_mistral": "Mistral (EU)",
+        "provider_ollama": "Ollama (lokal)",
+        "providerNone": "Ingen model",
+        "inherit": "Følg installationen ({provider})",
+        "providerHelp": "Ollama-adressen bestemmes af installationen. Det er med vilje: et arbejdsrum der selv kunne pege på en adresse, ville få serveren til at hente fra hvor som helst.",
+        "modelLabel": "Modelnavn",
+        "modelHelpMistral": "Lad feltet stå tomt for at bruge {placeholder}.",
+        "modelHelpOllama": "Navnet skal matche en model du har hentet med „ollama pull“. Test forbindelsen ovenfor, så siger den hvilke du har.",
+        "keyLabel": "API-nøgle",
+        "keyPlaceholder": "Indsæt din Mistral-nøgle",
+        "keyStored": "Der ligger en gemt nøgle",
+        "keyHelp": "Lad feltet stå tomt for at bruge installationens nøgle. Nøglen krypteres før den gemmes og kan ikke læses ud igen.",
+        "keyStoredHelp": "Arbejdsrummet har sin egen nøgle. Skriv en ny for at erstatte den, eller fjern den for at falde tilbage på installationens.",
+        "keyRemove": "Fjern gemt nøgle",
+        "save": "Gem",
+        "saving": "Gemmer …",
+        "saved": "Gemt",
+        "saveFailed": "Kunne ikke gemmes. Prøv igen.",
+        "notAllowed": "Kun ejere og administratorer kan ændre arbejdsrummets model.",
+        "short_mistral": "Mistral",
+        "short_ollama": "Ollama",
+        "shortNone": "ingen model"
+      },
+      "noModel": "Ingen model konfigureret",
+      "setupIntro": "Domino virker uden en model. Vil du have rigtige forslag og fritekstsvar, så sæt en op:",
+      "setupOutro": "Kør derefter Domino igen. Uden en model siger AI-knapperne det, og alt andet i Domino virker som før.",
+      "limitsTitle": "Loft over AI-kald",
+      "limitsHint": "Et modelkald koster penge på en hostet installation og minutter på en lokal. Tallene er rundhåndede for et menneske og nærige for et script.",
+      "perUser": "Kald pr. bruger i timen",
+      "perWorkspace": "Kald pr. arbejdsrum i døgnet",
+      "messageLength": "Tegn i det modellen får at læse, højst",
+      "principlesTitle": "Sådan bruger Domino AI",
+      "principleDecides": "AI'en foreslår, mennesket beslutter. Et forslag til et flow ligger som et diff på lærredet, til du siger ja eller nej. Den sender aldrig noget ud af huset og sletter aldrig noget.",
+      "principleUndo": "Hver ændring af et flow er en ny version, uanset om den kom fra dig eller fra modellen. Enhver version kan hentes frem igen.",
+      "principleData": "Det du skriver, og det dine dokumenter indeholder, sendes til modellen som data, aldrig som instruktioner, og modellens forslag valideres mod flow-formatet, før noget skrives.",
+      "principleSovereign": "Modellen kan skiftes ud, også til en lokal. Hvem der kan se hvad står i docs/subprocessors.md.",
+      "test": "Test forbindelsen",
+      "testing": "Tester …",
+      "testPatience": "En lokal model skal måske læses ind fra disken først. Det kan tage op mod et minut første gang.",
+      "testOk": "Modellen svarer",
+      "testOkDetail": "{model} svarede „{sample}“ på {seconds} sekunder.",
+      "testFailed": "Modellen svarer ikke",
+      "failAuth": "Nøglen blev afvist. Tjek arbejdsrummets egen nøgle herunder, eller installationens MISTRAL_API_KEY.",
+      "failUnreachable": "Der er ingen der lytter på adressen. Kører Ollama? Tjek OLLAMA_BASE_URL.",
+      "failConfig": "Modellen er sat op forkert. Ret modelnavnet herunder, eller LLM_MODEL i .env.",
+      "failGeneric": "Kaldet gik galt. Detaljerne står herunder og i serverloggen.",
+      "failRateLimited": "Mistral afviste kaldet som for mange (429). Nøglen virker, men kontoen eller planen sætter loftet: på den gratis Experiment-plan sker det ofte når modellen er travl, og en nøgle under et arbejdsrum uden aktiv plan får det samme svar. Tjek Billing og Limits på console.mistral.ai for den organisation nøglen hører til.",
+      "failWhereToLook": "Detaljerne står i serverloggen.",
+      "testNotAllowed": "Kun ejeren eller en administrator kan teste forbindelsen.",
+      "withoutTitle": "Uden model",
+      "withoutBody": "Domino er bygget om AI'en: uden en model kan du stadig tegne, gemme, eksportere og importere flows, men ingen brikker kan køres og ingen samtale kan foreslå noget. Knapperne siger det, og intet går i stykker.",
+      "setupEuComment": "EU-hostet (Mistral)",
+      "setupLocalComment": "eller lokalt (Ollama)",
+      "setupKeyPlaceholder": "din-nøgle-her",
+      "perInstallation": "Kald i hele installationen i døgnet",
+      "failCeiling": "Dominos eget loft over AI-kald blev nået, ikke udbyderens. Loftet står under “Loft over AI-kald” herunder; installationens samlede loft sættes med AI_DAILY_CALL_CAP. Prøv igen om lidt."
+    },
+    "members": {
+      "title": "Medlemmer",
+      "body": "Alle i arbejdsrummet kan se og arbejde på alle flows. Ejere og administratorer kan invitere og fjerne medlemmer.",
+      "name": "Navn",
+      "email": "E-mail",
+      "role": "Rolle",
+      "you": "(dig)",
+      "remove": "Fjern",
+      "removeTitle": "Fjern {name} fra arbejdsrummet?",
+      "removeBody": "Personen mister adgangen med det samme. Flows, kørsler og filer personen har lavet, bliver i arbejdsrummet.",
+      "removeConfirm": "Fjern medlemmet",
+      "leave": "Forlad arbejdsrummet",
+      "leaveTitle": "Forlad arbejdsrummet?",
+      "leaveBody": "Du mister adgangen til arbejdsrummets flows. En ejer eller administrator kan invitere dig igen.",
+      "leaveConfirm": "Forlad",
+      "inviteTitle": "Inviter en kollega",
+      "inviteBody": "Skriv adressen, og du får et link. Send det selv, sådan som I ellers taler sammen. Linket gælder kun den adresse og i 48 timer.",
+      "invite": "Lav et link",
+      "issued": "Link til {email}",
+      "issuedHint": "Kopiér og send. Har personen ingen konto, oprettes den gennem linket; ellers logger de ind og siger ja.",
+      "copy": "Kopiér",
+      "copied": "Kopieret",
+      "copyLink": "Kopiér link",
+      "copyFailed": "Kunne ikke kopiere. Markér linket og kopiér selv.",
+      "pendingEmail": "Inviteret",
+      "expires": "Udløber",
+      "cancel": "Træk tilbage",
+      "errors": {
+        "alreadyMember": "Personen er allerede medlem.",
+        "alreadyInvited": "Der findes allerede et åbent link til den adresse. Træk det tilbage først, hvis du vil lave et nyt.",
+        "forbidden": "Det kræver at du er ejer eller administrator.",
+        "invalid": "Skriv en gyldig e-mailadresse.",
+        "generic": "Det gik galt. Prøv igen."
+      }
+    }
+  },
+  "demo": {
+    "bannerTitle": "Det her er en demo.",
+    "bannerBody": "Arbejdsrummet og alt i det slettes efter {hours, plural, one {# time} other {# timer}}. Skriv gerne i det.",
+    "bannerCta": "Ansøg om en rigtig konto"
+  },
+  "terms": {
+    "title": "Vilkår og privatliv",
+    "updated": "Senest opdateret 4. september 2026.",
+    "back": "Tilbage",
+    "language": "In English",
+    "intro": "Domino er et open source-værktøj til at bygge og køre AI-arbejdsgange, drevet af Haij. Det her er aftalen mellem dig og os, når du bruger den udgave vi driver. Kører du koden selv, gælder kun licensen.",
+    "what": {
+      "title": "Hvad Domino er",
+      "body": "Et værktøj hvor man stiller brikker op i rækkefølge og lader en sprogmodel udføre arbejdet trin for trin: flows, versioner, kørsler og de filer man giver dem. Vi giver ingen garanti for at det passer til jeres opgave; prøv demoen først."
+    },
+    "account": {
+      "title": "Konto og adgang",
+      "body": "Du får adgang ved at ansøge eller blive inviteret. Vi gemmer dit navn, din e-mail og navnet på dit arbejdsrum, og vi bruger dem til at logge dig ind og til at skrive til dig om tjenesten. Adgangskoder gemmes hashet, og du kan tilføje passkey og totrinsbekræftelse. Vi sælger ikke noget, og vi sender ikke markedsmails du ikke har bedt om."
+    },
+    "yourData": {
+      "title": "Jeres data",
+      "body": "Alt et arbejdsrum lægger ind, tilhører arbejdsrummet. Det kan hentes ud som regneark og JSON med ét klik og slettes helt igen, revisionssporet inklusive. Vi kigger ikke i det, medmindre I beder os om hjælp, og vi videregiver det aldrig."
+    },
+    "ai": {
+      "title": "AI",
+      "body": "Er der sat en sprogmodel op, sendes det du skriver i samtalen, prompterne i dine brikker og indholdet af de dokumenter et flow læser, til modeludbyderen, når flowet køres. Hvem det er, står under Indstillinger → AI og i listen over underdatabehandlere. Modellen foreslår ændringer i flowet; intet gemmes uden at en person siger ja."
+    },
+    "leaving": {
+      "title": "At holde op",
+      "body": "Du kan slette dit arbejdsrum med det samme, uden at skrive til nogen og uden at vente. Eksporten ligger et klik væk, og den er læsbar uden Domino. Vi opbevarer ikke en kopi bagefter ud over de natlige krypterede backups, som ruller ud efter 30 dage — både på serveren og i det EU-lager de kopieres til."
+    },
+    "availability": {
+      "title": "Drift og garantier",
+      "body": "Domino er ny, og der er ingen oppetidsgaranti. Vi passer på dine data med krypterede backups hver nat, men du bør hente en eksport ind imellem, hvis dine flows er vigtige. Tjenesten leveres som den er, uden garantier ud over hvad ufravigelig lovgivning kræver."
+    },
+    "license": {
+      "title": "Licens",
+      "body": "Koden er AGPL-3.0. Du må bruge, ændre og køre den selv; ændrer du den og stiller den til rådighed for andre over et netværk, skal dine ændringer også være tilgængelige. Det du skriver i værktøjet er ikke omfattet af licensen — det er dit."
+    },
+    "demo": {
+      "title": "Demoen",
+      "body": "Et demo-arbejdsrum oprettes uden e-mail eller tilmelding og slettes helt efter 24 timer, konto inklusive. Læg ikke rigtige personoplysninger i det. Vi gemmer kun de tekniske logdata der skal til for at holde demoen kørende."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "body": "Skriv til martin@vintherconsulting.dk. Har du fundet et sikkerhedsproblem, står fremgangsmåden i SECURITY.md i kodearkivet; meld det der frem for i en almindelig mail."
+    },
+    "subprocessorsNote": "Hvem der kan se hvad, står i",
+    "shareLinks": {
+      "title": "Invitationer",
+      "body": "Et invitationslink gælder én adresse og udløber efter to døgn. Det er dig der sender det; vi sender ingen mails."
+    }
+  },
+  "join": {
+    "title": "Du er inviteret",
+    "intro": "{inviter} har inviteret dig ind i arbejdsrummet {workspace}.",
+    "someone": "En kollega",
+    "invalidTitle": "Linket virker ikke længere",
+    "invalidBody": "Invitationen er udløbet eller trukket tilbage. Bed den der inviterede dig om et nyt link.",
+    "acceptedBody": "Invitationen er allerede brugt. Log ind for at komme ind i arbejdsrummet.",
+    "toLogin": "Log ind",
+    "wrongAccount": "Invitationen er til {email}, men du er logget ind som {current}. Log ud, og åbn linket igen.",
+    "switchAccount": "Log ud",
+    "accept": "Kom ind i arbejdsrummet",
+    "wrongPerson": "Invitationen er sendt til en anden adresse end den du er logget ind med.",
+    "name": "Dit navn",
+    "email": "E-mail",
+    "lockedHint": "Invitationen gælder denne adresse. Kontoen bliver medlem af {workspace}.",
+    "password": "Adgangskode",
+    "passwordHint": "Mindst 12 tegn. En sætning er nemmere at huske end et kodeord.",
+    "submit": "Opret konto og kom ind",
+    "haveAccount": "Har du allerede en konto?",
+    "loginLink": "Log ind",
+    "errorEmailExists": "Der findes allerede en konto med den adresse. Log ind, og åbn linket igen.",
+    "errorInvalid": "Noget i det du skrev kunne ikke bruges. Se felterne igennem.",
+    "errorGeneric": "Det gik galt. Prøv igen."
+  },
+  "help": {
+    "title": "Hjælp",
+    "intro": "Sådan virker Domino, i den rækkefølge du møder det.",
+    "howToTitle": "Sådan bruger du værktøjet",
+    "howTo": {
+      "flows": {
+        "title": "Flows",
+        "body": "Et flow er en række brikker, forbundet i den rækkefølge arbejdet sker. Det er ét dokument: lærredet tegner det, kørslen følger det, og eksporten er det. Hver ændring er en ny version, som du altid kan gå tilbage til."
+      },
+      "bricks": {
+        "title": "Brikkerne",
+        "body": "Input tager tekst, en fil eller en liste. Sprogmodel skriver ud fra en prompt med felter fra tidligere brikker. Struktureret output gør det samme, men svarer i et skema. Dokument trækker teksten ud af en fil. Hvis/ellers vælger en vej. Løkke kører brikkerne mellem start og slut én gang pr. element. Kombinér samler flere ting til én. Skabelon sætter tekst sammen. Output er det, du får ud."
+      },
+      "talk": {
+        "title": "Snak dig frem",
+        "body": "Du starter ikke på et tomt lærred. Beskriv hvad du vil have, eller vælg et eksempel, og modellen foreslår en opstilling med brikker, forbindelser, prompts og skemaer. Bagefter kan du blive i samtalen: bed om et tjek mere eller en kortere sammenfatning, og se ændringen som et diff på lærredet, som du godkender eller fortryder."
+      },
+      "run": {
+        "title": "Kørsel",
+        "body": "Test først på ét eksempel, så du ser hvad hver brik får ind og sender videre. Når det ser rigtigt ud, kører du hele bunken. Du kan følge med brik for brik undervejs."
+      },
+      "history": {
+        "title": "Historik",
+        "body": "Hver kørsel gemmes med status, tid og forbrug, og med input og output på hvert trin. Går noget galt, kan modellen forklare hvad der skete, i almindeligt sprog, og foreslå en rettelse."
+      },
+      "ai": {
+        "title": "Hvad AI'en må",
+        "body": "Modellen foreslår, du bestemmer. Den kan foreslå et flow, ændringer i det, en prompt, et skema eller en forklaring på en fejl, men intet gemmes uden at du siger ja. Det du skriver og det dine dokumenter indeholder, behandles som data, aldrig som instruktioner."
+      },
+      "data": {
+        "title": "Dine data",
+        "body": "Et flow kan eksporteres som én JSON-fil og importeres igen, også i et andet arbejdsrum eller en anden installation. Hele arbejdsrummet kan hentes ud som regneark og JSON under Indstillinger → Data, og slettes helt igen."
+      }
+    },
+    "closing": "Mangler der noget her? Skriv til os, eller ret siden selv: koden er åben."
+  },
+  "flows": {
+    "title": "Flows",
+    "subtitle": "Arbejdsgange du har stillet op, og hvordan de sidst kørte.",
+    "empty": {
+      "title": "Ingen flows endnu",
+      "hint": "Lærredet og samtalen der bygger et flow kommer i næste etape. Indtil da er der intet at vise her."
+    }
+  }
+}

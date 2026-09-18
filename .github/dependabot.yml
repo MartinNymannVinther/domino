@@ -1,0 +1,32 @@
+version: 2
+
+# Domino promises a 90-day fix window in SECURITY.md. That promise needs a
+# mechanism, not good intentions: this is it. The github-actions ecosystem
+# keeps the workflow's pinned commits current: the actions are pinned to
+# SHAs, so without this they would stay where they were pinned forever.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for the routine patch traffic; anything that changes a
+      # major version still arrives on its own and gets read properly.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday

@@ -1,0 +1,542 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "error": "Something went wrong. Please try again.",
+    "hours": "{value} h"
+  },
+  "landing": {
+    "nav": {
+      "login": "Log in",
+      "register": "Create account",
+      "apply": "Apply for access"
+    },
+    "hero": {
+      "title": "Line the bricks up. Push the first one.",
+      "subtitle": "Domino is a visual flow builder for AI workflows, for people who do not program. Describe what you want, edit what the model proposes, test on one example and run it on the whole pile. Open source, on EU soil or your own server, with an AI that proposes and never decides.",
+      "ctaPrimary": "Create account",
+      "ctaSecondary": "Log in",
+      "trust": "AGPL-3.0 · Passkeys and two-factor login · Export your data with one click",
+      "ctaApply": "Apply for access",
+      "ctaDemo": "Try the demo"
+    },
+    "flowsLabel": "What you get",
+    "values": {
+      "aiTitle": "Talk your way to a flow",
+      "aiBody": "Describe the task and the model lines the bricks up: inputs, prompts, schemas and connections. Ask for changes afterwards and see them as a diff on the canvas, to accept or undo. Run it at Mistral in the EU or locally.",
+      "dataTitle": "Your data, always",
+      "dataBody": "The whole workspace comes out as a spreadsheet and JSON with one click, and can be deleted completely again. A flow is one file you can export, import and keep under version control.",
+      "securityTitle": "Secure from day one",
+      "securityBody": "Workspaces are separated in the database, not just in the code. Passkeys, two-factor login and a log that cannot be edited."
+    },
+    "status": "Version {version} · built to be used",
+    "family": {
+      "body": "Domino is one tool in the Haij family of open source tools for organisations that want to own their own technology.",
+      "link": "Read about Haij"
+    },
+    "footer": {
+      "license": "Open source under AGPL-3.0",
+      "language": "Dansk",
+      "terms": "Terms and privacy"
+    },
+    "demo": {
+      "title": "Try it without creating anything",
+      "body": "You get your own workspace with example flows ready to run. It is deleted after {hours, plural, one {# hour} other {# hours}}. No email, no sign-up.",
+      "privacy": "Do not put real personal data in the demo. It passes through a database and possibly a language model on the way.",
+      "cta": "Open a demo"
+    },
+    "flows": {
+      "talk": "Describe the task, get a flow",
+      "bricks": "Nine bricks: input, language model, schema, document, if, loop, combine, template, output",
+      "diff": "AI changes as a diff, accept or undo",
+      "test": "Test on one example before the whole pile",
+      "steps": "Watch the run brick by brick",
+      "history": "History with status, time and usage",
+      "ai": "AI that proposes, you decide"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The address is wrong, or the page has moved.",
+    "cta": "To the front page"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Welcome back.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "or": "or",
+      "withPasskey": "Sign in with a passkey",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Create account",
+      "error": "Wrong email or password.",
+      "passkeyError": "Passkey sign-in failed. Please try again."
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Your account and your workspace are created together.",
+      "name": "Your name",
+      "email": "Email",
+      "organizationName": "Workspace name",
+      "organizationHint": "Your company, association or team. Can be changed later.",
+      "password": "Password",
+      "passwordHint": "At least 12 characters.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "errorInvalid": "Check the fields and try again.",
+      "errorEmailExists": "An account with this email already exists.",
+      "errorGeneric": "The account could not be created. Please try again.",
+      "closedBody": "This Domino installation is not accepting new users. Contact the owner if you need access.",
+      "invitedSubtitle": "You are invited. The account is created for the email and the workspace the invitation is for.",
+      "lockedHint": "Set by the invitation.",
+      "errorInvitationInvalid": "The invitation has expired or has already been used. Ask for a new link.",
+      "invitationInvalidTitle": "This link no longer works",
+      "invitationInvalidBody": "The invitation has expired, been used, or been replaced by a newer one. Ask the person who invited you for a new link, or apply for access again.",
+      "applyLink": "Apply for access"
+    },
+    "twoFactor": {
+      "title": "Two-factor authentication",
+      "subtitle": "Enter the code from your authenticator app.",
+      "submit": "Verify",
+      "error": "Wrong code. Please try again."
+    },
+    "onboarding": {
+      "title": "Create your workspace",
+      "subtitle": "You need a workspace before you can get started.",
+      "organizationName": "Workspace name",
+      "submit": "Create workspace",
+      "error": "The workspace could not be created. Please try again."
+    },
+    "apply": {
+      "title": "Apply for access",
+      "subtitle": "This Domino installation accepts new users after a short application. The owner reads it personally and replies by email.",
+      "name": "Your name",
+      "email": "Email",
+      "organizationName": "Organisation or association",
+      "message": "What will you use Domino for?",
+      "messageHint": "Optional. A line or two about the team makes it easier to say yes.",
+      "submit": "Send application",
+      "sentTitle": "Thanks, your application has been received",
+      "sentBody": "You will hear from the owner of this installation at {email}. The reply comes from a person, so allow a day or two.",
+      "errorInvalid": "Check the fields and try again.",
+      "errorTooMany": "Many applications have been sent from here in a short time. Try again in an hour.",
+      "privacy": "We store your name, email and organisation to handle the application, and nothing else. If it is declined, the details remain only as a note of the decision.",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Log in"
+    }
+  },
+  "app": {
+    "nav": {
+      "flows": "Flows",
+      "help": "Help",
+      "security": "Security",
+      "logout": "Log out",
+      "appearance": "Appearance",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Follow system",
+      "language": "Language",
+      "danish": "Dansk",
+      "english": "English",
+      "openMenu": "Open menu",
+      "menuTitle": "Navigation",
+      "settings": "Settings",
+      "skipToContent": "Skip to content",
+      "hideMenu": "Hide the menu",
+      "showMenu": "Show the menu"
+    },
+    "orgSwitcher": {
+      "label": "Workspace",
+      "create": "Create workspace",
+      "createTitle": "Create new workspace",
+      "name": "Name",
+      "createSubmit": "Create",
+      "switched": "Switched to {name}",
+      "created": "{name} has been created",
+      "error": "The workspace could not be created. Please try again.",
+      "switch": "Switch workspace"
+    },
+    "security": {
+      "title": "Security",
+      "subtitle": "Passkeys and two-factor authentication for your account.",
+      "passkeys": {
+        "title": "Passkeys",
+        "description": "Sign in without a password using Touch ID, Face ID or a security key.",
+        "empty": "No passkeys yet.",
+        "nameLabel": "Name",
+        "namePlaceholder": "E.g. MacBook",
+        "add": "Add passkey",
+        "remove": "Remove",
+        "addedAt": "Added {date}",
+        "addedToast": "Passkey added",
+        "removedToast": "Passkey removed",
+        "error": "The passkey could not be added. Please try again."
+      },
+      "totp": {
+        "title": "Two-factor authentication (TOTP)",
+        "description": "Require a code from your authenticator app at sign-in.",
+        "statusEnabled": "Enabled",
+        "statusDisabled": "Disabled",
+        "enable": "Enable",
+        "disable": "Disable",
+        "password": "Confirm with your password",
+        "scan": "Scan the QR code with your authenticator app and enter the code below.",
+        "backupCodes": "Backup codes",
+        "backupHint": "Store the codes somewhere safe. They can be used if you lose your phone.",
+        "verifyLabel": "Code from the app",
+        "verify": "Verify",
+        "verifyError": "Wrong code. Please try again.",
+        "enabledToast": "Two-factor authentication enabled",
+        "disabledToast": "Two-factor authentication disabled",
+        "error": "The action failed. Check the password and try again.",
+        "totpQrAlt": "QR code to scan in your authenticator app to add Domino"
+      }
+    },
+    "about": {
+      "title": "About Domino",
+      "subtitle": "Which release of Domino is running here, and whether the database has kept up.",
+      "short": "v{release}",
+      "dirtyShort": "modified",
+      "dirty": "Local changes",
+      "dirtyHint": "Built from a working tree with uncommitted changes, so the commit does not tell the whole truth about the code that is running.",
+      "releaseHint": "The version number is raised by hand when a step is worth naming. The commit is stamped in at build time and points at exactly the code answering here.",
+      "versionLabel": "Version",
+      "commitLabel": "Commit",
+      "builtAtLabel": "Built",
+      "environmentLabel": "Environment",
+      "runtimeLabel": "Runtime",
+      "environments": {
+        "development": "Development",
+        "test": "Test",
+        "production": "Production"
+      },
+      "schemaTitle": "Database schema",
+      "schemaHint": "The number of migrations the build was made from, against the number the database has applied.",
+      "schemaBehind": "Migrations pending",
+      "schemaBehindHint": "The database has fewer migrations than the code expects. Run the migrations before using the system further.",
+      "migrationLabel": "Latest migration",
+      "appliedLabel": "Applied",
+      "appliedValue": "{applied} of {expected}",
+      "appliedAtLabel": "Last applied",
+      "unknown": "Unknown",
+      "license": "Domino is open source under AGPL-3.0 and part of the Haij family."
+    },
+    "dataExport": {
+      "title": "Data and export",
+      "subtitle": "Take a complete copy of everything this workspace holds.",
+      "xlsxTitle": "Spreadsheet",
+      "xlsxBody": "One file with a tab per kind of data. For you, for the steering group, or for anyone who needs to look without knowing Domino.",
+      "xlsxAction": "Download spreadsheet",
+      "jsonTitle": "Machine-readable copy",
+      "jsonBody": "The same data as JSON with every id kept, so you can move to something other than Domino without losing the links between flows, versions, runs and files.",
+      "jsonAction": "Download JSON",
+      "sheetsLabel": "Tabs in the file (named in Danish, as the file writes them):",
+      "membersSheet": "Brugere",
+      "notBackupTitle": "This is not a backup.",
+      "notBackupBody": "An export can be read but not restored, and it is only as fresh as the day you downloaded it. The night's encrypted dump is what saves you when the database is gone.",
+      "privacy": "The export contains the names of the workspace's people and its whole history. Passwords, passkeys and the key to the workspace's language model are never included. Downloading it is recorded in the audit log."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Your security and your installation.",
+    "nav": {
+      "security": "Security",
+      "about": "About",
+      "access": "Access",
+      "workspace": "Workspace",
+      "ai": "AI",
+      "data": "Data"
+    },
+    "access": {
+      "title": "Access to this installation",
+      "subtitle": "Who may create a workspace here. You approve and send the link; the rest happens by itself.",
+      "pendingTitle": "Applications",
+      "pendingEmpty": "No pending applications.",
+      "approve": "Approve",
+      "decline": "Decline",
+      "declinedToast": "The application was declined.",
+      "linkTitle": "Link for {email}",
+      "linkBody": "Shown only now. Copy it and send it yourself. It works for 7 days and only once.",
+      "copy": "Copy link",
+      "copiedToast": "Link copied.",
+      "inviteTitle": "Invite directly",
+      "inviteBody": "Without an application first. Same link, same rules.",
+      "inviteEmail": "E-mail",
+      "inviteOrganization": "Workspace name",
+      "inviteSubmit": "Create invitation",
+      "invitationsTitle": "Invitations",
+      "invitationsEmpty": "No invitations yet.",
+      "renew": "New link",
+      "expires": "Expires {date}",
+      "used": "Used {date}",
+      "applied": "Applied {date}",
+      "decidedApproved": "Approved {date}",
+      "decidedDeclined": "Declined {date}",
+      "historyTitle": "Earlier decisions",
+      "stateOpen": "Unused",
+      "stateUsed": "Used",
+      "stateExpired": "Expired",
+      "stateRevoked": "Replaced",
+      "errorInvalid": "Check the email and the workspace name."
+    },
+    "workspace": {
+      "title": "Workspace",
+      "subtitle": "Who is in it, and the way out again.",
+      "createdOn": "Created {date}",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "roles": {
+        "owner": "Owner",
+        "admin": "Administrator",
+        "member": "Member"
+      },
+      "delete": {
+        "title": "Delete the workspace",
+        "body": "Everything in the workspace goes: flows with every version and conversation, files, runs, and the whole audit trail about them. It cannot be undone.",
+        "exportFirst": "Take an export first if you want to keep anything. It is under Data.",
+        "typeName": "Type {name} to confirm",
+        "action": "Delete the workspace permanently",
+        "deleting": "Deleting …",
+        "failed": "The workspace was not deleted. Try again.",
+        "notOwner": "Only the workspace owner can delete it.",
+        "nameMismatch": "That name does not match. Type the workspace's name exactly."
+      }
+    },
+    "ai": {
+      "title": "AI",
+      "subtitle": "Which engine answers, and what it is allowed to do.",
+      "providerTitle": "Language model",
+      "providerHint": "The installation sets a model in the environment, and each workspace can choose its own instead.",
+      "provider": "Provider",
+      "model": {
+        "title": "Your own language model",
+        "subtitle": "This workspace can run on a different model than the installation set up. Choose nothing and you inherit the installation's.",
+        "current": "Model",
+        "source": "Chosen by",
+        "fromInstallation": "The installation",
+        "fromWorkspace": "This workspace",
+        "keySource": "Key",
+        "keyFromWorkspace": "The workspace's own",
+        "keyFromInstallation": "The installation's",
+        "keyMissing": "Missing",
+        "providerLabel": "Provider",
+        "provider_mistral": "Mistral (EU)",
+        "provider_ollama": "Ollama (local)",
+        "providerNone": "No model",
+        "inherit": "Follow the installation ({provider})",
+        "providerHelp": "The Ollama address is set by the installation. That is deliberate: a workspace that could point at an address of its own would make the server fetch from anywhere.",
+        "modelLabel": "Model name",
+        "modelHelpMistral": "Leave the field empty to use {placeholder}.",
+        "modelHelpOllama": "The name must match a model you have pulled with “ollama pull”. Test the connection above and it will list the ones you have.",
+        "keyLabel": "API key",
+        "keyPlaceholder": "Paste your Mistral key",
+        "keyStored": "A key is stored",
+        "keyHelp": "Leave the field empty to use the installation's key. The key is encrypted before it is stored and cannot be read back.",
+        "keyStoredHelp": "This workspace has its own key. Type a new one to replace it, or remove it to fall back on the installation's.",
+        "keyRemove": "Remove stored key",
+        "save": "Save",
+        "saving": "Saving …",
+        "saved": "Saved",
+        "saveFailed": "Could not be saved. Try again.",
+        "notAllowed": "Only owners and administrators can change the workspace's model.",
+        "short_mistral": "Mistral",
+        "short_ollama": "Ollama",
+        "shortNone": "no model"
+      },
+      "noModel": "No model configured",
+      "setupIntro": "Domino works without a model. For real proposals and free-text answers, set one up:",
+      "setupOutro": "Then start Domino again. Without a model the AI buttons say so, and everything else in Domino works as before.",
+      "limitsTitle": "Ceiling on AI calls",
+      "limitsHint": "A model call costs money on a hosted installation and minutes on a local one. The numbers are generous for a person and mean for a script.",
+      "perUser": "Calls per user per hour",
+      "perWorkspace": "Calls per workspace per day",
+      "messageLength": "Characters the model gets to read, at most",
+      "principlesTitle": "How Domino uses AI",
+      "principleDecides": "The AI proposes, the person decides. A proposal for a flow sits on the canvas as a diff until you say yes or no. It never sends anything out of the house and never deletes anything.",
+      "principleUndo": "Every change to a flow is a new version, whether it came from you or from the model. Any version can be brought back.",
+      "principleData": "What you write, and what your documents contain, is sent to the model as data, never as instructions, and the model's proposal is validated against the flow format before anything is written.",
+      "principleSovereign": "The model can be swapped, including for a local one. Who can see what is listed in docs/subprocessors.md.",
+      "test": "Test the connection",
+      "testing": "Testing …",
+      "testPatience": "A local model may have to be read off disk first. That can take up to a minute the first time.",
+      "testOk": "The model answers",
+      "testOkDetail": "{model} answered “{sample}” in {seconds} seconds.",
+      "testFailed": "The model does not answer",
+      "failAuth": "The key was rejected. Check the workspace's own key below, or the installation's MISTRAL_API_KEY.",
+      "failUnreachable": "Nothing is listening at that address. Is Ollama running? Check OLLAMA_BASE_URL.",
+      "failConfig": "The model is set up wrong. Correct the model name below, or LLM_MODEL in .env.",
+      "failGeneric": "The call failed. The details are below and in the server log.",
+      "failRateLimited": "Mistral refused the call as too many (429). The key works, but the account or plan sets the ceiling: on the free Experiment plan this happens often when the model is busy, and a key under a workspace with no active plan gets the same answer. Check Billing and Limits on console.mistral.ai for the organisation the key belongs to.",
+      "failWhereToLook": "The details are in the server log.",
+      "testNotAllowed": "Only the owner or an administrator can test the connection.",
+      "withoutTitle": "Without a model",
+      "withoutBody": "Domino is built around the AI: without a model you can still draw, save, export and import flows, but no brick can run and no conversation can propose anything. The buttons say so, and nothing breaks.",
+      "setupEuComment": "hosted in the EU (Mistral)",
+      "setupLocalComment": "or locally (Ollama)",
+      "setupKeyPlaceholder": "your-key-here",
+      "perInstallation": "Calls across the installation per day",
+      "failCeiling": "Domino's own ceiling on AI calls was reached, not the provider's. The ceilings are under “Ceiling on AI calls” below; the installation's own is set with AI_DAILY_CALL_CAP. Try again shortly."
+    },
+    "members": {
+      "title": "Members",
+      "body": "Everyone in the workspace can see and work on every flow. Owners and admins can invite and remove members.",
+      "name": "Name",
+      "email": "E-mail",
+      "role": "Role",
+      "you": "(you)",
+      "remove": "Remove",
+      "removeTitle": "Remove {name} from the workspace?",
+      "removeBody": "The person loses access immediately. The flows, runs and files they made stay in the workspace.",
+      "removeConfirm": "Remove the member",
+      "leave": "Leave the workspace",
+      "leaveTitle": "Leave the workspace?",
+      "leaveBody": "You lose access to the workspace's flows. An owner or admin can invite you again.",
+      "leaveConfirm": "Leave",
+      "inviteTitle": "Invite a colleague",
+      "inviteBody": "Type the address and you get a link. Send it yourself, the way you talk to each other anyway. The link is for that address only and lasts 48 hours.",
+      "invite": "Make a link",
+      "issued": "Link for {email}",
+      "issuedHint": "Copy and send. If the person has no account, it is created through the link; otherwise they sign in and accept.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copyLink": "Copy link",
+      "copyFailed": "Could not copy. Select the link and copy it yourself.",
+      "pendingEmail": "Invited",
+      "expires": "Expires",
+      "cancel": "Withdraw",
+      "errors": {
+        "alreadyMember": "The person is already a member.",
+        "alreadyInvited": "There is already an open link for that address. Withdraw it first to make a new one.",
+        "forbidden": "That takes an owner or an admin.",
+        "invalid": "Type a valid e-mail address.",
+        "generic": "That went wrong. Try again."
+      }
+    }
+  },
+  "demo": {
+    "bannerTitle": "This is a demo.",
+    "bannerBody": "The workspace and everything in it is deleted after {hours, plural, one {# hour} other {# hours}}. Feel free to write in it.",
+    "bannerCta": "Apply for a real account"
+  },
+  "terms": {
+    "title": "Terms and privacy",
+    "updated": "Last updated 4 September 2026.",
+    "back": "Back",
+    "language": "På dansk",
+    "intro": "Domino is an open source tool for building and running AI workflows, run by Haij. This is the agreement between you and us when you use the edition we run. If you run the code yourself, only the licence applies.",
+    "what": {
+      "title": "What Domino is",
+      "body": "A tool where you line bricks up in order and let a language model do the work step by step: flows, versions, runs and the files you give them. We make no promise that it fits your task; try the demo first."
+    },
+    "account": {
+      "title": "Accounts and access",
+      "body": "You get in by applying or being invited. We store your name, your email and your workspace's name, and use them to sign you in and to write to you about the service. Passwords are stored hashed, and you can add a passkey and two-factor. We sell nothing, and we do not send marketing you did not ask for."
+    },
+    "yourData": {
+      "title": "Your data",
+      "body": "Everything a workspace puts in belongs to the workspace. It can be downloaded as a spreadsheet and JSON with one click and deleted entirely again, audit trail included. We do not look at it unless you ask us for help, and we never pass it on."
+    },
+    "ai": {
+      "title": "AI",
+      "body": "With a language model set up, what you write in the conversation, the prompts in your bricks and the contents of the documents a flow reads are sent to the model provider when the flow runs. Who that is stands under Settings → AI and in the list of subprocessors. The model proposes changes to the flow; nothing is saved without a person saying yes."
+    },
+    "leaving": {
+      "title": "Leaving",
+      "body": "You can delete your workspace immediately, without writing to anyone and without waiting. The export is one click away and readable without Domino. We keep no copy afterwards beyond the nightly encrypted backups, which roll off after 30 days — on the server and in the EU storage they are copied to."
+    },
+    "availability": {
+      "title": "Running and guarantees",
+      "body": "Domino is new, and there is no uptime guarantee. We look after your data with encrypted backups every night, but take an export now and then if your flows matter. The service is provided as it is, without warranties beyond what the law requires."
+    },
+    "license": {
+      "title": "Licence",
+      "body": "The code is AGPL-3.0. You may use it, change it and run it yourself; if you change it and offer it to others over a network, your changes must be available too. What you write in the tool is not covered by the licence — that is yours."
+    },
+    "demo": {
+      "title": "The demo",
+      "body": "A demo workspace is created without e-mail or sign-up and deleted entirely after 24 hours, account included. Do not put real personal data in it. We keep only the technical log data needed to keep the demo running."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "Write to martin@vintherconsulting.dk. If you have found a security problem, SECURITY.md in the repository says how to report it; use that rather than an ordinary email."
+    },
+    "subprocessorsNote": "Who can see what is listed in",
+    "shareLinks": {
+      "title": "Invitations",
+      "body": "An invitation link is for one address and expires after two days. You send it; we send no mail."
+    }
+  },
+  "join": {
+    "title": "You are invited",
+    "intro": "{inviter} has invited you into the workspace {workspace}.",
+    "someone": "A colleague",
+    "invalidTitle": "This link no longer works",
+    "invalidBody": "The invitation has expired or been withdrawn. Ask the person who invited you for a new link.",
+    "acceptedBody": "The invitation has already been used. Sign in to enter the workspace.",
+    "toLogin": "Sign in",
+    "wrongAccount": "The invitation is for {email}, but you are signed in as {current}. Sign out and open the link again.",
+    "switchAccount": "Sign out",
+    "accept": "Enter the workspace",
+    "wrongPerson": "The invitation was sent to another address than the one you are signed in with.",
+    "name": "Your name",
+    "email": "E-mail",
+    "lockedHint": "The invitation is for this address. The account becomes a member of {workspace}.",
+    "password": "Password",
+    "passwordHint": "At least 12 characters. A sentence is easier to remember than a word.",
+    "submit": "Create account and enter",
+    "haveAccount": "Already have an account?",
+    "loginLink": "Sign in",
+    "errorEmailExists": "An account with that address already exists. Sign in and open the link again.",
+    "errorInvalid": "Something you wrote could not be used. Check the fields.",
+    "errorGeneric": "That went wrong. Try again."
+  },
+  "help": {
+    "title": "Help",
+    "intro": "How Domino works, in the order you meet it.",
+    "howToTitle": "How to use the tool",
+    "howTo": {
+      "flows": {
+        "title": "Flows",
+        "body": "A flow is a row of bricks, connected in the order the work happens. It is one document: the canvas draws it, a run follows it, and the export is it. Every change is a new version you can always go back to."
+      },
+      "bricks": {
+        "title": "The bricks",
+        "body": "Input takes text, a file or a list. Language model writes from a prompt with fields from earlier bricks. Structured output does the same but answers in a schema. Document pulls the text out of a file. If/else picks a path. Loop runs the bricks between start and end once per item. Combine gathers several things into one. Template puts text together. Output is what you get out."
+      },
+      "talk": {
+        "title": "Talk your way there",
+        "body": "You do not start on an empty canvas. Describe what you want, or pick an example, and the model proposes an arrangement with bricks, connections, prompts and schemas. Afterwards you can stay in the conversation: ask for one more check or a shorter summary, and see the change as a diff on the canvas, to accept or undo."
+      },
+      "run": {
+        "title": "Running",
+        "body": "Test on one example first, so you see what every brick takes in and passes on. When it looks right, run the whole pile. You can follow along brick by brick."
+      },
+      "history": {
+        "title": "History",
+        "body": "Every run is kept with status, time and usage, and with the input and output of every step. When something goes wrong, the model can explain what happened in plain words and propose a fix."
+      },
+      "ai": {
+        "title": "What the AI may do",
+        "body": "The model proposes, you decide. It can propose a flow, changes to it, a prompt, a schema or an explanation of a failure, but nothing is saved without you saying yes. What you write and what your documents contain is treated as data, never as instructions."
+      },
+      "data": {
+        "title": "Your data",
+        "body": "A flow can be exported as one JSON file and imported again, in another workspace or another installation too. The whole workspace can be taken out as a spreadsheet and JSON under Settings → Data, and deleted completely again."
+      }
+    },
+    "closing": "Something missing here? Write to us, or fix the page yourself: the code is open."
+  },
+  "flows": {
+    "title": "Flows",
+    "subtitle": "The workflows you have lined up, and how they last ran.",
+    "empty": {
+      "title": "No flows yet",
+      "hint": "The canvas and the conversation that builds a flow arrive in the next wave. Until then there is nothing to show here."
+    }
+  }
+}

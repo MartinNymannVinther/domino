@@ -1,0 +1,23 @@
+# pnpm 10 reads its settings from here rather than from a "pnpm" field in
+# package.json, and it ignores that field silently apart from one warning
+# on install. The overrides below were in the wrong place until the
+# pre-release review: the pins survived in the lockfile, so nothing was
+# broken, but the next regenerated lockfile would have dropped them
+# without anybody deciding to.
+#
+# sharp reaches production through next and esbuild through drizzle-kit;
+# both had advisories their own maintainers had not yet released past.
+overrides:
+  sharp: ">=0.35.4"
+  esbuild: ">=0.25.0"
+
+# Not an override: better-auth 1.7.5 dropped the account "issuer" column
+# our auth schema requires, so the family is held at 1.7.1 in
+# package.json — including @better-auth/core as a direct exact
+# dependency, because the passkey plugin takes core as a *peer* and
+# pnpm resolves auto-installed peers to the root's own version, never
+# to an override. Lifting it is a migration, decided on its own.
+
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

@@ -1,0 +1,172 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# Every action is pinned to a commit, with the version it was at in the
+# comment beside it. A tag like `v7` is a pointer somebody else can move,
+# and this pipeline reads the whole repository; Dependabot watches the
+# github-actions ecosystem and moves the pins, which is a change that
+# arrives as a pull request and is read rather than one that happens.
+
+# One run per branch. Six jobs, two of them Docker builds; pushing three
+# times in a minute should not queue three full pipelines.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Test-only credentials for the ephemeral CI database.
+  MIGRATION_DATABASE_URL: postgres://postgres:postgres@localhost:5432/domino
+  APP_DATABASE_URL: postgres://domino_app:domino_app@localhost:5432/domino
+  AUTH_DATABASE_URL: postgres://domino_auth:domino_auth@localhost:5432/domino
+  BETTER_AUTH_SECRET: ci-only-secret-not-used-anywhere-else
+  BETTER_AUTH_URL: http://localhost:3000
+
+jobs:
+  quality:
+    name: Lint, format & typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+
+  test:
+    name: Tests (RLS isolation)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: domino
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d domino"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Migrations create the roles and the test global-setup gives them
+      # LOGIN + the passwords embedded in the URLs above.
+      - run: pnpm test
+
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  image:
+    name: Docker image (migrator and runner)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # only shows up here, not in pnpm build. Both targets, no push.
+      - run: docker build --target migrator -t domino-migrator:ci .
+      - run: docker build --target runner -t domino-runner:ci .
+
+      # Building an image proves it builds. It does not prove it runs, and
+      # the difference cost a deployment: a --prod dependency install gave
+      # a migrator that built cleanly here and then died at deploy time
+      # with `sh: tsx: not found`, after the database was already up and
+      # healthy. Nothing in a build can catch that.
+      #
+      # Pointed at a port nobody listens on, the migration step should
+      # fail with its own sentence about the connection. That it gets far
+      # enough to say so is the proof that the image can run its own
+      # entrypoint. Any other failure means it cannot.
+      #
+      # GitHub runs every step under `bash -e`, and the migrator is
+      # *meant* to exit non-zero here, so -e is switched off around the
+      # run and the exit code is read by hand. The first version of this
+      # step forgot that and died at the assignment, before it had echoed
+      # a single line, which made a passing image look like a broken one.
+      - name: The migrator image can run its entrypoint
+        run: |
+          set -uo pipefail
+          set +e
+          out=$(docker run --rm \
+            -e MIGRATION_DATABASE_URL='postgres://domino:domino@127.0.0.1:1/domino' \
+            domino-migrator:ci 2>&1)
+          code=$?
+          set -e
+          echo "$out"
+          if [ "$code" -eq 0 ]; then
+            echo "::error::The migrator image exited 0 against a database that does not exist."
+            exit 1
+          fi
+          echo "$out" | grep -q "Nothing answers on" || {
+            echo "::error::The migrator image did not reach its own error handling (exit $code)."
+            exit 1
+          }
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # --prod, because this gate is about what ships. The dev tree pulls
+      # in eslint's and drizzle-kit's own transitive advisories, which
+      # never reach a running Domino, and a required check that is red for
+      # reasons nobody can act on is a check people learn to ignore.
+      # `pnpm audit` without the flag is still worth running by hand.
+      - run: pnpm audit --prod --audit-level high
+
+  secrets:
+    name: Secrets scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Run gitleaks
+        run: |
+          set -euo pipefail
+          GITLEAKS_VERSION=8.24.3
+          GITLEAKS_SHA256=9991e0b2903da4c8f6122b5c3186448b927a5da4deef1fe45271c3793f4ee29c
+          curl -sSfL --retry 4 --retry-delay 5 --retry-all-errors -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          # The scan runs on every pull request, from every fork. A tarball
+          # fetched over the network and executed unchecked is a way in;
+          # the published checksum closes it.
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum -c -
+          tar -xzf gitleaks.tar.gz gitleaks
+          ./gitleaks git --no-banner --redact .
