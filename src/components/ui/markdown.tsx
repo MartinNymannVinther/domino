@@ -152,13 +152,13 @@ export function Markdown({ source, className }: { source: string; className?: st
             return <p key={i}>{inline(block.text)}</p>;
           case "list":
             return block.ordered ? (
-              <ol key={i} className="flex list-decimal flex-col gap-1 pl-6">
+              <ol key={i} className="flex list-decimal flex-col gap-1 pl-8">
                 {block.items.map((item, j) => (
                   <li key={j}>{inline(item)}</li>
                 ))}
               </ol>
             ) : (
-              <ul key={i} className="flex list-disc flex-col gap-1 pl-6">
+              <ul key={i} className="flex list-disc flex-col gap-1 pl-8">
                 {block.items.map((item, j) => (
                   <li key={j}>{inline(item)}</li>
                 ))}
