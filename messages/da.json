@@ -710,6 +710,31 @@
         "notFound": "Flowet blev ikke fundet.",
         "unauthorized": "Du er ikke logget ind."
       }
+    },
+    "assist": {
+      "finishPrompt": "Hjælp mig med prompten",
+      "schemaFromExample": "Foreslå skema fra et eksempel",
+      "asking": "Modellen tænker…",
+      "propose": "Foreslå",
+      "close": "Luk",
+      "examplePlaceholder": "Indsæt et eksempel på det data, flowet skal læse – fx teksten fra én ansøgning.",
+      "exampleLabel": "Eksempel på data",
+      "hintPlaceholder": "Hvad vil du have ud? (valgfrit)",
+      "hintLabel": "Hvad du vil have ud",
+      "suggestion": "Forslag",
+      "use": "Brug",
+      "dismiss": "Nej tak",
+      "required": "skal udfyldes",
+      "failed": {
+        "noModel": "Der er ingen sprogmodel sat op for arbejdsrummet.",
+        "rateLimited": "Loftet for AI-kald er nået. Prøv igen om lidt.",
+        "unreachable": "Modellen svarer ikke.",
+        "badAnswer": "Modellen svarede ikke med noget der kunne bruges.",
+        "generic": "Noget gik galt.",
+        "invalid": "Beskeden kunne ikke sendes.",
+        "notFound": "Flowet blev ikke fundet.",
+        "unauthorized": "Du er ikke logget ind."
+      }
     }
   },
   "bricks": {
@@ -943,6 +968,27 @@
         "steps": "Trin",
         "tokens": "Tokens",
         "engine": "Model"
+      }
+    },
+    "explain": {
+      "button": "Forklar fejlen",
+      "asking": "Modellen tænker…",
+      "title": "Hvad gik galt",
+      "applyFix": "{count, plural, one {Ret flowet (# ændring)} other {Ret flowet (# ændringer)}}",
+      "dismiss": "Nej tak",
+      "fixMessage": "rettelse foreslået efter en fejlet kørsel",
+      "applied": "Flowet er rettet som version {number}.",
+      "openFlow": "Åbn flowet",
+      "conflict": "Flowet er ændret siden. Åbn det og prøv igen.",
+      "failed": {
+        "noModel": "Der er ingen sprogmodel sat op for arbejdsrummet.",
+        "rateLimited": "Loftet for AI-kald er nået. Prøv igen om lidt.",
+        "unreachable": "Modellen svarer ikke.",
+        "badAnswer": "Modellen svarede ikke med noget der kunne bruges.",
+        "generic": "Noget gik galt.",
+        "invalid": "Beskeden kunne ikke sendes.",
+        "notFound": "Flowet blev ikke fundet.",
+        "unauthorized": "Du er ikke logget ind."
       }
     }
   }

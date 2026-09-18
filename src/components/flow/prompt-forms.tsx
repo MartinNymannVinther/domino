@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/native-select";
 import { outputPortNames, type FlowDocument, type FlowNodeOf } from "@/modules/flow";
 import { NumberField, TextAreaField } from "./field-helpers";
+import { SuggestPrompt, SuggestSchema } from "./ai-suggest";
 import { SchemaEditor } from "./schema-editor";
 
 /**
@@ -75,10 +76,14 @@ function useInsertAt(commit: (next: string) => void, current: string) {
 export function LlmForm({
   node,
   doc,
+  flowId,
+  withAi,
   onChange,
 }: {
   node: FlowNodeOf<"llm">;
   doc: FlowDocument;
+  flowId: string;
+  withAi: boolean;
   onChange: (config: FlowNodeOf<"llm">["config"]) => void;
 }) {
   const t = useTranslations("bricks.prompt");
@@ -94,6 +99,13 @@ export function LlmForm({
         textareaRef={ref}
       />
       <InsertReference doc={doc} nodeId={node.id} onInsert={insert} />
+      {withAi ? (
+        <SuggestPrompt
+          flowId={flowId}
+          nodeId={node.id}
+          onUse={(prompt) => onChange({ ...c, prompt })}
+        />
+      ) : null}
       <ModelSettings
         temperature={c.temperature}
         maxTokens={c.maxTokens}
@@ -106,10 +118,14 @@ export function LlmForm({
 export function StructuredForm({
   node,
   doc,
+  flowId,
+  withAi,
   onChange,
 }: {
   node: FlowNodeOf<"structured">;
   doc: FlowDocument;
+  flowId: string;
+  withAi: boolean;
   onChange: (config: FlowNodeOf<"structured">["config"]) => void;
 }) {
   const t = useTranslations("bricks.prompt");
@@ -125,7 +141,15 @@ export function StructuredForm({
         textareaRef={ref}
       />
       <InsertReference doc={doc} nodeId={node.id} onInsert={insert} />
+      {withAi ? (
+        <SuggestPrompt
+          flowId={flowId}
+          nodeId={node.id}
+          onUse={(prompt) => onChange({ ...c, prompt })}
+        />
+      ) : null}
       <SchemaEditor schema={c.schema} onChange={(schema) => onChange({ ...c, schema })} />
+      {withAi ? <SuggestSchema onUse={(schema) => onChange({ ...c, schema })} /> : null}
       <ModelSettings
         temperature={c.temperature}
         maxTokens={c.maxTokens}
@@ -138,10 +162,14 @@ export function StructuredForm({
 export function TemplateForm({
   node,
   doc,
+  flowId,
+  withAi,
   onChange,
 }: {
   node: FlowNodeOf<"template">;
   doc: FlowDocument;
+  flowId: string;
+  withAi: boolean;
   onChange: (config: FlowNodeOf<"template">["config"]) => void;
 }) {
   const t = useTranslations("bricks.prompt");
@@ -157,6 +185,13 @@ export function TemplateForm({
         textareaRef={ref}
       />
       <InsertReference doc={doc} nodeId={node.id} onInsert={insert} />
+      {withAi ? (
+        <SuggestPrompt
+          flowId={flowId}
+          nodeId={node.id}
+          onUse={(template) => onChange({ template })}
+        />
+      ) : null}
     </>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import "@xyflow/react/dist/style.css";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   Background,
   Controls,
@@ -77,12 +77,32 @@ function Canvas(props: CanvasProps) {
     [edges, selectedId],
   );
 
-  // Refit when the picture changes size: a brick added, the panel opened.
-  const panelOpen = selectedId !== null;
+  // Refit when the picture or the room for it changes: a brick added, a
+  // panel opened or closed beside it. Never below half size — a long
+  // flow scrolls sideways rather than shrinking past reading.
+  const wrapper = useRef<HTMLDivElement>(null);
+  const refit = useCallback(
+    () => fitView({ padding: 0.15, duration: 200, minZoom: 0.5 }),
+    [fitView],
+  );
   useEffect(() => {
-    const frame = requestAnimationFrame(() => fitView({ padding: 0.15, duration: 200 }));
+    const frame = requestAnimationFrame(() => void refit());
     return () => cancelAnimationFrame(frame);
-  }, [document.nodes.length, panelOpen, fitView]);
+  }, [document.nodes.length, refit]);
+  useEffect(() => {
+    const element = wrapper.current;
+    if (!element) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const observer = new ResizeObserver(() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => void refit(), 120);
+    });
+    observer.observe(element);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [refit]);
 
   /** A click or a keyboard pick arrives as a select change; the editor is told, and decides. */
   const pickFrom = useCallback(
@@ -139,37 +159,39 @@ function Canvas(props: CanvasProps) {
   );
 
   return (
-    <ReactFlow<BrickNodeType, BrickEdge>
-      nodes={shownNodes}
-      edges={shownEdges}
-      nodeTypes={nodeTypes}
-      onNodesChange={handleNodesChange}
-      onEdgesChange={handleEdgesChange}
-      onPaneClick={() => onSelect(null)}
-      onConnect={handleConnect}
-      isValidConnection={isValid}
-      onDelete={({ nodes: gone, edges: goneEdges }) =>
-        onDelete({ nodes: gone.map((n) => n.id), edges: goneEdges.map((e) => e.id) })
-      }
-      deleteKeyCode={readOnly ? null : ["Backspace", "Delete"]}
-      nodesConnectable={!readOnly}
-      elementsSelectable
-      nodesFocusable
-      edgesFocusable
-      // Layout is the document's; a drag reorders nothing yet, so it is off.
-      nodesDraggable={false}
-      panOnScroll
-      zoomOnDoubleClick={false}
-      minZoom={0.3}
-      maxZoom={1.6}
-      proOptions={{ hideAttribution: true }}
-      defaultEdgeOptions={{ type: "default", style: { strokeWidth: 1.5 } }}
-      aria-label={t("label")}
-      className="bg-background"
-    >
-      <Background gap={24} size={1} color="var(--hairline)" />
-      <Controls showInteractive={false} position="bottom-right" />
-    </ReactFlow>
+    <div ref={wrapper} className="h-full w-full">
+      <ReactFlow<BrickNodeType, BrickEdge>
+        nodes={shownNodes}
+        edges={shownEdges}
+        nodeTypes={nodeTypes}
+        onNodesChange={handleNodesChange}
+        onEdgesChange={handleEdgesChange}
+        onPaneClick={() => onSelect(null)}
+        onConnect={handleConnect}
+        isValidConnection={isValid}
+        onDelete={({ nodes: gone, edges: goneEdges }) =>
+          onDelete({ nodes: gone.map((n) => n.id), edges: goneEdges.map((e) => e.id) })
+        }
+        deleteKeyCode={readOnly ? null : ["Backspace", "Delete"]}
+        nodesConnectable={!readOnly}
+        elementsSelectable
+        nodesFocusable
+        edgesFocusable
+        // Layout is the document's; a drag reorders nothing yet, so it is off.
+        nodesDraggable={false}
+        panOnScroll
+        zoomOnDoubleClick={false}
+        minZoom={0.3}
+        maxZoom={1.6}
+        proOptions={{ hideAttribution: true }}
+        defaultEdgeOptions={{ type: "default", style: { strokeWidth: 1.5 } }}
+        aria-label={t("label")}
+        className="bg-background"
+      >
+        <Background gap={24} size={1} color="var(--hairline)" />
+        <Controls showInteractive={false} position="bottom-right" />
+      </ReactFlow>
+    </div>
   );
 }
 

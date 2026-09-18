@@ -27,15 +27,16 @@ format is written down in [docs/flow-format.md](docs/flow-format.md).
 
 ## Status
 
-Wave 0 of 0.9: the foundation. What it holds: auth with passkeys and
-TOTP, workspaces separated in the database, admission by application and
-invitation, the audit log, CI, Docker, the design shell, the six product
-tables with their isolation tests, and the flow format — versioned from
-the first commit, so that what is exported today can be imported after
-the format has moved on. The product itself — the document and the
-engine, the canvas, the conversation, the runs, the assists — arrives in
-the five waves CLAUDE.md names. Nothing here has run a real pile yet;
-dogma seven is what 1.0 waits for.
+0.9, waves 0 to 5 built: the foundation (auth with passkeys and TOTP,
+workspaces separated in the database, admission by invitation, the
+audit log, CI, Docker), the flow format and the engine, the canvas with
+the panel per brick, the start screen that talks a flow into existence
+and the conversation that shapes it, runs with files and a step-by-step
+record, and the AI per brick — a prompt finished, a schema from an
+example, a failed run explained with a fix. Everything here has run
+against a local model on one machine; nothing has run a real pile yet.
+Dogma seven is what 1.0 waits for, and [docs/launch.md](docs/launch.md)
+is the road to it.
 
 What that means for you: the code is public and you are welcome to run
 it, read it, report what you find and send changes. Before 1.0 a

@@ -12,7 +12,8 @@ import type { ProposalResult } from "./wire";
  * quiet. Degrade to nothing, not to broken (docs/adr/0025).
  */
 export async function askAi<T>(
-  road: "quick-assist" | "close-advice" | "propose-flow" | "flow-chat" | "brick-assist",
+  road:
+    "quick-assist" | "close-advice" | "propose-flow" | "flow-chat" | "brick-assist" | "explain-run",
   body: unknown,
   { locale, signal }: { locale: string; signal?: AbortSignal },
 ): Promise<ProposalResult<T>> {

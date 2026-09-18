@@ -9,6 +9,7 @@ import { formatStamp } from "@/core/dates";
 import { cancelRunAction } from "@/modules/runs/actions";
 import type { RunView as RunRecord } from "@/modules/runs/service";
 import { Link } from "@/i18n/navigation";
+import { ExplainFailure } from "./explain-failure";
 import { OutputView } from "./output-view";
 import { StepList } from "./step-list";
 
@@ -34,7 +35,7 @@ export type RunJson = Omit<RunRecord, "startedAt" | "finishedAt" | "createdAt" |
 
 const LIVE = new Set(["queued", "running"]);
 
-export function RunView({ initial }: { initial: RunJson }) {
+export function RunView({ initial, withAi }: { initial: RunJson; withAi: boolean }) {
   const t = useTranslations("run.view");
   const locale = useLocale();
   const [run, setRun] = useState(initial);
@@ -112,9 +113,14 @@ export function RunView({ initial }: { initial: RunJson }) {
       />
 
       {run.error ? (
-        <div className="bg-warning-tint text-warning rounded-md px-4 py-3 text-sm">
-          <p className="font-semibold">{t("failedTitle")}</p>
-          <p className="mt-1 whitespace-pre-wrap">{run.error}</p>
+        <div className="flex flex-col gap-3">
+          <div className="bg-warning-tint text-warning rounded-md px-4 py-3 text-sm">
+            <p className="font-semibold">{t("failedTitle")}</p>
+            <p className="mt-1 whitespace-pre-wrap">{run.error}</p>
+          </div>
+          {withAi && run.status === "failed" ? (
+            <ExplainFailure runId={run.id} flowId={run.flowId} />
+          ) : null}
         </div>
       ) : null}
 

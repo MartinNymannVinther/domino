@@ -710,6 +710,31 @@
         "notFound": "The flow was not found.",
         "unauthorized": "You are not signed in."
       }
+    },
+    "assist": {
+      "finishPrompt": "Help me with the prompt",
+      "schemaFromExample": "Propose a schema from an example",
+      "asking": "The model is thinking…",
+      "propose": "Propose",
+      "close": "Close",
+      "examplePlaceholder": "Paste an example of the data the flow will read – e.g. the text of one application.",
+      "exampleLabel": "Example of the data",
+      "hintPlaceholder": "What do you want out? (optional)",
+      "hintLabel": "What you want out",
+      "suggestion": "Suggestion",
+      "use": "Use",
+      "dismiss": "No thanks",
+      "required": "required",
+      "failed": {
+        "noModel": "No language model is set up for the workspace.",
+        "rateLimited": "The ceiling on AI calls is reached. Try again in a while.",
+        "unreachable": "The model does not answer.",
+        "badAnswer": "The model did not answer with anything usable.",
+        "generic": "Something went wrong.",
+        "invalid": "The message could not be sent.",
+        "notFound": "The flow was not found.",
+        "unauthorized": "You are not signed in."
+      }
     }
   },
   "bricks": {
@@ -943,6 +968,27 @@
         "steps": "Steps",
         "tokens": "Tokens",
         "engine": "Model"
+      }
+    },
+    "explain": {
+      "button": "Explain the failure",
+      "asking": "The model is thinking…",
+      "title": "What went wrong",
+      "applyFix": "{count, plural, one {Fix the flow (# change)} other {Fix the flow (# changes)}}",
+      "dismiss": "No thanks",
+      "fixMessage": "fix proposed after a failed run",
+      "applied": "The flow was fixed as version {number}.",
+      "openFlow": "Open the flow",
+      "conflict": "The flow has changed since. Open it and try again.",
+      "failed": {
+        "noModel": "No language model is set up for the workspace.",
+        "rateLimited": "The ceiling on AI calls is reached. Try again in a while.",
+        "unreachable": "The model does not answer.",
+        "badAnswer": "The model did not answer with anything usable.",
+        "generic": "Something went wrong.",
+        "invalid": "The message could not be sent.",
+        "notFound": "The flow was not found.",
+        "unauthorized": "You are not signed in."
       }
     }
   }

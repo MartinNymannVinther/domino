@@ -25,16 +25,20 @@ import { LlmForm, StructuredForm, TemplateForm } from "./prompt-forms";
  * change leaves as a list of operations; the editor commits them.
  */
 export function BrickPanel({
+  flowId,
   doc,
   node,
   problems,
+  withAi,
   onCommit,
   onClose,
   readOnly,
 }: {
+  flowId: string;
   doc: FlowDocument;
   node: FlowNode;
   problems: Problem[];
+  withAi: boolean;
   onCommit: (ops: PatchOp[], message: string) => void;
   onClose: () => void;
   readOnly?: boolean;
@@ -75,9 +79,11 @@ export function BrickPanel({
       />
 
       {node.type === "input" ? <InputForm node={node} onChange={change} /> : null}
-      {node.type === "llm" ? <LlmForm node={node} doc={doc} onChange={change} /> : null}
+      {node.type === "llm" ? (
+        <LlmForm node={node} doc={doc} flowId={flowId} withAi={withAi} onChange={change} />
+      ) : null}
       {node.type === "structured" ? (
-        <StructuredForm node={node} doc={doc} onChange={change} />
+        <StructuredForm node={node} doc={doc} flowId={flowId} withAi={withAi} onChange={change} />
       ) : null}
       {node.type === "document" ? <DocumentForm node={node} onChange={change} /> : null}
       {node.type === "branch" ? <BranchForm node={node} onChange={change} /> : null}
@@ -85,7 +91,9 @@ export function BrickPanel({
         <LoopForm node={node} onChange={change} />
       ) : null}
       {node.type === "combine" ? <CombineForm node={node} onChange={change} /> : null}
-      {node.type === "template" ? <TemplateForm node={node} doc={doc} onChange={change} /> : null}
+      {node.type === "template" ? (
+        <TemplateForm node={node} doc={doc} flowId={flowId} withAi={withAi} onChange={change} />
+      ) : null}
       {node.type === "output" ? <OutputForm node={node} onChange={change} /> : null}
 
       <ConnectionsForm

@@ -120,7 +120,7 @@ export function FlowEditor({
   };
 
   return (
-    <div className="flex min-h-svh flex-1 flex-col">
+    <div className="flex h-full min-h-0 flex-1 flex-col">
       <FlowHeader
         flowId={flowId}
         document={document}
@@ -150,7 +150,7 @@ export function FlowEditor({
             onReject={reject}
           />
         ) : null}
-        <div className="min-h-[60svh] flex-1 lg:min-h-0">
+        <div className="min-h-[40svh] flex-1 lg:min-h-0">
           <FlowCanvas
             document={shown}
             problems={shownProblems}
@@ -166,9 +166,11 @@ export function FlowEditor({
         {selected ? (
           <BrickPanel
             key={selected.id}
+            flowId={flowId}
             doc={shown}
             node={selected}
             problems={shownProblems}
+            withAi={modelConfigured}
             onCommit={(ops, message) => void commit(ops, message)}
             onClose={() => setSelectedId(null)}
             readOnly={frozen}

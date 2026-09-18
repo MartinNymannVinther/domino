@@ -8,6 +8,7 @@ import { MAX_MESSAGE_CHARS } from "@/modules/ai/propose-change";
 import type { PatchOutcome } from "./actions";
 import { acceptProposal, recordExchange, rejectProposal } from "./messages";
 import { Patch } from "./patch";
+import { commitPatch } from "./versions";
 
 /**
  * The conversation's writes (docs/adr/0008: acceptances are actions).
@@ -53,4 +54,28 @@ export async function rejectProposalAction(raw: unknown): Promise<Result> {
   if (!parsed.success) return fail("invalid");
   const done = await rejectProposal(ctx, parsed.data.flowId, parsed.data.messageId);
   return done ? ok(undefined) : fail("notFound");
+}
+
+/**
+ * A fix the model proposed for a failed run, accepted on the run page:
+ * the same commit as any edit, marked as the model's, against the
+ * version the fix was judged on.
+ */
+export async function acceptFixAction(raw: unknown): Promise<Result<PatchOutcome>> {
+  const ctx = await requireOrgContext();
+  if (!ctx) return fail("unauthorized");
+  const parsed = z
+    .object({
+      flowId: FlowId,
+      baseVersionId: z.string().min(1).max(64),
+      patch: Patch,
+      message: z.string().max(200).default(""),
+    })
+    .safeParse(raw);
+  if (!parsed.success) return fail("invalid");
+  const { flowId, baseVersionId, patch, message } = parsed.data;
+  const result = await commitPatch(ctx, flowId, patch, { actorKind: "ai", message, baseVersionId });
+  if (!result.ok) return fail(result.error);
+  revalidatePath(`/flows/${flowId}`);
+  return ok({ versionId: result.versionId, number: result.number, document: result.document });
 }

@@ -43,6 +43,19 @@ describe("a demo workspace", () => {
     expect(demoLandingUrl("en").pathname).toBe("/en/flows");
   });
 
+  it("opens with the three example flows, each at version 1", async () => {
+    const flows = await admin.query(
+      `select f.name, v.number from flows f join flow_versions v on v.id = f.current_version_id
+       where f.org_id = $1 order by f.created_at`,
+      [orgId],
+    );
+    expect(flows.rows.map((r) => [r.name, r.number])).toEqual([
+      ["Sortér en henvendelse", 1],
+      ["Sammenfat et dokument", 1],
+      ["Ansøgninger til skema", 1],
+    ]);
+  });
+
   it("is deleted whole when its time is up, guest account included", async () => {
     await admin.query(
       `update demo_workspaces set expires_at = now() - interval '1 minute' where organization_id = $1`,

@@ -6,13 +6,16 @@ import { demoWorkspaces } from "@/core/db/schema";
 import { DEMO_HEADER, demoSignupHeaderValue } from "@/core/auth/signup";
 import { env } from "@/core/env";
 import { organizationSlug } from "@/lib/slug";
+import { EXAMPLE_FLOWS } from "@/modules/flow";
+import { createFlow } from "@/modules/flow/service";
 
 /**
  * A demo is a real workspace with a throwaway account in it and a date on
  * which it stops existing. Everything a visitor touches is the product:
  * the same tables, the same policies, the same services, so nothing shown
- * here can quietly differ from what a customer would get. The example
- * flows a demo opens with arrive with the demo itself (roadmap, 0.9).
+ * here can quietly differ from what a customer would get. A demo opens
+ * with the three example flows, made through the same service as a
+ * person's own, so there is something to run within a minute.
  *
  * Nothing here runs unless DEMO=on. On an installation that has not asked
  * for it, the route below answers 404 and this file is dead code.
@@ -144,6 +147,17 @@ export async function createDemoWorkspace(locale: "da" | "en"): Promise<DemoSess
     userId,
     expiresAt: new Date(Date.now() + DEMO_TTL_HOURS * 60 * 60 * 1000),
   });
+
+  // The examples, oldest first so the list reads in the order they are
+  // meant to be met; a failure here leaves a working, emptier demo.
+  const ctx = { orgId: organization.id, userId };
+  for (const example of [...EXAMPLE_FLOWS].reverse()) {
+    try {
+      await createFlow(ctx, example.document, { message: "eksempel" });
+    } catch (error) {
+      console.error("demo: could not seed an example flow", example.key, error);
+    }
+  }
 
   return { headers: sessionHeaders };
 }

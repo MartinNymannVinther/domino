@@ -40,21 +40,42 @@ tools would want too, and is better made once and carried across than
 made four times. The product's own files start at zero and stay under
 the line.
 
-### The demo seeds nothing yet
+### The runner is one process, in order
 
-`createDemoWorkspace` builds a workspace, an account and a cookie, and
-lands on an empty flow list. The example flows it should open with are
-decided together with the start screen (wave 3) and seeded with the demo
-(wave 5); until then `DEMO=on` demonstrates the foundation and nothing
-else.
+Runs are claimed oldest first, one at a time, by the web process (ADR
+0013). A long run delays the next, and a second instance of the app
+would be a second runner without coordination beyond `FOR UPDATE SKIP
+LOCKED` — correct, but each instance also fails every run left
+`running` when it starts, which on a rolling deploy fails the other
+instance's run in flight. One server, one process is the stated shape;
+a pool, a heartbeat and a resume are the answer when a real pile asks.
 
-### The AI ceilings are Tavle's numbers
+### Proposals are written by the client, not the route
 
-60 calls per user per hour and 600 per workspace per day (ADR 0009) were
-sized for a team adding cards. A run over two hundred documents is two
-hundred calls in one go. The runner (wave 4) brings its own accounting
-and an ADR amending 0009; until then the inherited ceilings bound only
-the conversation and the assists, which is what exists.
+The conversation's route answers with the model's reply and patch; the
+client then stores the exchange with `recordExchangeAction` (ADR 0008
+keeps the model call off the action queue). A browser that closes
+between the two loses the exchange, and a client could store a reply
+the model never gave. The second is harmless — a proposal is validated
+again when accepted, and only the workspace's own flow can be touched —
+but the shape is two trips where one would do. A route that stores as
+it answers, with the same guard, is the cleaner shape.
+
+### The canvas draws small
+
+Auto-layout puts a flow of seven bricks in a row, and the canvas fits
+it to the width, so the bricks are small on a laptop until the person
+zooms. A layout that wraps long chains, or bricks that show less at a
+small zoom, are both possible; which one is the calmer picture is a
+question for a person who has used it for a week.
+
+### The chosen structured fields cannot be nested from the form
+
+The schema editor writes strings, numbers, booleans and choices; a
+nested object or a list of objects — which the model may propose and
+the format allows — is shown as "advanced" and left alone. Editing it
+means the conversation or a file. Enough for 0.9; a form for one level
+of nesting is small work when somebody needs it.
 
 ## Accepted, with the reason written down
 
@@ -113,6 +134,13 @@ Twenty megabytes per file and five hundred items per run are the first
 numbers (docs/flow-format.md, ADR 0011). A case worker with a thousand
 applications, or a scanned PDF of eighty pages, is the reason to change
 either — not a guess about them.
+
+### 600 calls per workspace per day, runs included
+
+ADR 0013 counts a run's calls against the workspace's day and keeps the
+number ADR 0009 set: three piles of two hundred and the fourth waits.
+Whether the number should be a setting, or the runs should have a day
+of their own, is a question for the first workspace that reaches it.
 
 ### What a person needs to see when a run fails
 
