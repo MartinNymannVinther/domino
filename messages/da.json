@@ -681,7 +681,8 @@
         "noOutput": "Flowet har ingen output-klods.",
         "fieldOnText": "{port} er tekst og har ingen felter.",
         "unknownField": "Feltet findes ikke i {port}.",
-        "loopOpen": "Løkkens start når ikke sin slutning endnu."
+        "loopOpen": "Løkkens start når ikke sin slutning endnu.",
+        "unusedInput": "Input-klodsen bruges ikke af nogen."
       }
     },
     "chat": {

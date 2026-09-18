@@ -164,6 +164,15 @@ function checkInputs(doc: FlowDocument, index: PortIndex, problems: Problem[]) {
           port: port.name,
         });
     }
+    // An input nothing reads is a run asking for something it never uses.
+    if (node.type === "input" && !doc.edges.some((e) => e.from.node === node.id)) {
+      problems.push({
+        code: "unusedInput",
+        severity: severityOf("unusedInput"),
+        message: `${node.id} is an input nothing reads`,
+        nodeId: node.id,
+      });
+    }
     if (node.type === "combine") {
       const connected = ports.filter((p) => index.edgeInto(node.id, p.name)).length;
       if (connected < 2)

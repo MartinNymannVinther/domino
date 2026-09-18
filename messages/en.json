@@ -681,7 +681,8 @@
         "noOutput": "The flow has no output brick.",
         "fieldOnText": "{port} is text and has no fields.",
         "unknownField": "The field does not exist in {port}.",
-        "loopOpen": "The loop's start does not reach its end yet."
+        "loopOpen": "The loop's start does not reach its end yet.",
+        "unusedInput": "The input brick is not read by anything."
       }
     },
     "chat": {

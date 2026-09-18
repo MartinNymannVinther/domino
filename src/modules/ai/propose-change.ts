@@ -1,5 +1,11 @@
 import type { LlmMessage } from "@/core/llm";
-import { applyPatch, Patch, type FlowDocument, type Problem } from "@/modules/flow";
+import {
+  applyPatch,
+  Patch,
+  validateDocument,
+  type FlowDocument,
+  type Problem,
+} from "@/modules/flow";
 import { FLOW_FORMAT_RULES } from "./flow-format-prompt";
 import { DATA_RULE, fenceUntrusted, languageRule } from "./prompting";
 import type { Ask } from "./propose-flow";
@@ -38,7 +44,57 @@ function system(locale: string): string {
     '{ "op": "addEdge", "edge": { "id", "from": { "node", "port" }, "to": { "node", "port" } } } — a new connection, with a new id.',
     '{ "op": "removeEdge", "id": "e3" }',
     '{ "op": "setMeta", "name": "...", "description": "..." }',
-    "Change as little as the request needs. Keep existing ids. When you change a prompt's references, add or remove the matching edges. When you insert a brick between two others, remove the old edge and add the two new ones. The result must still hold together: every input connected, kinds fitting, loops paired.",
+    "Change as little as the request needs, but write the whole change: every brick the reply mentions is in the patch, and every new brick is connected — its inputs fed by an edge, its output feeding something. A brick added without its edges is an unfinished change. Keep existing ids; new ids continue the numbering. When you change a prompt's references, add or remove the matching edges. When you insert a brick between two others, remove the old edge and add the two new ones. The result must still hold together: every input connected, kinds fitting, loops paired.",
+    "",
+    "An example. The flow has input n1 (text) feeding output n2. The person asks for a summary of an uploaded file instead. The patch:",
+    JSON.stringify({
+      ops: [
+        {
+          op: "addNode",
+          node: {
+            id: "n3",
+            type: "input",
+            title: "Fil",
+            config: { kind: "file", itemKind: "file", label: "Fil", hint: "" },
+          },
+        },
+        {
+          op: "addNode",
+          node: { id: "n4", type: "document", title: "Læs filen", config: { maxChars: 60000 } },
+        },
+        {
+          op: "addNode",
+          node: {
+            id: "n5",
+            type: "llm",
+            title: "Sammenfat",
+            config: {
+              prompt: "Sammenfat teksten herunder på ti linjer.\n\n{{n4.text}}",
+              temperature: 0.2,
+              maxTokens: 800,
+            },
+          },
+        },
+        {
+          op: "addEdge",
+          edge: { id: "e2", from: { node: "n3", port: "value" }, to: { node: "n4", port: "file" } },
+        },
+        {
+          op: "addEdge",
+          edge: {
+            id: "e3",
+            from: { node: "n4", port: "text" },
+            to: { node: "n5", port: "n4.text" },
+          },
+        },
+        { op: "removeEdge", id: "e1" },
+        {
+          op: "addEdge",
+          edge: { id: "e4", from: { node: "n5", port: "text" }, to: { node: "n2", port: "value" } },
+        },
+        { op: "removeNode", id: "n1" },
+      ],
+    }),
     "",
     FLOW_FORMAT_RULES,
   ].join("\n");
@@ -93,7 +149,8 @@ export function readProposedChange(
       problems: parsed.error.issues.slice(0, 8).map((i) => `${i.path.join(".")}: ${i.message}`),
     };
   }
-  const applied = applyPatch(doc, parsed.data);
+  const patch = inCanonicalOrder(parsed.data);
+  const applied = applyPatch(doc, patch);
   if (!applied.ok) {
     return {
       ok: false,
@@ -102,7 +159,36 @@ export function readProposedChange(
         .map((p) => (applied.at >= 0 ? `op ${applied.at}: ${p.message}` : p.message)),
     };
   }
-  return { ok: true, reply, patch: parsed.data, warnings: applied.warnings };
+  return { ok: true, reply, patch, warnings: applied.warnings };
+}
+
+/**
+ * A model writes the operations in the order it thinks of them, and
+ * "connect the new brick to the output" comes to mind before "and
+ * take the old connection off it". A patch is applied in order
+ * (docs/flow-format.md), so the model's is put in the one order that
+ * cannot trip over itself: connections off, bricks off, bricks on,
+ * bricks changed, connections on, the name last. No operation changes
+ * meaning by this; only a patch that would have refused itself does.
+ */
+const PHASE: Record<Patch["ops"][number]["op"], number> = {
+  removeEdge: 0,
+  removeNode: 1,
+  addNode: 2,
+  updateNode: 3,
+  addEdge: 4,
+  setMeta: 5,
+};
+
+export function inCanonicalOrder(patch: Patch): Patch {
+  return { ops: [...patch.ops].sort((a, b) => PHASE[a.op] - PHASE[b.op]) };
+}
+
+/** Loose ends the patch itself made: warnings the flow did not have before it. */
+function looseEndsOf(before: Problem[], after: Problem[]): string[] {
+  const key = (p: Problem) => `${p.code}:${p.nodeId ?? ""}:${p.port ?? ""}`;
+  const had = new Set(before.map(key));
+  return after.filter((w) => !had.has(key(w))).map((w) => w.message);
 }
 
 export async function proposeChange(
@@ -113,6 +199,7 @@ export async function proposeChange(
   ask: Ask,
 ): Promise<ChangeProposal> {
   const messages = changeMessages(doc, history, message, locale);
+  const before = validateDocument(doc);
   let problems: string[] = [];
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const asked =
@@ -127,8 +214,19 @@ export async function proposeChange(
           ];
     const answer = await ask(asked, { maxTokens: 3000 });
     const read = readProposedChange(doc, answer);
-    if (read.ok) return read;
+    if (read.ok) {
+      // A patch that applies but leaves the bricks it added unconnected is
+      // sent back once too; the second answer is kept as it comes, loose
+      // ends and all, since a warning is not a refusal (docs/adr/0012).
+      const loose = read.patch ? looseEndsOf(before, read.warnings) : [];
+      if (loose.length === 0 || attempt > 0) return read;
+      problems = loose.map((m) => `the patch leaves a loose end: ${m}`);
+      continue;
+    }
     problems = read.problems;
+    // Worth a line in the log: a patch that did not apply is how the
+    // prompt gets better (dogma seven), and nothing else records it.
+    console.warn("ai: a proposed change did not apply", { attempt, problems });
   }
   return { ok: false, reason: "badAnswer", problems };
 }

@@ -23,6 +23,7 @@ export type ProblemCode =
   | "referenceMismatch"
   | "kindMismatch"
   | "unconnected"
+  | "unusedInput"
   | "combineTooFew"
   | "cycle"
   | "loopUnpaired"
@@ -37,6 +38,7 @@ export type ProblemCode =
 /** The codes that mean "not finished" rather than "not a flow". */
 export const WARNING_CODES: ReadonlySet<ProblemCode> = new Set([
   "unconnected",
+  "unusedInput",
   "combineTooFew",
   "noOutput",
   "loopOpen",

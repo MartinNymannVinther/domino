@@ -99,6 +99,80 @@ describe("proposing a change", () => {
     expect(seen[1]!.at(-1)!.content).toContain("op 0: no brick n99");
   });
 
+  it("sends a patch back once when the bricks it added are left loose", async () => {
+    const loose = {
+      ops: [
+        {
+          op: "addNode",
+          node: {
+            id: "n5",
+            type: "document",
+            title: "Læs",
+            config: { maxChars: 1000 },
+          },
+        },
+      ],
+    };
+    const wired = {
+      ops: [
+        ...loose.ops,
+        {
+          op: "addEdge",
+          edge: { id: "e9", from: { node: "n1", port: "value" }, to: { node: "n5", port: "file" } },
+        },
+      ],
+    };
+    const { ask, seen } = scripted([
+      { reply: "Tilføjet.", patch: loose },
+      { reply: "Tilføjet og forbundet.", patch: wired },
+    ]);
+    const result = await proposeChange(summary, [], "læs filen en gang til", "da", ask);
+    expect(result).toMatchObject({ ok: true, reply: "Tilføjet og forbundet.", patch: wired });
+    expect(seen[1]!.at(-1)!.content).toContain("loose end: n5 is missing its input file");
+
+    // The second answer is kept as it comes.
+    const stubborn = scripted([{ reply: "x", patch: loose }]);
+    const kept = await proposeChange(summary, [], "igen", "da", stubborn.ask);
+    expect(kept).toMatchObject({ ok: true, patch: loose });
+    expect(stubborn.seen).toHaveLength(2);
+  });
+
+  it("puts the model's operations in an order that cannot trip over itself", () => {
+    // The new edge into n4.value before the old one is removed: refused as
+    // written, fine once removals come first.
+    const written = {
+      ops: [
+        {
+          op: "addNode",
+          node: { id: "n5", type: "template", title: "T", config: { template: "{{n3.text}}" } },
+        },
+        {
+          op: "addEdge",
+          edge: { id: "e4", from: { node: "n5", port: "text" }, to: { node: "n4", port: "value" } },
+        },
+        {
+          op: "addEdge",
+          edge: {
+            id: "e5",
+            from: { node: "n3", port: "text" },
+            to: { node: "n5", port: "n3.text" },
+          },
+        },
+        { op: "removeEdge", id: "e3" },
+      ],
+    };
+    const result = readProposedChange(summary, { reply: "Indsat.", patch: written });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.patch!.ops.map((o) => o.op)).toEqual([
+      "removeEdge",
+      "addNode",
+      "addEdge",
+      "addEdge",
+    ]);
+    expect(result.warnings).toEqual([]);
+  });
+
   it("keeps a patch with warnings and says what they are", () => {
     const loose = { ops: [{ op: "removeEdge", id: "e3" }] };
     const result = readProposedChange(summary, { reply: "x", patch: loose });
