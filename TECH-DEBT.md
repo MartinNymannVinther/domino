@@ -79,6 +79,17 @@ of nesting is small work when somebody needs it.
 
 ## Accepted, with the reason written down
 
+### pdf.js gets a six-number DOMMatrix
+
+pdf.js asks for a `DOMMatrix` global at load and, in Node, reaches for
+`@napi-rs/canvas` to get one — a native binary per platform that the
+standalone build does not trace, and that a text extractor has no use
+for. `src/modules/files/extract.ts` stands a class of six numbers in
+before importing pdf-parse, and the worker file is traced in by name in
+`next.config.ts`. Text extraction is proven on a PDF in
+`tests/files`; anything that renders a page — nothing in Domino does —
+would find the stand-in wanting.
+
 ### The content policy still allows inline scripts
 
 `next.config.ts` sends a Content-Security-Policy, and it blocks
