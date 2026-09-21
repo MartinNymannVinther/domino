@@ -13,6 +13,8 @@ import { ACCEPTED_MIMES, extractText } from "./extract";
 
 export const MAX_FILE_BYTES = 20 * 1024 * 1024;
 export const MAX_FILES_PER_UPLOAD = 200;
+/** One request, all files together. */
+export const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
 
 export type StoredFile = {
   id: string;

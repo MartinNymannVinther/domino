@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { crossSite } from "@/core/auth/cross-site";
 import { requireOrgContext } from "@/core/auth/guard";
+import { RUN_LIMITS } from "@/modules/flow";
 import { lastInputsFor, testBrick } from "@/modules/runs/test-brick";
 
 export const runtime = "nodejs";
@@ -25,9 +27,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   return NextResponse.json({ ok: true, inputs }, { headers: { "Cache-Control": "no-store" } });
 }
 
+/** A value per port: text up to a run input's size, or a file reference; eight ports at most. */
+const Given = z.union([
+  z.string().max(RUN_LIMITS.textChars),
+  z.object({ fileId: z.string().max(64), name: z.string().max(255), mime: z.string().max(120) }),
+]);
 const Body = z.object({
   nodeId: z.string().regex(NODE),
-  inputs: z.record(z.string().max(64), z.unknown()),
+  inputs: z
+    .record(z.string().max(64), Given.optional())
+    .refine((r) => Object.keys(r).length <= 8, "ports"),
 });
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -49,15 +58,4 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     { ok: true, result },
     { status: 200, headers: { "Cache-Control": "no-store" } },
   );
-}
-
-function crossSite(request: Request): boolean {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
-  try {
-    return new URL(origin).host !== host;
-  } catch {
-    return true;
-  }
 }

@@ -146,10 +146,19 @@ export function securityHeaders(production: boolean): Array<{ key: string; value
 const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
-  // Dev only: `next dev` refuses to serve its own assets to any host but
-  // localhost, and a dev server reached from another machine (motor.local)
-  // otherwise renders as script-less HTML. Ignored by `next build`.
-  allowedDevOrigins: ["motor.local", "motor"],
+  // The text extractors run in Node as they are, not bundled: bundled,
+  // pdf.js resolves to its browser build and dies on the first PDF with
+  // "DOMMatrix is not defined" — in the production image only, since
+  // `next dev` does not bundle them. Left external, the standalone
+  // output traces the packages in whole and the Node entry is used.
+  serverExternalPackages: ["pdf-parse", "mammoth"],
+  // pdf.js loads its worker by path at run time, which the file tracer
+  // cannot see; named here, the file is carried into the standalone
+  // output. Files only: the tracer refuses a glob that lands on a
+  // symlinked directory, of which pnpm's tree is made.
+  outputFileTracingIncludes: {
+    "/api/files": ["./node_modules/.pnpm/pdfjs-dist@*/node_modules/pdfjs-dist/legacy/build/*.mjs"],
+  },
   env: {
     DOMINO_VERSION: pkg.version,
     DOMINO_COMMIT: commit,

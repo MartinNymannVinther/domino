@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { z } from "zod";
+import { crossSite } from "@/core/auth/cross-site";
 import { requireOrgContext } from "@/core/auth/guard";
 import type { OrgContext } from "@/core/db/tenant";
 import { routing, type Locale } from "@/i18n/routing";
@@ -61,25 +62,6 @@ export async function aiRead<S extends z.ZodType, T>(
 
 function answer<T>(body: ProposalResult<T>, status: number): NextResponse<ProposalResult<T>> {
   return NextResponse.json(body, { status, headers: { "Cache-Control": "no-store" } });
-}
-
-/**
- * A server action checks that the page asking is the page we served;
- * moving a read onto a route must not quietly drop that. Same test as
- * Next's own: the origin the browser stamps against the host the request
- * was addressed to. No origin header at all is not a browser making a
- * cross-site request, and the session cookie — SameSite=Lax — is the
- * guard there.
- */
-function crossSite(request: Request): boolean {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
-  try {
-    return new URL(origin).host !== host;
-  } catch {
-    return true;
-  }
 }
 
 /**

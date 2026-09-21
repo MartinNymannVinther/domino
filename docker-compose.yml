@@ -85,6 +85,12 @@ services:
       # `0`, which means no roof at all, still reaches the app as `0`.
       AI_DAILY_CALL_CAP: ${AI_DAILY_CALL_CAP:-}
       TRUSTED_PROXY_HOPS: ${TRUSTED_PROXY_HOPS:-}
+      # Queued flows run inside this container (docs/adr/0013); "off" only
+      # when a second container is started for the runner alone.
+      RUNNER: ${RUNNER:-}
+      # Other addresses the app may be signed in from, beside
+      # BETTER_AUTH_URL; empty on an installation with one address.
+      AUTH_TRUSTED_ORIGINS: ${AUTH_TRUSTED_ORIGINS:-}
     # No published port. Coolify's proxy reaches the app over the compose
     # network and terminates TLS in front of it; binding 0.0.0.0:3000 as
     # well would put the same app on the VPS's public address in cleartext,
