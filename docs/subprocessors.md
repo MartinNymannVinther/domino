@@ -30,20 +30,23 @@ Domino calls the EU one, and `MISTRAL_BASE_URL` in the environment is what
 decides it, so it is an installation's choice and not a workspace's. The
 regional endpoints cost 1.1x list price; that is what this row costs.
 
-Mistral receives what a prompt contains and nothing else. This list is
-completed as each AI surface arrives (CLAUDE.md, roadmap); a surface
-that is not written out here does not exist yet. What is decided
-already:
+Mistral receives what a prompt contains and nothing else. Every AI
+surface in 0.9 is written out here; a surface that is not on this list
+does not exist:
 
-- **The conversation** (wave 3): the person's description or follow-up
-  line, the flow document as it stands, and the last few turns of the
-  conversation about it. Never a run's data.
-- **The assists per brick** (wave 5): the brick's own prompt or schema
-  and the example the person pasted for a schema to be drafted from.
-- **A failed run explained** (wave 5): the failing brick's settings and
+- **The start screen and the conversation**: the person's description
+  or follow-up line, the flow document as it stands, and the last few
+  turns of the conversation about it. Never a run's data.
+- **The assists per brick**: the flow's name and description, the
+  brick's own prompt or schema, and the example the person pasted for a
+  schema to be drafted from.
+- **A brick tried on its own**: exactly what the person handed the
+  brick's inputs — which may be a document's text when they took it from
+  the last run.
+- **A failed run explained**: the flow document, the failing brick and
   the input and error of the step that failed — which may include a
   document's text, since that is what the brick was reading.
-- **A run** (wave 4): every model brick sends its prompt with the fields
+- **A run**: every model brick sends its prompt with the fields
   it references filled in, which means the text of the documents the
   person uploaded and whatever earlier bricks produced from them. This
   is the one surface that carries a person's documents by design; a

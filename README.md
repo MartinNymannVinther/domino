@@ -40,7 +40,9 @@ is the road to it.
 
 What that means for you: the code is public and you are welcome to run
 it, read it, report what you find and send changes. Before 1.0 a
-migration may still change its mind.
+migration may still change its mind. Releases are listed in
+[CHANGELOG.md](CHANGELOG.md); security reports go the way
+[SECURITY.md](SECURITY.md) says.
 
 Much of the code is written together with Claude Code, under the rules
 in [CLAUDE.md](CLAUDE.md). Every change is reviewed, tested and deployed
@@ -162,4 +164,7 @@ What we know is not right yet is written down rather than hoped away:
 [TECH-DEBT.md](TECH-DEBT.md) lists it, with the reason it is still there
 and what fixing it would take.
 
-License: [AGPL-3.0](LICENSE). The two typefaces the interface is set in ship in `public/fonts`, both under the SIL Open Font License 1.1: Archivo by the Archivo Project Authors ([OFL.txt](public/fonts/OFL.txt)) and Geist Mono by the Geist Project Authors ([OFL-Geist.txt](public/fonts/OFL-Geist.txt)). The `.woff2` files are Google Fonts' own subsets, copied in so that a build needs no network.
+License: [AGPL-3.0](LICENSE). Every dependency that ships in the
+production image is under a permissive licence compatible with it — MIT,
+Apache-2.0, BSD, ISC, MPL-2.0 — and `pnpm licenses list --prod` is the
+way to check that again after an upgrade. The two typefaces the interface is set in ship in `public/fonts`, both under the SIL Open Font License 1.1: Archivo by the Archivo Project Authors ([OFL.txt](public/fonts/OFL.txt)) and Geist Mono by the Geist Project Authors ([OFL-Geist.txt](public/fonts/OFL-Geist.txt)). The `.woff2` files are Google Fonts' own subsets, copied in so that a build needs no network.

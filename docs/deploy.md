@@ -32,6 +32,8 @@ runtime but the machine.
    | `LLM_PROVIDER`         | `mistral` hosted, `ollama` self-hosted, or leave unset for `none`   |
    | `MISTRAL_API_KEY`      | only with `LLM_PROVIDER=mistral`                                    |
    | `AI_DAILY_CALL_CAP`    | model calls per day across the whole installation; `0` for no roof  |
+   | `RUNNER`               | leave unset: queued flows run in the app's own container (ADR 0013) |
+   | `AUTH_TRUSTED_ORIGINS` | leave unset unless the app is reached on a second address           |
 
    Hex, not base64, for the three database passwords, and that is not a
    style preference. `docker-compose.yml` builds the connection strings by

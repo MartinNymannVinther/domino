@@ -26,9 +26,9 @@ can be taken back afterwards.
 gh repo edit MartinNymannVinther/domino --visibility public \
   --accept-visibility-change-consequences
 gh repo edit MartinNymannVinther/domino \
-  --description "Teamets domino, uden abonnementet. Kanban og Scrum, open source." \
+  --description "Stil brikkerne op. Skub til den første. Visuel flow-bygger til AI-arbejdsgange, open source." \
   --homepage https://domino.haij.dk \
-  --add-topic kanban --add-topic scrum --add-topic nextjs \
+  --add-topic ai --add-topic workflow --add-topic llm --add-topic nextjs \
   --add-topic postgresql --add-topic open-source --add-topic danish
 ```
 
