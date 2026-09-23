@@ -62,7 +62,12 @@ export function toGraph(
       mark: marks.get(brick.id),
     });
     const rows = inputs.length + (hasReferenceHandle(brick.type) ? 1 : 0);
-    sizes.set(brick.id, { width: BRICK_WIDTH, height: brickHeight(rows, outputs.length) });
+    // A note adds a line under the brick; the layout has to leave room.
+    const noteLines = brick.note ? Math.ceil(brick.note.length / 34) + 1 : 0;
+    sizes.set(brick.id, {
+      width: BRICK_WIDTH,
+      height: brickHeight(rows, outputs.length) + noteLines * 14,
+    });
   }
   const placed = layoutDocument(doc, sizes);
   const nodes: BrickNode[] = doc.nodes.map((brick) => {

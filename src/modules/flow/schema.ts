@@ -23,6 +23,7 @@ export const LIMITS = {
   template: 20_000,
   label: 80,
   hint: 300,
+  note: 500,
   documentChars: 200_000,
   combineInputs: 8,
 } as const;
@@ -87,7 +88,23 @@ export const OutputConfig = z.object({
   label: z.string().min(1).max(LIMITS.label),
 });
 
-const base = { id: Id, title: z.string().min(1).max(LIMITS.title) };
+/** What a brick does when it fails: end the run, or leave this one out and go on. */
+export const ON_ERROR = ["stop", "skip"] as const;
+export type OnError = (typeof ON_ERROR)[number];
+
+/**
+ * Every brick carries these beside its type's own config. Both are
+ * optional with a default, so a document written before they existed
+ * still reads (docs/flow-format.md).
+ */
+const base = {
+  id: Id,
+  title: z.string().min(1).max(LIMITS.title),
+  /** "skip" leaves the brick's outputs unfilled and carries on; inside a loop, that item is left out. */
+  onError: z.enum(ON_ERROR).default("stop"),
+  /** A note to whoever reads the flow next, drawn on the brick. */
+  note: z.string().max(LIMITS.note).default(""),
+};
 
 export const FlowNode = z.discriminatedUnion("type", [
   z.object({ ...base, type: z.literal("input"), config: InputConfig }),

@@ -155,7 +155,9 @@ of their own, is a question for the first workspace that reaches it.
 
 ### What a person needs to see when a run fails
 
-The steps record input and output, and the model can explain a failure.
-Whether that is enough — whether the person wants to retry one item,
-skip it, or edit the brick and resume from the step that failed — is
-what the first real pile will say.
+The steps record input and output, the model can explain a failure, a
+brick can be set to leave a bad item out, and a failed run can be taken
+over from where it stopped (ADR 0014). What is still open is the
+smallest unit: retrying **one item** of a pile rather than the run, and
+editing the brick before taking over. The first real pile decides
+whether either is missed.

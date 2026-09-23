@@ -124,6 +124,35 @@ export const flowMessages = pgTable(
   ],
 );
 
+/**
+ * An example value fastened to a brick's input port, so the brick — and
+ * the ones after it — can be tried without running the flow again
+ * (docs/adr/0014). Kept beside the flow rather than in the document on
+ * purpose: a pinned value is not a change to the flow, it should not
+ * make a version every time it changes, and it must not travel with an
+ * exported file, since it is often a page of somebody's document.
+ */
+export const flowPins = pgTable(
+  "flow_pins",
+  {
+    id: domainId("id"),
+    orgId: tenant(),
+    flowId: text("flow_id")
+      .notNull()
+      .references(() => flows.id, { onDelete: "cascade" }),
+    /** The brick, by its id in the document. */
+    nodeId: text("node_id").notNull(),
+    /** Its input port, as the document names it: `value`, `file`, `n2.text`. */
+    port: text("port").notNull(),
+    /** What the port should carry, in the run-time shape (docs/flow-format.md). */
+    value: json("value").notNull(),
+    createdBy: text("created_by").references(() => users.id, { onDelete: "set null" }),
+    ...timestamps,
+  },
+  (t) => [uniqueIndex("flow_pins_node_port_uq").on(t.flowId, t.nodeId, t.port)],
+);
+
 export type FlowRow = typeof flows.$inferSelect;
+export type FlowPinRow = typeof flowPins.$inferSelect;
 export type FlowVersionRow = typeof flowVersions.$inferSelect;
 export type FlowMessageRow = typeof flowMessages.$inferSelect;

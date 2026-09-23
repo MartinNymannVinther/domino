@@ -43,6 +43,13 @@
       "when": 1789723144543,
       "tag": "0005_claim_runs",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790150742948,
+      "tag": "0006_pins_and_resume",
+      "breakpoints": true
     }
   ]
 }

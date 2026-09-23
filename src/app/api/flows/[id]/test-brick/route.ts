@@ -3,6 +3,7 @@ import { z } from "zod";
 import { crossSite } from "@/core/auth/cross-site";
 import { requireOrgContext } from "@/core/auth/guard";
 import { RUN_LIMITS } from "@/modules/flow";
+import { pinsFor } from "@/modules/flow/pins";
 import { lastInputsFor, testBrick } from "@/modules/runs/test-brick";
 
 export const runtime = "nodejs";
@@ -23,8 +24,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   const { id } = await params;
   const nodeId = new URL(request.url).searchParams.get("nodeId") ?? "";
   if (!ID.test(id) || !NODE.test(nodeId)) return NextResponse.json({ ok: false }, { status: 404 });
-  const inputs = await lastInputsFor(ctx, id, nodeId);
-  return NextResponse.json({ ok: true, inputs }, { headers: { "Cache-Control": "no-store" } });
+  // What was fastened to the brick wins over what the last run carried:
+  // a pin is the example the person chose to keep (docs/adr/0014).
+  const [fromRun, pins] = await Promise.all([
+    lastInputsFor(ctx, id, nodeId),
+    pinsFor(ctx, id, nodeId),
+  ]);
+  return NextResponse.json(
+    { ok: true, inputs: { ...fromRun, ...pins }, pinned: Object.keys(pins) },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }
 
 /** A value per port: text up to a run input's size, or a file reference; eight ports at most. */

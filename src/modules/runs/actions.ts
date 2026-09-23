@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireOrgContext } from "@/core/auth/guard";
 import { fail, ok, type Result } from "@/core/result";
-import { cancelRun, startRun, type StartResult } from "./service";
+import { cancelRun, resumeRun, startRun, type StartResult } from "./service";
 
 /**
  * Starting and stopping runs (CLAUDE.md, security rules): the session
@@ -30,6 +30,23 @@ export async function startRunAction(
       reason: result.reason,
     };
   revalidatePath(`/flows/${parsed.data.flowId}/runs`);
+  return ok({ runId: result.runId });
+}
+
+/** Take over from a failed run: the finished steps stand, the rest is done again. */
+export async function resumeRunAction(
+  raw: unknown,
+): Promise<Result<{ runId: string }> & { reason?: string }> {
+  const ctx = await requireOrgContext();
+  if (!ctx) return fail("unauthorized");
+  const parsed = z.object({ runId: Id }).safeParse(raw);
+  if (!parsed.success) return fail("invalid");
+  const result = await resumeRun(ctx, parsed.data.runId);
+  if (!result.ok)
+    return {
+      ...fail(result.reason === "notFound" ? "notFound" : "invalid"),
+      reason: result.reason,
+    };
   return ok({ runId: result.runId });
 }
 

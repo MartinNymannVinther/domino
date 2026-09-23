@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   EXAMPLE_FLOWS,
+  FlowNode,
   parseDocument,
   PortIndex,
   validateDocument,
@@ -66,6 +67,8 @@ describe("the shape", () => {
 
   it("refuses a structured schema outside the subset", () => {
     const doc = withEdits(summary, (d) => {
+      // Not parsed: a schema outside the subset is exactly what the
+      // document is supposed to be refused for.
       d.nodes[2] = {
         id: "n3",
         type: "structured",
@@ -151,10 +154,10 @@ describe("the rules", () => {
 
   it("refuses a circle", () => {
     const doc = withEdits(summary, (d) => {
-      d.nodes[2] = {
+      d.nodes[2] = FlowNode.parse({
         ...d.nodes[2]!,
         config: { prompt: "{{n2.text}} {{n3.text}}", temperature: 0, maxTokens: 10 },
-      } as never;
+      }) as never;
       d.edges.push({
         id: "e9",
         from: { node: "n3", port: "text" },
@@ -166,10 +169,10 @@ describe("the rules", () => {
 
   it("refuses a field read off a text port", () => {
     const doc = withEdits(summary, (d) => {
-      d.nodes[2] = {
+      d.nodes[2] = FlowNode.parse({
         ...d.nodes[2]!,
         config: { prompt: "{{n2.text.name}}", temperature: 0, maxTokens: 10 },
-      } as never;
+      }) as never;
     });
     expect(codes(doc)).toContain("fieldOnText");
   });
@@ -187,18 +190,22 @@ describe("loops", () => {
 
   it("refuse a brick inside the loop that never comes back", () => {
     const doc = withEdits(applications, (d) => {
-      d.nodes.push({
-        id: "n7",
-        type: "llm",
-        title: "Sidespor",
-        config: { prompt: "{{n3.text}}", temperature: 0, maxTokens: 10 },
-      });
-      d.nodes.push({
-        id: "n8",
-        type: "output",
-        title: "Ud",
-        config: { kind: "text", label: "Ud" },
-      });
+      d.nodes.push(
+        FlowNode.parse({
+          id: "n7",
+          type: "llm",
+          title: "Sidespor",
+          config: { prompt: "{{n3.text}}", temperature: 0, maxTokens: 10 },
+        }),
+      );
+      d.nodes.push(
+        FlowNode.parse({
+          id: "n8",
+          type: "output",
+          title: "Ud",
+          config: { kind: "text", label: "Ud" },
+        }),
+      );
       d.edges.push({
         id: "e8",
         from: { node: "n3", port: "text" },
@@ -218,14 +225,25 @@ describe("loops", () => {
   it("refuse a loop inside a loop", () => {
     // An inner pair whose end feeds the outer end, so the outer start reaches it.
     const inner = withEdits(applications, (d) => {
-      d.nodes.push({ id: "n7", type: "loop_start", title: "Indre", config: { loopId: "l2" } });
-      d.nodes.push({ id: "n8", type: "loop_end", title: "Indre slut", config: { loopId: "l2" } });
-      d.nodes.push({
-        id: "n9",
-        type: "combine",
-        title: "Liste af én",
-        config: { mode: "list", separator: "" },
-      });
+      d.nodes.push(
+        FlowNode.parse({ id: "n7", type: "loop_start", title: "Indre", config: { loopId: "l2" } }),
+      );
+      d.nodes.push(
+        FlowNode.parse({
+          id: "n8",
+          type: "loop_end",
+          title: "Indre slut",
+          config: { loopId: "l2" },
+        }),
+      );
+      d.nodes.push(
+        FlowNode.parse({
+          id: "n9",
+          type: "combine",
+          title: "Liste af én",
+          config: { mode: "list", separator: "" },
+        }),
+      );
       d.edges.push({ id: "e8", from: { node: "n3", port: "text" }, to: { node: "n9", port: "a" } });
       d.edges.push({ id: "e9", from: { node: "n3", port: "text" }, to: { node: "n9", port: "b" } });
       d.edges.push({

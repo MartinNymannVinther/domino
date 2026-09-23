@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { runFlow, type StepEvent } from "@/modules/engine";
-import { EXAMPLE_FLOWS, type FlowDocument } from "@/modules/flow";
+import { runFlow, type StepEvent, type Value } from "@/modules/engine";
+import { EXAMPLE_FLOWS, FlowDocument } from "@/modules/flow";
 import { fakeFiles, fakeModel } from "./fake-model";
 
 /**
@@ -259,7 +259,7 @@ describe("the triage flow", () => {
 });
 
 describe("the other combine modes and a branch on text", () => {
-  const doc: FlowDocument = {
+  const doc: FlowDocument = FlowDocument.parse({
     format: "domino.flow",
     version: 1,
     name: "Combine",
@@ -301,7 +301,7 @@ describe("the other combine modes and a branch on text", () => {
       { id: "e8", from: { node: "e", port: "json" }, to: { node: "o2", port: "value" } },
       { id: "e9", from: { node: "t", port: "text" }, to: { node: "o3", port: "value" } },
     ],
-  };
+  });
 
   it("flattens lists, merges scalars under their port, and skips an output nothing reached", async () => {
     const yes = await runFlow(doc, {
@@ -320,5 +320,95 @@ describe("the other combine modes and a branch on text", () => {
       input: { a: "1", b: [] },
     });
     expect(no.ok && no.output).toEqual({ o1: ["1"], o2: { a: "1" }, o3: null });
+  });
+});
+
+/**
+ * A bad item in a good pile (docs/adr/0014): a brick set to carry on
+ * leaves its item out and the run finishes, and a run that took over
+ * from an earlier one does not redo what was already done.
+ */
+describe("carrying on, and taking over", () => {
+  const applications = example("applications");
+  const withSkip = () => {
+    const doc = structuredClone(applications);
+    doc.nodes = doc.nodes.map((n) => (n.id === "n3" ? { ...n, onError: "skip" as const } : n));
+    return doc;
+  };
+  const answer = () =>
+    JSON.stringify({
+      navn: "A",
+      uddannelse: "x",
+      erfaring: "y",
+      motivation: "z",
+      vurdering: "stærk",
+    });
+
+  it("leaves out the item whose brick failed and finishes the rest", async () => {
+    const { events, onStep } = collect();
+    const result = await runFlow(withSkip(), {
+      model: fakeModel(answer),
+      // The second file has no text: that brick fails, on that item only.
+      readFile: fakeFiles({ f1: "en", f3: "tre" }),
+      input: { n1: [pdf(1), pdf(2), pdf(3)] },
+      hooks: { onStep },
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.output.n6).toHaveLength(2);
+    expect(result.failedSteps).toBe(1);
+    expect(result.modelCalls).toBe(2);
+    expect(
+      events.filter((e) => e.status === "failed").map((e) => `${e.nodeId}#${e.iteration}`),
+    ).toEqual(["n3#1"]);
+    // The brick after the failed one is skipped for that item, not failed.
+    expect(events.find((e) => e.nodeId === "n4" && e.iteration === 1)?.status).toBe("skipped");
+  });
+
+  it("still stops the whole run when the brick says stop", async () => {
+    const result = await runFlow(applications, {
+      model: fakeModel(answer),
+      readFile: fakeFiles({ f1: "en" }),
+      input: { n1: [pdf(1), pdf(2)] },
+    });
+    expect(result).toMatchObject({ ok: false, nodeId: "n3", iteration: 1 });
+  });
+
+  it("takes the steps an earlier run finished and asks the model only for the rest", async () => {
+    const prior = new Map<string, Record<string, Value>>([
+      ["n1:0", { value: [pdf(1), pdf(2)] }],
+      ["n3:0", { text: "en" }],
+      [
+        "n4:0",
+        {
+          json: {
+            navn: "Allerede",
+            uddannelse: "x",
+            erfaring: "y",
+            motivation: "z",
+            vurdering: "svag",
+          },
+        },
+      ],
+    ]);
+    const model = fakeModel(answer);
+    const { events, onStep } = collect();
+    const result = await runFlow(applications, {
+      model,
+      readFile: fakeFiles({ f1: "en", f2: "to" }),
+      input: { n1: [pdf(1), pdf(2)] },
+      prior,
+      hooks: { onStep },
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    // Two items out, the first one straight from the earlier run.
+    expect((result.output.n6 as Array<{ navn: string }>).map((r) => r.navn)).toEqual([
+      "Allerede",
+      "A",
+    ]);
+    expect(model.calls).toHaveLength(1);
+    expect(result.reusedSteps).toBe(3);
+    expect(events.filter((e) => e.reused).map((e) => e.nodeId)).toEqual(["n1", "n3", "n4"]);
   });
 });

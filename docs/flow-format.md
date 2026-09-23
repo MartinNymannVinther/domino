@@ -60,12 +60,21 @@ not part of the flow and lives in the run tables.
 }
 ```
 
-| Field    | Type   | Notes                                                                   |
-| -------- | ------ | ----------------------------------------------------------------------- |
-| `id`     | string | Unique in the document. `[a-z][a-z0-9_]{0,31}`. Stable across versions. |
-| `type`   | string | One of the nine below.                                                  |
-| `title`  | string | 1–80 characters. What the brick says on the canvas.                     |
-| `config` | object | Shaped by the type; each type's shape is a zod schema of its own.       |
+| Field     | Type   | Notes                                                                   |
+| --------- | ------ | ----------------------------------------------------------------------- |
+| `id`      | string | Unique in the document. `[a-z][a-z0-9_]{0,31}`. Stable across versions. |
+| `type`    | string | One of the nine below.                                                  |
+| `title`   | string | 1–80 characters. What the brick says on the canvas.                     |
+| `config`  | object | Shaped by the type; each type's shape is a zod schema of its own.       |
+| `onError` | string | `stop` (default) or `skip`. What a failure does to the run (ADR 0014).  |
+| `note`    | string | 0–500 characters. A note to the next reader, drawn on the brick.        |
+
+`onError: "skip"` leaves the brick's outputs unfilled when it fails —
+which travels downstream as a skip, and inside a loop leaves that item
+out of what the end collects — and the run carries on and finishes,
+counting what was left out. `stop` ends the run at the first failure.
+Both fields are optional with a default, so a document written before
+they existed still reads.
 
 Ids are stable on purpose: a patch names nodes by id, a run's steps name
 nodes by id, and a person's follow-up in the conversation ("make the

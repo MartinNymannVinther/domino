@@ -34,6 +34,15 @@ const TABLES: Array<{ table: string; row: (suffix: string) => Record<string, unk
     row: (s) => ({ flow_id: `flow_${s}`, role: "user", content: `Besked ${s}` }),
   },
   {
+    table: "flow_pins",
+    row: (s) => ({
+      flow_id: `flow_${s}`,
+      node_id: "n2",
+      port: "file",
+      value: JSON.stringify({ text: `eksempel ${s}` }),
+    }),
+  },
+  {
     table: "files",
     row: (s) => ({
       id: `file_${s}`,

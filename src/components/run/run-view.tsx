@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { RotateCcwIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/ui/page-header";
 import { formatStamp } from "@/core/dates";
-import { cancelRunAction } from "@/modules/runs/actions";
+import { cancelRunAction, resumeRunAction } from "@/modules/runs/actions";
 import type { RunView as RunRecord } from "@/modules/runs/service";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { ExplainFailure } from "./explain-failure";
 import { OutputView } from "./output-view";
 import { StepList } from "./step-list";
@@ -38,6 +39,7 @@ const LIVE = new Set(["queued", "running"]);
 export function RunView({ initial, withAi }: { initial: RunJson; withAi: boolean }) {
   const t = useTranslations("run.view");
   const locale = useLocale();
+  const router = useRouter();
   const [run, setRun] = useState(initial);
   const live = LIVE.has(run.status);
 
@@ -96,6 +98,24 @@ export function RunView({ initial, withAi }: { initial: RunJson; withAi: boolean
             >
               {t("history")}
             </Button>
+            {run.status === "failed" ? (
+              <Button
+                size="sm"
+                onClick={async () => {
+                  const result = await resumeRunAction({ runId: run.id });
+                  if (!result.ok) {
+                    toast.error(
+                      t(`resumeFailed.${result.reason ?? "generic"}` as "resumeFailed.generic"),
+                    );
+                    return;
+                  }
+                  router.push(`/flows/${run.flowId}/runs/${result.data.runId}`);
+                }}
+              >
+                <RotateCcwIcon data-icon="inline-start" />
+                {t("resume")}
+              </Button>
+            ) : null}
             {live ? (
               <Button
                 variant="destructive"
@@ -122,6 +142,21 @@ export function RunView({ initial, withAi }: { initial: RunJson; withAi: boolean
             <ExplainFailure runId={run.id} flowId={run.flowId} />
           ) : null}
         </div>
+      ) : null}
+
+      {run.failedSteps > 0 ? (
+        <p className="bg-warning-tint text-warning rounded-md px-4 py-2 text-2sm">
+          {t("leftOut", { count: run.failedSteps })}
+        </p>
+      ) : null}
+
+      {run.resumedFrom ? (
+        <p className="text-meta text-2sm">
+          {t("resumedFrom")}{" "}
+          <Link href={`/flows/${run.flowId}/runs/${run.resumedFrom}`} className="underline">
+            {t("theEarlierRun")}
+          </Link>
+        </p>
       ) : null}
 
       {run.status === "done" ? <OutputView run={run} /> : null}

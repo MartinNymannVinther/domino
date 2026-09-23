@@ -1,5 +1,15 @@
 import { sql } from "drizzle-orm";
-import { check, index, integer, json, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  check,
+  index,
+  integer,
+  json,
+  pgTable,
+  text,
+  timestamp,
+  type AnyPgColumn,
+} from "drizzle-orm/pg-core";
 import { domainId, users } from "./foundation";
 import { flows, flowVersions } from "./flows";
 import { tenant } from "./shared";
@@ -43,10 +53,20 @@ export const runs = pgTable(
     input: json("input").notNull().default({}),
     /** What the output bricks produced, keyed by node id; null until the run is done. */
     output: json("output"),
+    /** Steps that failed on a brick set to carry on: items left out of an otherwise finished run. */
+    failedSteps: integer("failed_steps").notNull().default(0),
     /** Why the run failed, in the engine's words; the AI's explanation is asked for separately. */
     error: text("error"),
     /** Which engine answered the model calls, so the history says whose numbers these are. */
     engine: text("engine").notNull().default(""),
+    /**
+     * The run this one took over from (docs/adr/0014). Its finished steps
+     * were taken as they were; what failed was done again. Null for a run
+     * started from the beginning.
+     */
+    resumedFrom: text("resumed_from").references((): AnyPgColumn => runs.id, {
+      onDelete: "set null",
+    }),
     stepCount: integer("step_count").notNull().default(0),
     tokensIn: integer("tokens_in").notNull().default(0),
     tokensOut: integer("tokens_out").notNull().default(0),
@@ -79,6 +99,8 @@ export const runSteps = pgTable(
     nodeId: text("node_id").notNull(),
     /** Which time round inside a loop; 0 outside one. */
     iteration: integer("iteration").notNull().default(0),
+    /** True when the value came from the run this one took over from (docs/adr/0014). */
+    reused: boolean("reused").notNull().default(false),
     status: text("status").notNull().default("running"),
     input: json("input"),
     output: json("output"),

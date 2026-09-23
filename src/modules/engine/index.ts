@@ -17,6 +17,7 @@ export {
   type ModelAdapter,
   type ModelReply,
   type ModelRequest,
+  type PriorSteps,
   type RunResult,
   type RunTotals,
   type StepEvent,

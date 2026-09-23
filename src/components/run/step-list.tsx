@@ -72,6 +72,7 @@ function Step({
         {ms !== null ? (
           <span className="text-meta text-xs tabular-nums">{t("ms", { ms })}</span>
         ) : null}
+        {step.reused ? <span className="text-meta text-xs">{t("reused")}</span> : null}
         {step.tokensIn + step.tokensOut > 0 ? (
           <span className="text-meta text-xs tabular-nums">
             {t("tokens", { in: step.tokensIn, out: step.tokensOut })}

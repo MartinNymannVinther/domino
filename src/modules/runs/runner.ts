@@ -1,10 +1,17 @@
-import { eq, sql } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import { appDb } from "@/core/db/client";
 import { runs, runSteps } from "@/core/db/schema";
 import { withOrgContext, type OrgContext } from "@/core/db/tenant";
 import { RateLimited, reserveRunCall } from "@/modules/ai/limits";
 import { workspaceLlmProvider } from "@/modules/ai/model-settings";
-import { providerAdapter, runFlow, type ModelAdapter, type StepEvent } from "@/modules/engine";
+import {
+  providerAdapter,
+  runFlow,
+  type ModelAdapter,
+  type PriorSteps,
+  type StepEvent,
+  type Value,
+} from "@/modules/engine";
 import { readFileText } from "@/modules/files/service";
 import { parseDocument, type RunInput } from "@/modules/flow";
 import { RUN_CEILINGS } from "./ceilings";
@@ -51,6 +58,11 @@ export async function performRun(claimed: Claimed): Promise<void> {
     return;
   }
 
+  // A run that took over from another starts with that one's finished
+  // steps in hand (docs/adr/0014); the first iteration of each is what a
+  // resume can reuse, since a later one may have failed on its own item.
+  const prior = loaded.run.resumedFrom ? await priorSteps(ctx, loaded.run.resumedFrom) : undefined;
+
   const provider = await workspaceLlmProvider(ctx);
   const model = provider ? counted(providerAdapter(provider), ctx) : null;
   const stepRows = new Map<string, string>();
@@ -60,6 +72,7 @@ export async function performRun(claimed: Claimed): Promise<void> {
     readFile: (fileId) => readFileText(ctx, fileId),
     input: loaded.run.input as RunInput,
     limits: { maxSteps: RUN_CEILINGS.stepsPerRun, maxModelCalls: RUN_CEILINGS.modelCallsPerRun },
+    prior,
     hooks: {
       onStep: (event) => writeStep(ctx, claimed.id, event, stepRows),
       shouldStop: async () => {
@@ -77,9 +90,27 @@ export async function performRun(claimed: Claimed): Promise<void> {
     output: result.ok ? result.output : null,
     engine: model?.engine ?? "",
     stepCount: stepRows.size,
+    failedSteps: result.failedSteps,
     tokensIn: result.tokensIn,
     tokensOut: result.tokensOut,
   });
+}
+
+/** What a run left behind, for one taking over: the outputs of its finished steps. */
+async function priorSteps(ctx: OrgContext, runId: string): Promise<PriorSteps> {
+  const rows = await withOrgContext(ctx, (tx) =>
+    tx
+      .select({ nodeId: runSteps.nodeId, iteration: runSteps.iteration, output: runSteps.output })
+      .from(runSteps)
+      .where(and(eq(runSteps.runId, runId), eq(runSteps.status, "done")))
+      .orderBy(asc(runSteps.startedAt)),
+  );
+  const prior: PriorSteps = new Map();
+  for (const row of rows) {
+    if (!row.output) continue;
+    prior.set(`${row.nodeId}:${row.iteration}`, row.output as Record<string, Value>);
+  }
+  return prior;
 }
 
 function errorLine(result: { error: string; nodeId?: string; iteration?: number }): string {
@@ -124,6 +155,7 @@ async function writeStep(
           nodeId: event.nodeId,
           iteration: event.iteration,
           status: event.status,
+          reused: event.reused ?? false,
           input: event.input ?? null,
           output: event.output ?? null,
           error: event.error ?? null,
@@ -161,6 +193,7 @@ async function finish(
     output?: unknown;
     engine?: string;
     stepCount?: number;
+    failedSteps?: number;
     tokensIn?: number;
     tokensOut?: number;
   },

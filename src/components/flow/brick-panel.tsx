@@ -4,7 +4,13 @@ import { useTranslations } from "next-intl";
 import { PlayIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConfirmButton } from "@/components/ui/confirm-button";
-import type { FlowDocument, FlowNode, PatchOp, Problem } from "@/modules/flow";
+import {
+  ON_ERROR,
+  type FlowDocument,
+  type FlowNode,
+  type PatchOp,
+  type Problem,
+} from "@/modules/flow";
 import { testableBrick } from "@/modules/runs/testable";
 import { cn } from "@/lib/utils";
 import {
@@ -16,7 +22,7 @@ import {
   OutputForm,
 } from "./brick-forms";
 import { ConnectionsForm } from "./connections-form";
-import { TextField } from "./field-helpers";
+import { SelectField, TextAreaField, TextField } from "./field-helpers";
 import { reconnectOps, removeOps, updateConfigOps } from "./patches";
 import { LlmForm, StructuredForm, TemplateForm } from "./prompt-forms";
 
@@ -81,6 +87,19 @@ export function BrickPanel({
           onCommit([{ op: "updateNode", id: node.id, title }], t("messages.renamed", { title }))
         }
       />
+      <TextAreaField
+        label={t("note")}
+        value={node.note}
+        rows={3}
+        placeholder={t("notePlaceholder")}
+        onCommit={(note) =>
+          onCommit(
+            [{ op: "updateNode", id: node.id, note }],
+            t("messages.noted", { title: node.title }),
+          )
+        }
+        hint={t("noteHint")}
+      />
 
       {node.type === "input" ? <InputForm node={node} onChange={change} /> : null}
       {node.type === "llm" ? (
@@ -99,6 +118,21 @@ export function BrickPanel({
         <TemplateForm node={node} doc={doc} flowId={flowId} withAi={withAi} onChange={change} />
       ) : null}
       {node.type === "output" ? <OutputForm node={node} onChange={change} /> : null}
+
+      {testableBrick(node.type) ? (
+        <SelectField
+          label={t("onError.label")}
+          value={node.onError}
+          options={ON_ERROR.map((value) => ({ value, label: t(`onError.${value}`) }))}
+          onCommit={(onError) =>
+            onCommit(
+              [{ op: "updateNode", id: node.id, onError }],
+              t("messages.onError", { title: node.title }),
+            )
+          }
+          hint={t(`onError.help.${node.onError}`)}
+        />
+      ) : null}
 
       {onTest && testableBrick(node.type) ? (
         <Button type="button" variant="outline" size="sm" className="w-fit" onClick={onTest}>

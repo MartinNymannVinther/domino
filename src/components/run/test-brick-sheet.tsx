@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { PlayIcon } from "lucide-react";
+import { PinIcon, PlayIcon } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
@@ -16,6 +17,7 @@ import {
   type FlowNode,
 } from "@/modules/flow";
 import type { BrickTestResult } from "@/modules/runs/test-brick";
+import { clearPinAction, setPinAction } from "@/modules/flow/actions-pins";
 import { FileField } from "./file-field";
 
 /**
@@ -59,12 +61,15 @@ function TestBrickForm({
   document: FlowDocument;
   node: FlowNode;
 }) {
+  const nodeId = node.id;
   const t = useTranslations("run.test");
   const tb = useTranslations("bricks");
   const [given, setGiven] = useState<Given>({});
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<BrickTestResult | null>(null);
+  const [pinned, setPinned] = useState<string[]>([]);
+  const [saving, setSaving] = useState(false);
 
   const index = new PortIndex(document);
   const ports = inputPorts(node).map((p) => ({
@@ -73,14 +78,17 @@ function TestBrickForm({
     from: index.edgeInto(node.id, p.name)?.from ?? null,
   }));
 
-  // What the last run carried here, as a starting point.
-  const nodeId = node.id;
+  // What the last run carried here, or what was fastened to it.
   useEffect(() => {
     let alive = true;
     fetch(`/api/flows/${flowId}/test-brick?nodeId=${nodeId}`, { cache: "no-store" })
-      .then((r) => r.json() as Promise<{ ok: boolean; inputs?: Record<string, Value> }>)
+      .then(
+        (r) =>
+          r.json() as Promise<{ ok: boolean; inputs?: Record<string, Value>; pinned?: string[] }>,
+      )
       .then((data) => {
         if (!alive || !data.ok || !data.inputs) return;
+        setPinned(data.pinned ?? []);
         const next: Given = {};
         for (const [port, value] of Object.entries(data.inputs)) {
           next[port] =
@@ -118,6 +126,30 @@ function TestBrickForm({
     } finally {
       setRunning(false);
     }
+  };
+
+  /** Fasten what is in the fields to the brick, so the next test starts here. */
+  const keep = async () => {
+    setSaving(true);
+    const kept: string[] = [];
+    for (const port of ports) {
+      const value = given[port.name];
+      if (value === undefined || value === "") continue;
+      const result = await setPinAction({ flowId, nodeId, port: port.name, value });
+      if (result.ok && result.data === "saved") kept.push(port.name);
+      else
+        toast.error(t(`pinFailed.${result.ok ? result.data : "generic"}` as "pinFailed.generic"));
+    }
+    setPinned(kept);
+    setSaving(false);
+    if (kept.length) toast.success(t("pinned"));
+  };
+
+  const forget = async () => {
+    setSaving(true);
+    await clearPinAction({ flowId, nodeId });
+    setPinned([]);
+    setSaving(false);
   };
 
   return (
@@ -169,10 +201,30 @@ function TestBrickForm({
         </div>
       ))}
 
-      <Button type="button" className="w-fit" disabled={running || loading} onClick={run}>
-        <PlayIcon data-icon="inline-start" />
-        {running ? t("running") : t("run")}
-      </Button>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button type="button" disabled={running || loading} onClick={run}>
+          <PlayIcon data-icon="inline-start" />
+          {running ? t("running") : t("run")}
+        </Button>
+        {ports.length > 0 ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={saving || loading}
+            onClick={keep}
+          >
+            <PinIcon data-icon="inline-start" />
+            {t("keepAsExample")}
+          </Button>
+        ) : null}
+        {pinned.length > 0 ? (
+          <Button type="button" variant="ghost" size="sm" disabled={saving} onClick={forget}>
+            {t("forgetExample")}
+          </Button>
+        ) : null}
+      </div>
+      {pinned.length > 0 ? <p className="text-meta text-xs">{t("pinnedHint")}</p> : null}
 
       {result ? (
         result.ok ? (

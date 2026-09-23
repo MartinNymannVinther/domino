@@ -36,6 +36,8 @@ export type RunSummary = {
   error: string | null;
   engine: string;
   stepCount: number;
+  failedSteps: number;
+  resumedFrom: string | null;
   tokensIn: number;
   tokensOut: number;
   startedAt: Date | null;
@@ -48,6 +50,7 @@ export type RunStep = {
   nodeId: string;
   iteration: number;
   status: StepStatus;
+  reused: boolean;
   input: unknown;
   output: unknown;
   error: string | null;
@@ -64,6 +67,9 @@ export type RunView = RunSummary & {
   flowName: string;
   steps: RunStep[];
 };
+
+export type ResumeResult =
+  { ok: true; runId: string } | { ok: false; reason: "notFound" | "notResumable" | "unfinished" };
 
 export type StartResult =
   | { ok: true; runId: string }
@@ -126,6 +132,38 @@ function fileIdsIn(input: RunInput): string[] {
     }
   }
   return ids;
+}
+
+/**
+ * A failed run taken over (docs/adr/0014): a new run on the same
+ * version with the same input, which takes every step the old one
+ * finished as it was and does again what failed. A run that finished,
+ * or one whose flow has moved on, is not resumable — the second because
+ * the steps were recorded against a document that no longer applies.
+ */
+export async function resumeRun(ctx: OrgContext, runId: string): Promise<ResumeResult> {
+  const run = await getRun(ctx, runId);
+  if (!run) return { ok: false, reason: "notFound" };
+  if (run.status !== "failed") return { ok: false, reason: "notResumable" };
+  const flow = await getFlow(ctx, run.flowId);
+  if (!flow || flow.version.id !== run.versionId) return { ok: false, reason: "notResumable" };
+  if (validateDocument(flow.document).length) return { ok: false, reason: "unfinished" };
+  const [row] = await withOrgContext(ctx, (tx) =>
+    tx
+      .insert(runs)
+      .values({
+        orgId: ctx.orgId,
+        flowId: run.flowId,
+        versionId: run.versionId,
+        mode: run.mode,
+        status: "queued",
+        input: run.input,
+        resumedFrom: run.id,
+        createdBy: ctx.userId,
+      })
+      .returning({ id: runs.id }),
+  );
+  return { ok: true, runId: row!.id };
 }
 
 export async function listRuns(ctx: OrgContext, flowId: string): Promise<RunSummary[]> {
@@ -210,6 +248,8 @@ const summaryColumns = {
   error: runs.error,
   engine: runs.engine,
   stepCount: runs.stepCount,
+  failedSteps: runs.failedSteps,
+  resumedFrom: runs.resumedFrom,
   tokensIn: runs.tokensIn,
   tokensOut: runs.tokensOut,
   startedAt: runs.startedAt,
@@ -227,6 +267,8 @@ function summarize(row: typeof runs.$inferSelect): RunSummary {
     error: row.error,
     engine: row.engine,
     stepCount: row.stepCount,
+    failedSteps: row.failedSteps,
+    resumedFrom: row.resumedFrom,
     tokensIn: row.tokensIn,
     tokensOut: row.tokensOut,
     startedAt: row.startedAt,

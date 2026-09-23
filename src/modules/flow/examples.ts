@@ -1,4 +1,12 @@
-import type { FlowDocument } from "./schema";
+import { FlowDocument } from "./schema";
+
+/**
+ * Written as the document reads, then parsed, so the fields every brick
+ * has by default — how it behaves on an error, its note — are filled in
+ * here exactly as they are for a document that arrives from a file.
+ */
+const example = (raw: FlowDocumentInput): FlowDocument => FlowDocument.parse(raw);
+type FlowDocumentInput = import("zod").input<typeof FlowDocument>;
 
 /**
  * The example flows: what the start screen offers to begin from, what
@@ -10,7 +18,7 @@ import type { FlowDocument } from "./schema";
  * example can never be the first broken flow a person meets.
  */
 
-const applications: FlowDocument = {
+const applications = example({
   format: "domino.flow",
   version: 1,
   name: "Ansøgninger til skema",
@@ -61,9 +69,9 @@ const applications: FlowDocument = {
     { id: "e4", from: { node: "n4", port: "json" }, to: { node: "n5", port: "item" } },
     { id: "e5", from: { node: "n5", port: "items" }, to: { node: "n6", port: "value" } },
   ],
-};
+});
 
-const summary: FlowDocument = {
+const summary = example({
   format: "domino.flow",
   version: 1,
   name: "Sammenfat et dokument",
@@ -99,9 +107,9 @@ const summary: FlowDocument = {
     { id: "e2", from: { node: "n2", port: "text" }, to: { node: "n3", port: "n2.text" } },
     { id: "e3", from: { node: "n3", port: "text" }, to: { node: "n4", port: "value" } },
   ],
-};
+});
 
-const triage: FlowDocument = {
+const triage = example({
   format: "domino.flow",
   version: 1,
   name: "Sortér en henvendelse",
@@ -179,7 +187,7 @@ const triage: FlowDocument = {
     { id: "e6", from: { node: "n5", port: "text" }, to: { node: "n6", port: "b" } },
     { id: "e7", from: { node: "n6", port: "text" }, to: { node: "n7", port: "value" } },
   ],
-};
+});
 
 export const EXAMPLE_FLOWS: ReadonlyArray<{
   key: "applications" | "summary" | "triage";

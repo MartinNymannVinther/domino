@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Id } from "./kinds";
 import { errorsOf, type Problem } from "./problems";
-import { FlowDocument, FlowEdge, FlowNode, LIMITS } from "./schema";
+import { FlowDocument, FlowEdge, FlowNode, LIMITS, ON_ERROR } from "./schema";
 import { validateDocument } from "./validate";
 
 /**
@@ -18,6 +18,8 @@ const NodeUpdate = z.object({
   id: Id,
   title: z.string().min(1).max(LIMITS.title).optional(),
   config: z.record(z.string(), z.unknown()).optional(),
+  onError: z.enum(ON_ERROR).optional(),
+  note: z.string().max(LIMITS.note).optional(),
 });
 
 export const PatchOp = z.discriminatedUnion("op", [
@@ -76,6 +78,8 @@ export function applyPatch(doc: FlowDocument, patch: Patch): ApplyResult {
           ...current,
           title: op.title ?? current.title,
           config: op.config ?? current.config,
+          onError: op.onError ?? current.onError,
+          note: op.note ?? current.note,
         });
         if (!next.success)
           return refuse(`${op.id}: ${next.error.issues[0]?.message ?? "invalid"}`, op.id);

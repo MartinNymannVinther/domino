@@ -37,6 +37,14 @@ export type FileReader = (fileId: string) => Promise<{ text: string } | { error:
 
 export type StepStatus = "running" | "done" | "failed" | "skipped";
 
+/**
+ * What an earlier run left behind, for a run that takes over from it
+ * (docs/adr/0014): the outputs of every step that finished, keyed by
+ * `nodeId:iteration`. A step found here is not run again; its values go
+ * into the new run's state and its row is written as reused.
+ */
+export type PriorSteps = Map<string, Record<string, Value>>;
+
 export type StepEvent = {
   nodeId: string;
   /** Which time round inside a loop; 0 outside one. */
@@ -47,6 +55,8 @@ export type StepEvent = {
   error?: string;
   tokensIn: number;
   tokensOut: number;
+  /** True when the value came from the run this one took over from, not from work done now. */
+  reused?: boolean;
 };
 
 export type EngineHooks = {
@@ -71,9 +81,20 @@ export type EngineOptions = {
   input: RunInput;
   hooks?: EngineHooks;
   limits?: Partial<EngineLimits>;
+  /** Steps an earlier run finished, to be taken as done rather than redone. */
+  prior?: PriorSteps;
 };
 
-export type RunTotals = { steps: number; modelCalls: number; tokensIn: number; tokensOut: number };
+export type RunTotals = {
+  steps: number;
+  modelCalls: number;
+  tokensIn: number;
+  tokensOut: number;
+  /** Steps that failed on a brick set to carry on; the run is done, these are not. */
+  failedSteps: number;
+  /** Steps taken from the run this one took over from. */
+  reusedSteps: number;
+};
 
 export type RunResult =
   | ({ ok: true; output: Record<string, Value | null> } & RunTotals)

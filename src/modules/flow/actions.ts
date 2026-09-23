@@ -41,7 +41,7 @@ const NewFlowInput = z.discriminatedUnion("from", [
   }),
 ]);
 
-const BLANK: FlowDocument = {
+const BLANK: FlowDocument = FlowDocument.parse({
   format: "domino.flow",
   version: 1,
   name: "Nyt flow",
@@ -56,7 +56,7 @@ const BLANK: FlowDocument = {
     { id: "n2", type: "output", title: "Resultat", config: { kind: "text", label: "Resultat" } },
   ],
   edges: [{ id: "e1", from: { node: "n1", port: "value" }, to: { node: "n2", port: "value" } }],
-};
+});
 
 export async function createFlowAction(raw: unknown): Promise<Result<{ flowId: string }>> {
   const ctx = await requireOrgContext();

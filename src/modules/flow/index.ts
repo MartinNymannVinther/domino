@@ -42,8 +42,10 @@ export {
   FORMAT_VERSION,
   INPUT_KINDS,
   LIMITS,
+  ON_ERROR,
   OUTPUT_KINDS,
   type FlowNodeOf,
+  type OnError,
   type NodeConfig,
   type PortRef,
 } from "./schema";

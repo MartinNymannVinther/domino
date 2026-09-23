@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   applyPatch,
+  FlowNode,
   diffDocuments,
   EXAMPLE_FLOWS,
   exportDocument,
@@ -29,7 +30,7 @@ describe("applyPatch", () => {
         { op: "setMeta", name: "Sammenfat og oversæt" },
         {
           op: "addNode",
-          node: {
+          node: FlowNode.parse({
             id: "n5",
             type: "llm",
             title: "Oversæt",
@@ -38,7 +39,7 @@ describe("applyPatch", () => {
               temperature: 0,
               maxTokens: 500,
             },
-          },
+          }),
         },
         {
           op: "addEdge",
@@ -70,7 +71,12 @@ describe("applyPatch", () => {
         { op: "setMeta", description: "x" },
         {
           op: "addNode",
-          node: { id: "n1", type: "output", title: "x", config: { kind: "text", label: "x" } },
+          node: FlowNode.parse({
+            id: "n1",
+            type: "output",
+            title: "x",
+            config: { kind: "text", label: "x" },
+          }),
         },
       ],
     });
@@ -145,7 +151,12 @@ describe("applyPatch", () => {
       ops: [
         {
           op: "addNode",
-          node: { id: "n9", type: "output", title: "x", config: { kind: "text", label: "x" } },
+          node: FlowNode.parse({
+            id: "n9",
+            type: "output",
+            title: "x",
+            config: { kind: "text", label: "x" },
+          }),
         },
         { op: "updateNode", id: "n3", title: "y" },
         { op: "removeEdge", id: "e1" },
@@ -175,12 +186,12 @@ describe("diffDocuments", () => {
 
   it("re-adds the edges of a brick that changed type", () => {
     const changed: FlowDocument = structuredClone(summary);
-    changed.nodes[2] = {
+    changed.nodes[2] = FlowNode.parse({
       id: "n3",
       type: "template",
       title: "Uden model",
       config: { template: "Dokumentet:\n{{n2.text}}" },
-    };
+    });
     const patch = diffDocuments(summary, changed)!;
     expect(patch.ops.map((o) => o.op)).toEqual(["removeNode", "addNode", "addEdge", "addEdge"]);
     const result = applyPatch(summary, patch);

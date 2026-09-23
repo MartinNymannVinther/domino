@@ -30,6 +30,7 @@ export const EXPORT_TABLES: ExportTable[] = [
   // format docs/flow-format.md describes, importable one by one.
   { table: "flow_versions", sheet: "Versioner", orderBy: "flow_id, number" },
   { table: "flow_messages", sheet: "Samtaler", orderBy: "created_at" },
+  { table: "flow_pins", sheet: "Eksempler", orderBy: "flow_id, node_id" },
   // The files travel as their extracted text and their metadata. The bytes
   // are a workspace's too, and a later decision gives them their own
   // download; a spreadsheet cell is not the place for a PDF.

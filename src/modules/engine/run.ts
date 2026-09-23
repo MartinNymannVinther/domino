@@ -43,7 +43,15 @@ class Failed extends Error {
 
 export async function runFlow(doc: FlowDocument, options: EngineOptions): Promise<RunResult> {
   const limits = { ...DEFAULT_ENGINE_LIMITS, ...options.limits };
-  const totals: RunTotals = { steps: 0, modelCalls: 0, tokensIn: 0, tokensOut: 0 };
+  const totals: RunTotals = {
+    steps: 0,
+    modelCalls: 0,
+    tokensIn: 0,
+    tokensOut: 0,
+    failedSteps: 0,
+    reusedSteps: 0,
+  };
+  const prior = options.prior;
   const index = new PortIndex(doc);
   const state = new Map<string, Value | typeof SKIP>();
   const order = topologicalOrder(doc);
@@ -102,6 +110,23 @@ export async function runFlow(doc: FlowDocument, options: EngineOptions): Promis
   const execute = async (node: FlowNode, iteration: number): Promise<void> => {
     if (await options.hooks?.shouldStop?.()) throw new Stopped();
     totals.steps += 1;
+    // A step the earlier run finished is taken as it was: the same
+    // values, no model call, and a row saying where it came from.
+    const done = prior?.get(`${node.id}:${iteration}`);
+    if (done) {
+      for (const [port, value] of Object.entries(done)) state.set(`${node.id}:${port}`, value);
+      totals.reusedSteps += 1;
+      await report({
+        nodeId: node.id,
+        iteration,
+        status: "done",
+        output: done,
+        reused: true,
+        tokensIn: 0,
+        tokensOut: 0,
+      });
+      return;
+    }
     if (totals.steps > limits.maxSteps)
       throw new Failed(node.id, iteration, "the run's ceiling on steps is reached");
     const { inputs, skipped } = gather(node);
@@ -155,6 +180,14 @@ export async function runFlow(doc: FlowDocument, options: EngineOptions): Promis
         tokensIn: totals.tokensIn - before.tokensIn,
         tokensOut: totals.tokensOut - before.tokensOut,
       });
+      // "skip" is the brick's own answer to a bad item in a good pile
+      // (docs/adr/0014): its outputs stay unfilled, which carries
+      // downstream as a skip, and inside a loop leaves this item out.
+      if (node.onError === "skip") {
+        record(node, skipAll(node));
+        totals.failedSteps += 1;
+        return;
+      }
       throw new Failed(node.id, iteration, message);
     }
   };

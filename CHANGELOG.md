@@ -4,6 +4,19 @@ What changed, for people who run Domino. Decisions and their trade-offs
 are in `docs/adr/`; this is the release view. Dates are the day the
 change reached `main`.
 
+## Unreleased
+
+- **A bad item no longer costs the pile** (ADR 0014): a brick can be set
+  to leave the item out and carry on; the run finishes and says how many
+  were left out.
+- **A failed run can be carried on from where it stopped**: the finished
+  steps are taken as they were, and only what failed is done again.
+- **An example can be kept on a brick's input**, so trying that brick —
+  and the ones after it — needs no typing. Kept beside the flow, so it
+  never makes a version and never leaves with an exported file.
+- **A brick can carry a note**, drawn on the canvas for whoever opens
+  the flow next.
+
 ## 0.9.0 — 2026-09-21
 
 The first release: everything CLAUDE.md's five waves name, built and

@@ -39,6 +39,7 @@ function BrickNodeView({ data, selected }: NodeProps<BrickNodeType>) {
         mark === "added" && "border-primary bg-success-tint",
         mark === "changed" && "border-chart-4 bg-warning-tint",
         mark === "removed" && "border-dashed opacity-50",
+        brick.onError === "skip" && "border-dashed",
         brick.type === "input" && "border-l-4 border-l-chart-2",
         brick.type === "output" && "border-l-4 border-l-primary",
       )}
@@ -125,6 +126,12 @@ function BrickNodeView({ data, selected }: NodeProps<BrickNodeType>) {
           style={{ top: PORT_TOP + i * PORT_ROW + PORT_ROW / 2 }}
         />
       ))}
+      {brick.note ? (
+        <p className="bg-sticky text-sticky-ink mx-2 mt-1 mb-2 rounded-sm px-2 py-1 text-[11px] leading-snug">
+          {brick.note}
+        </p>
+      ) : null}
+
       {outputs.map((port, i) => (
         <span
           key={port.name}

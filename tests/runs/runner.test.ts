@@ -6,7 +6,7 @@ import { EXAMPLE_FLOWS } from "@/modules/flow";
 import { createFlow } from "@/modules/flow/service";
 import { commitPatch } from "@/modules/flow/versions";
 import { claimNextRun, performRun, runQueued } from "@/modules/runs/runner";
-import { cancelRun, getRun, lastRuns, listRuns, startRun } from "@/modules/runs/service";
+import { cancelRun, getRun, lastRuns, listRuns, resumeRun, startRun } from "@/modules/runs/service";
 import { adminPool } from "../helpers/db";
 import { seedWorkspace } from "../helpers/workspace";
 
@@ -223,5 +223,83 @@ describe("a run", () => {
     const run = await getRun(a, running.runId);
     expect(run).toMatchObject({ status: "cancelled", error: null });
     expect(run!.steps).toHaveLength(0);
+  });
+});
+
+/**
+ * A bad item in a good pile, and a run that takes over (docs/adr/0014):
+ * the skip is recorded as a failed step on an otherwise finished run,
+ * and a resumed run reuses what the first one did.
+ */
+describe("carrying on and taking over", () => {
+  it("leaves the item out, finishes, and says how many", async () => {
+    spy.provider = fakeProvider(() =>
+      JSON.stringify({
+        navn: "A",
+        uddannelse: "x",
+        erfaring: "y",
+        motivation: "z",
+        vurdering: "stærk",
+      }),
+    );
+    const doc = structuredClone(applications);
+    doc.nodes = doc.nodes.map((n) => (n.id === "n3" ? { ...n, onError: "skip" as const } : n));
+    const created = await createFlow(a, doc);
+    if (!created.ok) throw new Error("setup");
+    const good = await upload(a, created.flowId, "a.txt", "en");
+    // A file with no text at all: the document brick fails on it.
+    const empty = await storeFile(a, created.flowId, {
+      name: "tom.pdf",
+      mime: "application/pdf",
+      bytes: Buffer.from("ikke en pdf"),
+    });
+    if (!empty.ok) throw new Error("upload");
+    const started = await startRun(a, created.flowId, "full", { n1: [good, empty.ref] });
+    if (!started.ok) throw new Error("start");
+    await runQueued();
+    const run = await getRun(a, started.runId);
+    expect(run).toMatchObject({ status: "done", failedSteps: 1 });
+    expect(run!.output!.n6).toHaveLength(1);
+    expect(run!.steps.find((s) => s.status === "failed")).toMatchObject({ nodeId: "n3" });
+  });
+
+  it("takes over from a failed run and does not ask the model twice", async () => {
+    let calls = 0;
+    spy.provider = fakeProvider(() => {
+      calls += 1;
+      return "Sammenfatningen.";
+    });
+    const created = await createFlow(a, summary);
+    if (!created.ok) throw new Error("setup");
+    // A file whose text cannot be read: the document brick fails, the run stops.
+    const bad = await storeFile(a, created.flowId, {
+      name: "scan.pdf",
+      mime: "application/pdf",
+      bytes: Buffer.from("ikke en pdf"),
+    });
+    if (!bad.ok) throw new Error("upload");
+    const first = await startRun(a, created.flowId, "full", { n1: bad.ref });
+    if (!first.ok) throw new Error("start");
+    await runQueued();
+    expect((await getRun(a, first.runId))?.status).toBe("failed");
+    expect(calls).toBe(0);
+
+    // The file gets its text; the run is taken over rather than redone.
+    await admin.query("update files set text = $1, extract_error = null where id = $2", [
+      "Teksten kom alligevel",
+      bad.ref.fileId,
+    ]);
+    const again = await resumeRun(a, first.runId);
+    expect(again.ok).toBe(true);
+    if (!again.ok) return;
+    await runQueued();
+    const run = await getRun(a, again.runId);
+    expect(run).toMatchObject({ status: "done", resumedFrom: first.runId });
+    expect(run!.output!.n4).toBe("Sammenfatningen.");
+    // The input brick's step came from the first run; the rest was done now.
+    expect(run!.steps.filter((s) => s.reused).map((s) => s.nodeId)).toEqual(["n1"]);
+    expect(calls).toBe(1);
+    expect(await resumeRun(b, first.runId)).toMatchObject({ ok: false, reason: "notFound" });
+    expect(await resumeRun(a, again.runId)).toMatchObject({ ok: false, reason: "notResumable" });
   });
 });

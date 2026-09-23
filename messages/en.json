@@ -645,9 +645,23 @@
         "settings": "changed {title}",
         "renamed": "renamed to {title}",
         "connected": "connected {title}",
-        "removed": "removed {title}"
+        "removed": "removed {title}",
+        "noted": "wrote a note on {title}",
+        "onError": "changed error handling for {title}"
       },
-      "test": "Test the brick on its own"
+      "test": "Test the brick on its own",
+      "note": "Note",
+      "notePlaceholder": "Why is the brick set up this way? Shown on the canvas.",
+      "noteHint": "Shown on the brick, for whoever opens the flow next.",
+      "onError": {
+        "label": "If the brick fails",
+        "stop": "Stop the whole run",
+        "skip": "Leave the item out and carry on",
+        "help": {
+          "stop": "The run stops at the first failure, and you see what went wrong.",
+          "skip": "An item that fails is left out and the rest of the pile carries on. The failure stays on the step."
+        }
+      }
     },
     "history": {
       "button": "Version {number}",
@@ -940,7 +954,17 @@
       "history": "All runs",
       "cancel": "Cancel",
       "cancelFailed": "The run could not be cancelled.",
-      "failedTitle": "The run failed"
+      "failedTitle": "The run failed",
+      "resume": "Carry on from the failure",
+      "resumeFailed": {
+        "generic": "The run could not be resumed.",
+        "notFound": "The run was not found.",
+        "notResumable": "This run cannot be resumed – the flow has changed since, or the run did not fail.",
+        "unfinished": "The flow has loose ends. Fix them first."
+      },
+      "leftOut": "{count, plural, one {# item was left out because a brick failed on it.} other {# items were left out because a brick failed on them.}}",
+      "resumedFrom": "Carried on from",
+      "theEarlierRun": "the earlier run"
     },
     "steps": {
       "title": "{count, plural, one {# step} other {# steps}}",
@@ -951,7 +975,8 @@
       "input": "In",
       "output": "Out",
       "error": "Error",
-      "empty": "(empty)"
+      "empty": "(empty)",
+      "reused": "reused"
     },
     "output": {
       "spreadsheet": "Download as spreadsheet",
@@ -1009,7 +1034,17 @@
       "nothing": "The brick gave nothing back.",
       "failedTitle": "The brick failed",
       "failed": "The brick could not be run.",
-      "ceiling": "The ceiling on AI calls is reached. Try again in a while."
+      "ceiling": "The ceiling on AI calls is reached. Try again in a while.",
+      "keepAsExample": "Keep as example",
+      "forgetExample": "Forget the example",
+      "pinned": "The example is kept on the brick.",
+      "pinnedHint": "Kept on the brick: used next time you test it, and by the bricks after it.",
+      "pinFailed": {
+        "generic": "The example could not be kept.",
+        "tooBig": "The example is too big to keep.",
+        "tooMany": "Enough examples are kept in this flow already."
+      },
+      "subtitlePinned": "The example kept on the brick is filled in. Run it and see what it answers; the run itself is stored nowhere."
     }
   }
 }

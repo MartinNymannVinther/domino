@@ -645,9 +645,23 @@
         "settings": "ændrede {title}",
         "renamed": "omdøbte til {title}",
         "connected": "forbandt {title}",
-        "removed": "fjernede {title}"
+        "removed": "fjernede {title}",
+        "noted": "skrev en note på {title}",
+        "onError": "ændrede fejlhåndtering for {title}"
       },
-      "test": "Test klodsen for sig"
+      "test": "Test klodsen for sig",
+      "note": "Note",
+      "notePlaceholder": "Hvorfor er klodsen sat op sådan? Skrives på lærredet.",
+      "noteHint": "Vises på klodsen, så den næste der åbner flowet kan læse den.",
+      "onError": {
+        "label": "Hvis klodsen fejler",
+        "stop": "Stop hele kørslen",
+        "skip": "Spring elementet over og fortsæt",
+        "help": {
+          "stop": "Kørslen stopper ved første fejl, og du ser hvad der gik galt.",
+          "skip": "Et element der fejler udelades, og resten af bunken kører videre. Fejlen står på trinnet."
+        }
+      }
     },
     "history": {
       "button": "Version {number}",
@@ -940,7 +954,17 @@
       "history": "Alle kørsler",
       "cancel": "Afbryd",
       "cancelFailed": "Kørslen kunne ikke afbrydes.",
-      "failedTitle": "Kørslen fejlede"
+      "failedTitle": "Kørslen fejlede",
+      "resume": "Kør videre fra fejlen",
+      "resumeFailed": {
+        "generic": "Kørslen kunne ikke genoptages.",
+        "notFound": "Kørslen blev ikke fundet.",
+        "notResumable": "Denne kørsel kan ikke genoptages – flowet er ændret siden, eller kørslen fejlede ikke.",
+        "unfinished": "Flowet har løse ender. Ordn dem først."
+      },
+      "leftOut": "{count, plural, one {# element blev udeladt, fordi en klods fejlede på det.} other {# elementer blev udeladt, fordi en klods fejlede på dem.}}",
+      "resumedFrom": "Fortsat fra",
+      "theEarlierRun": "den tidligere kørsel"
     },
     "steps": {
       "title": "{count, plural, one {# trin} other {# trin}}",
@@ -951,7 +975,8 @@
       "input": "Ind",
       "output": "Ud",
       "error": "Fejl",
-      "empty": "(tomt)"
+      "empty": "(tomt)",
+      "reused": "genbrugt"
     },
     "output": {
       "spreadsheet": "Hent som regneark",
@@ -1009,7 +1034,17 @@
       "nothing": "Klodsen gav intet tilbage.",
       "failedTitle": "Klodsen fejlede",
       "failed": "Klodsen kunne ikke køres.",
-      "ceiling": "Loftet for AI-kald er nået. Prøv igen om lidt."
+      "ceiling": "Loftet for AI-kald er nået. Prøv igen om lidt.",
+      "keepAsExample": "Gem som eksempel",
+      "forgetExample": "Glem eksemplet",
+      "pinned": "Eksemplet er gemt på klodsen.",
+      "pinnedHint": "Gemt på klodsen: bruges næste gang du tester den, og af klodserne efter den.",
+      "pinFailed": {
+        "generic": "Eksemplet kunne ikke gemmes.",
+        "tooBig": "Eksemplet er for stort til at gemme.",
+        "tooMany": "Der er gemt eksempler nok i dette flow."
+      },
+      "subtitlePinned": "Eksemplet gemt på klodsen er fyldt ind. Kør den og se hvad den svarer; intet gemmes af kørslen."
     }
   }
 }
